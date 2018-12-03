@@ -1,2 +1,2 @@
 # Packman
-Packman eat fruits in the shorest path
+Packman eat fruits in the shortest path
