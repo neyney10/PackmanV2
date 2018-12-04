@@ -5,6 +5,8 @@ import java.awt.Image;
 
 import javax.swing.JComponent;
 
+import GameObjects.GameObject;
+
 public class GameSpirit extends JComponent {
 	
 	private static final long serialVersionUID = 3817775198749911544L;

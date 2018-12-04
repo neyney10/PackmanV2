@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Game.Game;
+import GameObjects.GameObject;
 
 
 public class MyFrame extends JFrame implements ComponentListener{
