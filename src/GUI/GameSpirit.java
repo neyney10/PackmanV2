@@ -29,7 +29,7 @@ public class GameSpirit extends JComponent {
 	
 	// TEMP ONLY
 	public GameSpirit(GameObject obj, int width, int height, Map map) {
-		this((int)map.getLocationOnScreen(obj).getX(), (int)map.getLocationOnScreen(obj).getY(), width, height, obj.getSpirit());
+		this(map.getLocationOnScreen(obj).x, map.getLocationOnScreen(obj).y, width, height, obj.getSpirit());
 	}
 	
 	/**
@@ -55,6 +55,8 @@ public class GameSpirit extends JComponent {
 	public void moveByPixel(int x, int y) {
 		updateLocation(startX + x, startY + y);
 	}
+	
+	
 	
 	
 

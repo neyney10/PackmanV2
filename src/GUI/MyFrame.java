@@ -2,21 +2,43 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Composite;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FileDialog;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.Image;
+import java.awt.Paint;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.Stroke;
+import java.awt.RenderingHints.Key;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ImageObserver;
+import java.awt.image.RenderedImage;
+import java.awt.image.renderable.RenderableImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.AttributedCharacterIterator;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -24,7 +46,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+
+import com.sun.java.swing.plaf.motif.MotifBorders.BevelBorder;
 
 import Game.Game;
 import GameObjects.Fruit;
@@ -39,7 +66,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 	private JBackground jb;
 	
 	// pnl_toolbar contains all the management buttons such load,save and run.
-	private JPanel pnl_toolbar;
+
 	
 	// pnl_toolbar's Buttons
 	private JButton btn_load; // load game from file.
@@ -64,6 +91,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 	 * Constructor of MyFrame, initialization and showing the frame.
 	 */
 	public MyFrame() {
+		super();
 		init();
 		this.setTitle("Packman!!!");
 		this.setVisible(true);
@@ -87,44 +115,59 @@ public class MyFrame extends JFrame implements ComponentListener{
 
 
 		// Set Component's settings
-		int toolbarH = 40; // Height of the toolbar component
 		Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
 
 		////////////////
 		// Background //
 		////////////////
 		Image img;
-		img = loadImage("Ex3\\Ariel1.png");
+		img = loadImage("Ex3\\Ariel1.png"); // Should come from MAP
 		jb = new JBackground(img);
-		jb.setBounds(0,toolbarH,SIZEW,SIZEH);
+		jb.setBounds(0,0,SIZEW,SIZEH);
 
-		// --testing -> gameSpirits 
-		img = loadImage("Ex3\\PACMAN.png");
-		GameSpirit pacman = new GameSpirit(115,5,100,100,img);
 
-		img = loadImage("Ex3\\fruit.png");
-		GameSpirit fruit = new GameSpirit(333,25,77,77,img);
-
-		// add gameSpirits to JBackground
-		jb.add(pacman);
-		jb.add(fruit);
 
 		/////////////
 		// Toolbar //
 		/////////////
-		pnl_toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		pnl_toolbar.setBackground(Color.lightGray);
-		pnl_toolbar.setBounds(0, 0, SIZEW, toolbarH);
-		pnl_toolbar.setBorder(BorderFactory.createEtchedBorder());
+
+		int menuFontSize, itemFontSize;
+		menuFontSize = 18;
+		itemFontSize = 22;
+		
+		Font menuFont = new Font("Arial", Font.PLAIN, menuFontSize);
+		Font itemFont = new Font("Arial", Font.PLAIN, itemFontSize);
+		
+		JMenuBar menubar = new JMenuBar();
+		
+		JMenu menu = new JMenu("File");
+		menu.setFont(menuFont);
+		menu.setCursor(handCursor);
+		menu.setBorder(BorderFactory.createSoftBevelBorder(0));
+
 		
 		/// create buttons for toolbar
-		btn_load = new JButton();
-		btn_load.setText("Load existing game");
-		btn_load.setCursor(handCursor);
+		JMenuItem i1 = new JMenuItem("Load game");
+		i1.setFont(itemFont);
+		i1.setCursor(handCursor);
+		i1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				loadGame();
+			}
+		});
 		
-		btn_save = new JButton();
-		btn_save.setText("Save current game");
-		btn_save.setCursor(handCursor);
+		JMenuItem i2 = new JMenuItem("Save game");
+		i2.setFont(itemFont);
+		i2.setCursor(handCursor);
+		i2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				saveGame();
+			}
+		});
 		
 		btn_run = new JButton();
 		btn_run.setText("<- [RUN] ->");
@@ -139,23 +182,24 @@ public class MyFrame extends JFrame implements ComponentListener{
 			}
 		});
 		
-		// add buttons to toolbar panel
-		pnl_toolbar.add(btn_load);
-		pnl_toolbar.add(btn_save);
-		pnl_toolbar.add(btn_run);
+		// pack menu
+		menu.add(i1);
+		menu.add(i2);
+		menubar.add(menu);
+		menubar.add(btn_run);
 		
-
 		/* pack it up. from last to first generated components to create the 'Z' height layer property and 
 		 stack components */
-		add(pnl_toolbar);
+		setJMenuBar(menubar);
 		add(jb);
 
 	}
 
 	/**
-	 * Loading an Image from file, see: https://stackoverflow.com/questions/18777893/jframe-background-image
+	 * Loading an Image from file.
+	 * @see: https://stackoverflow.com/questions/18777893/jframe-background-image
 	 * @param path to the file, Ex: "Ex3\\Pacman.png" for Windows system.
-	 * @return Image Object
+	 * @return Image Object (can be casted into BufferedImage)
 	 */
 	public static Image loadImage(String path) {
 		BufferedImage i = null;
@@ -166,7 +210,28 @@ public class MyFrame extends JFrame implements ComponentListener{
 			return null;
 		}
 
-		return i.getScaledInstance(i.getWidth(), i.getWidth(), Image.SCALE_SMOOTH);
+		return i;//i.getScaledInstance(i.getWidth(), i.getWidth(), Image.SCALE_SMOOTH);
+	}
+	
+	/**
+	 * @see https://stackoverflow.com/questions/8639567/java-rotating-images
+	 * @param img
+	 * @param angle
+	 * @return
+	 */
+	public static Image rotateImage(Image img, float angle) {
+		BufferedImage image = (BufferedImage) img;
+
+		// Rotation information
+
+		double rotationRequired = Math.toRadians (angle);
+		double locationX = image.getWidth() / 2;
+		double locationY = image.getHeight() / 2;
+		AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+
+		// Drawing the rotated image at the required drawing locations
+		return op.filter(image, null);
 	}
 
 	public void componentResized(ComponentEvent ce) {
@@ -193,12 +258,6 @@ public class MyFrame extends JFrame implements ComponentListener{
 			} // for over components
 		} // if jb != null 
 
-		// update Toolbar panel
-		if(pnl_toolbar != null) {
-			pnl_toolbar.setSize(this.getWidth(), pnl_toolbar.getHeight());
-		}
-
-
 	}
 	
 	/**
@@ -207,15 +266,23 @@ public class MyFrame extends JFrame implements ComponentListener{
 	 */
 	public void setGame(Game game) {
 		this.game = game;
-		refreshGameUI();
+		
+		if(game == null) return;
+			refreshGameUI();
 	}
 	
 	/**
 	 * Load game from CSV file.
 	 * @param path - to the file
 	 */
-	public void loadGame(String path) {
-		setGame(new Game(path));
+	public void loadGame() {
+		FileDialog fd = new FileDialog(new Frame(), "Load Game File (CSV)",FileDialog.LOAD);
+		fd.setDirectory("/");
+		fd.setFile("*.csv");
+		fd.setVisible(true);
+
+		if(fd.getFiles().length != 0)
+			setGame(new Game(fd.getFiles()[0].getAbsolutePath()));
 	}
 	
 	/**
@@ -241,7 +308,10 @@ public class MyFrame extends JFrame implements ComponentListener{
 	 * TODO: implement
 	 */
 	public void saveGame() {
-		
+		FileDialog fd = new FileDialog(new Frame(), "Save Game File (KML)",FileDialog.SAVE);
+		fd.setDirectory("/");
+		fd.setFile("*.kml");
+		fd.setVisible(true);
 	}
 	
 	/**
@@ -274,14 +344,6 @@ public class MyFrame extends JFrame implements ComponentListener{
 
 	@Override
 	public void componentShown(ComponentEvent arg0) {}
-
-
-	
-
-
-
-
-
 
 
 }

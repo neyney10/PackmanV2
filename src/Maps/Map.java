@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import Coords.MyCoords;
 import GameObjects.GameObject;
 import Geom.Point3D;
 
@@ -59,6 +60,60 @@ public class Map {
     	return new Point3D(x,y,0);
     }
     
+    /**
+     * Get distance between two points on screen (pixels) in METERES! <br>
+     * [Developer Note] not tested, might not even work correctly.
+     * @param p1 - point in pixels
+     * @param p2 - point in pixels
+     * @return distance in METERS.
+     */
+    public double getDistance(Point p1, Point p2) {
+		Point3D p3d1 = getLocationFromScreen(p1);
+		Point3D p3d2 = getLocationFromScreen(p2);
+		return new MyCoords().distance3d(p3d1, p3d2);
+    	
+    }
+    
+    /**
+     * Get distance between two points on screen (pixels) in PIXELS! <br>
+     * [Developer Note] not tested, might not even work correctly.
+     * @param p1 - point in pixels
+     * @param p2 - point in pixels
+     * @return distance in SCREEN PIXELS.
+     */
+    public double getDistanceByPixel(Point p1, Point p2) {
+    	double deltaX, deltaY;
+    	deltaX = p2.x-p1.x;
+    	deltaY = p2.y-p1.y;
+    	return Math.sqrt(Math.abs((deltaX*deltaX)+(deltaY*deltaY)));
+    	
+    }
+    
+    /**
+     * Get the angle between two points on screen (pixels), in degrees. <br>
+     * Directly Upwards = 180 degrees. <br>
+     * Directly on the Right = 90 degrees. <br>
+     * Directly Downwards = 0 degrees. <br>
+     * Directly on the Left = 270 degrees 
+     * @param p1 - point in pixels
+     * @param p2 - point in pixels
+     * @return angle in degrees
+     */
+    public double getAngle(Point p1, Point p2) {
+    	double deltaX, deltaY, angle;
+    	deltaX = p2.x-p1.x;
+    	deltaY = p2.y-p1.y;
+    	
+    	angle = Math.toDegrees(Math.atan2(deltaX, deltaY));
+    	return (angle < 0)? angle+360 : angle;
+    }
+    
+    /**
+     * updating screenRange from current MyFrame size on screen.
+     * @deprecated might be integrated inside MyFrame
+     * @param width
+     * @param height
+     */
     public void updateScreenRange(int width, int height) {
     	screenRange.setSize(width, height);
     }
