@@ -1,4 +1,4 @@
-import GUI.*;
+import GUI.MyFrame;
 
 public class mainFile {
 

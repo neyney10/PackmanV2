@@ -2,6 +2,7 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,8 +28,18 @@ import GameObjects.GameObject;
 
 public class MyFrame extends JFrame implements ComponentListener{
 
+	// JBackground component is an object that contains all GameSpirits elements and represent the "Game" object in UI.
 	private JBackground jb;
+	
+	// pnl_toolbar contains all the management buttons such load,save and run.
 	private JPanel pnl_toolbar;
+	
+	// pnl_toolbar's Buttons
+	private JButton btn_load; // load game from file.
+	private JButton btn_save; // save game to file.
+	private JButton btn_run; // run current loaded game.
+	
+	// starting size of MyFrame.
 	public int SIZEW = 1000;
 	public int SIZEH = 600;
 	
@@ -64,7 +76,8 @@ public class MyFrame extends JFrame implements ComponentListener{
 		addComponentListener(this); // for resizing the component
 
 		// Set Component's settings
-		int toolbarH = 35; // Height of the toolbar component
+		int toolbarH = 40; // Height of the toolbar component
+		Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
 
 		////////////////
 		// Background //
@@ -91,17 +104,26 @@ public class MyFrame extends JFrame implements ComponentListener{
 		pnl_toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		pnl_toolbar.setBackground(Color.lightGray);
 		pnl_toolbar.setBounds(0, 0, SIZEW, toolbarH);
+		pnl_toolbar.setBorder(BorderFactory.createEtchedBorder());
 		
 		/// create buttons for toolbar
-		JButton btn_load = new JButton();
+		btn_load = new JButton();
 		btn_load.setText("Load existing game");
+		btn_load.setCursor(handCursor);
 		
-		JButton btn_save = new JButton();
+		btn_save = new JButton();
 		btn_save.setText("Save current game");
+		btn_save.setCursor(handCursor);
+		
+		btn_run = new JButton();
+		btn_run.setText("<- [RUN] ->");
+		btn_run.setForeground(Color.BLUE);
+		btn_run.setCursor(handCursor);
 		
 		// add buttons to toolbar panel
 		pnl_toolbar.add(btn_load);
 		pnl_toolbar.add(btn_save);
+		pnl_toolbar.add(btn_run);
 		
 
 		/* pack it up. from last to first generated components to create the 'Z' height layer property and 
@@ -174,12 +196,32 @@ public class MyFrame extends JFrame implements ComponentListener{
 		setGame(new Game(path));
 	}
 	
+	/**
+	 * reloading all game components and objects.
+	 * TODO: might (?) be integrated inside JBackground
+	 */
 	public void refreshGameUI() {
 		if(game == null || jb == null) return;
 		
 		for(GameObject obj : game.getObjects()) {
 			jb.add(new GameSpirit(obj));
 		}
+	}
+	
+	/**
+	 * Saving the current game to a KML file
+	 * TODO: implement
+	 */
+	public void saveGame() {
+		
+	}
+	
+	/**
+	 * running the current game.
+	 * TODO: implement
+	 */
+	public void runGame() {
+		
 	}
 
 	@Override
