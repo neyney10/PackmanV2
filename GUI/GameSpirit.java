@@ -1,44 +1,44 @@
 package GUI;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class GameSpirit extends JComponent {
 	
 	private static final long serialVersionUID = 3817775198749911544L;
 	public Image img;
-	public MyFrame j;
-	int startWidth, startHeight; // TEMP
+	public int startWidth, startHeight, startX, startY;
 	
 	public GameSpirit(int x,int y, int width, int height, Image img) {
 		this.img = img;
 		setBounds(x, y, width, height); 
-		this.startWidth = width; // TEMP
-		this.startHeight = height; // TEMP
+		
+		/////////////////////////////////////
+		// Used for Re-scaling of MyFrame. //
+		/////////////////////////////////////
+		this.startWidth = width;
+		this.startHeight = height; 
+		this.startX = x;
+		this.startY = y; 
 	}
 	
-	/**
-	 * INCOMPLETE!
-	 * TODO: RESCALE WIDTH AND HEIGHT, RESCALE X AND Y POSITIONS.
+	public GameSpirit(GameObject obj) {
+		
+	}
+	
+	/*
+	 * [Developer Note] Status: Complete.
 	 */
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		double scaleFactorX, scaleFactorY;
-		scaleFactorX = ((double)j.getWidth())/j.SIZEW;
-		scaleFactorY = ((double)j.getHeight())/j.SIZEH;
-		//setBounds(getX(),getY(),(int)(getWidth()*scaleFactorX),(int)(getHeight()*scaleFactorY));
-		System.out.println(scaleFactorX);
 		/*
-		 * Drawing this Object's Image at Current X,Y position with the dimensions of (from (0,0) to (width,height)).
+		 Drawing this Object's Image at Current X,Y position 
+		 with the dimensions of (from (0,0) to (width,height)).
+		 Note: if using MyFrame than MyFrame class is re-scaling all of it's components when resized.
 		 */
 		g.drawImage(img, 0,0,getWidth(),getHeight(),this);
 	
