@@ -8,8 +8,12 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +27,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Game.Game;
+import GameObjects.Fruit;
 import GameObjects.GameObject;
+import GameObjects.Packman;
+import Maps.Map;
 
 
 public class MyFrame extends JFrame implements ComponentListener{
@@ -44,6 +51,8 @@ public class MyFrame extends JFrame implements ComponentListener{
 	public int SIZEH = 600;
 	
 	private Game game;
+	
+	private Map map = new Map(); // temp;
 
 
 	/**
@@ -60,6 +69,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 		this.setVisible(true);
 		System.out.println("Making MyFrame visible...");
 	}
+	
 
 	/**
 	 * Initialize JComponents, toolbar, background image and such.
@@ -74,6 +84,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addComponentListener(this); // for resizing the component
+
 
 		// Set Component's settings
 		int toolbarH = 40; // Height of the toolbar component
@@ -119,6 +130,14 @@ public class MyFrame extends JFrame implements ComponentListener{
 		btn_run.setText("<- [RUN] ->");
 		btn_run.setForeground(Color.BLUE);
 		btn_run.setCursor(handCursor);
+		btn_run.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MyFrame.this.Test();
+				
+			}
+		});
 		
 		// add buttons to toolbar panel
 		pnl_toolbar.add(btn_load);
@@ -138,7 +157,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 	 * @param path to the file, Ex: "Ex3\\Pacman.png" for Windows system.
 	 * @return Image Object
 	 */
-	public Image loadImage(String path) {
+	public static Image loadImage(String path) {
 		BufferedImage i = null;
 		try {
 			i =  ImageIO.read(new File(path));
@@ -155,6 +174,8 @@ public class MyFrame extends JFrame implements ComponentListener{
 		if(jb != null) {
 			jb.setSize(this.size());
 
+			this.map.updateScreenRange(this.getWidth(), this.getHeight()); // TEMP
+			// TODO: set the scalefactor inside the Map Object.
 			double scaleFactorX, scaleFactorY;
 			scaleFactorX = ((double)getWidth())/SIZEW;
 			scaleFactorY = ((double)getHeight())/SIZEH;
@@ -186,6 +207,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 	 */
 	public void setGame(Game game) {
 		this.game = game;
+		refreshGameUI();
 	}
 	
 	/**
@@ -203,8 +225,14 @@ public class MyFrame extends JFrame implements ComponentListener{
 	public void refreshGameUI() {
 		if(game == null || jb == null) return;
 		
+		jb.removeAll();
+		
 		for(GameObject obj : game.getObjects()) {
-			jb.add(new GameSpirit(obj));
+			// TODO: set the width and height inside the
+			if(obj instanceof Packman)
+				jb.add(new GameSpirit(obj, Packman.width, Packman.height, map)); 
+			else if(obj instanceof Fruit)
+				jb.add(new GameSpirit(obj, Fruit.width, Fruit.height, map));
 		}
 	}
 	
@@ -223,6 +251,20 @@ public class MyFrame extends JFrame implements ComponentListener{
 	public void runGame() {
 		
 	}
+	
+	/**
+	 * [Developer Note] Only for debug and testing purposes
+	 */
+	public void Test() {
+		if(jb == null) return;
+		
+		for(Component c : jb.getComponents()) {
+			if(c instanceof GameSpirit) {
+				GameSpirit gameComponent = (GameSpirit) c;
+				gameComponent.moveByPixel(10, 0);
+			}
+		}
+	}
 
 	@Override
 	public void componentHidden(ComponentEvent arg0) {}
@@ -232,6 +274,9 @@ public class MyFrame extends JFrame implements ComponentListener{
 
 	@Override
 	public void componentShown(ComponentEvent arg0) {}
+
+
+	
 
 
 

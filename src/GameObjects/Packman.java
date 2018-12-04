@@ -3,6 +3,10 @@ package GameObjects;
 import Geom.Point3D;
 
 public class Packman extends GameObject {
+	
+	final public static int width = 41;
+	final public static int height = 41;
+	
     private double radius,speed;
 
     public Packman(double lat, double lon, double alt, TYPE type, double radius, double speed) {
