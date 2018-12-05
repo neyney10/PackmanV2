@@ -3,14 +3,15 @@ package GameObjects;
 import Geom.Point3D;
 
 public class Packman extends GameObject {
-	
-	final public static int width = 41;
-	final public static int height = 41;
-	
+
+    final public static int width = 41;
+    final public static int height = 41;
+
     private double radius,speed;
 
-    public Packman(double lat, double lon, double alt, TYPE type, double radius, double speed) {
+    public Packman(double lat, double lon, double alt,int id, TYPE type, double radius, double speed) {
         setPoint(new Point3D(lat,lon,alt));
+        setId(id);
         setType(type);
         setRadius(radius);
         setSpeed(speed);
@@ -30,5 +31,10 @@ public class Packman extends GameObject {
 
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    @Override
+    public String toString() {
+        return "Packman: [ "+super.toString()+" , Speed: "+getSpeed()+" , Radius: "+getRadius()+" ]";
     }
 }

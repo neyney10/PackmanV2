@@ -1,13 +1,13 @@
 package GameObjects;
 
-import java.awt.Image;
-
 import Geom.Point3D;
 
+import java.awt.Image;
 
 public abstract class GameObject {
     private TYPE type;
     private Point3D point;
+    private int id;
     private Image spirit;
 
     public TYPE getType() {
@@ -26,13 +26,24 @@ public abstract class GameObject {
         this.point = point;
     }
 
-	public Image getSpirit() {
-		return spirit;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setSpirit(Image spirit) {
-		this.spirit = spirit;
-	}
-	
-	
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Image getSpirit() {
+        return spirit;
+    }
+
+    public void setSpirit(Image spirit) {
+        this.spirit = spirit;
+    }
+
+    @Override
+    public String toString() {
+        return "Point: [ Lat: "+point.x()+" , Lon: "+point.y()+" , Alt: "+point.z()+" ] , Id: "+getId()+" , Type: "+getType();
+    }
 }
