@@ -4,11 +4,13 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import GameObjects.GameObject;
+import Maps.Map;
 
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -56,6 +58,8 @@ public class JBackground extends JPanel implements MouseListener{
 		add(gs);
 		repaint();
 		System.out.println("CLICKED "+e);
+		Map m = new Map();
+		System.out.println(m.getDistance(new Point(0,0), new Point(e.getX(), e.getY())));
 }
 
 

@@ -1,14 +1,17 @@
 package GUI;
 
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JComponent;
 
 import GameObjects.GameObject;
 import Maps.Map;
 
-public class GameSpirit extends JComponent {
+public class GameSpirit extends JComponent implements MouseListener{
 	
 	private static final long serialVersionUID = 3817775198749911544L;
 	public Image img;
@@ -17,6 +20,8 @@ public class GameSpirit extends JComponent {
 	public GameSpirit(int x,int y, int width, int height, Image img) {
 		this.img = img;
 		setBounds(x, y, width, height); 
+		addMouseListener(this);
+		setToolTipText("<html><h3>[GameSpirit] " + "("+x+","+y+")</h3></html>"); //TODO: set tooltip text.
 		
 		/////////////////////////////////////
 		// Used for Re-scaling of MyFrame. //
@@ -75,6 +80,34 @@ public class GameSpirit extends JComponent {
 		 Note: if using MyFrame than MyFrame class is re-scaling all of it's components when resized.
 		 */
 		g.drawImage(img, 0,0,getWidth(),getHeight(),this);
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {	
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		System.out.println("CLICKED ON A GAMESPIRIT!!");
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
