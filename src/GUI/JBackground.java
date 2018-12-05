@@ -3,6 +3,8 @@ package GUI;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import GameObjects.GameObject;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -16,7 +18,9 @@ public class JBackground extends JPanel implements MouseListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 3817775198749911544L;
-	public Image img;
+	public Image img; //TODO: make getters and setters
+	public boolean dropMode = false; //TODO: make getters and setters
+	public Image dropItem; // temp, should be GameObject(?)
 	
 	public JBackground(Image img) {
 		this.img = img;
@@ -46,7 +50,9 @@ public class JBackground extends JPanel implements MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {		
 		// ONLY FOR DEBUG
-		GameSpirit gs = new GameSpirit(e.getX(), e.getY(), 44, 44, MyFrame.loadImage("Ex3\\PACMAN.png"));
+		if(!dropMode) return;
+		
+		GameSpirit gs = new GameSpirit(e.getX(), e.getY(), 44, 44, dropItem);
 		add(gs);
 		repaint();
 		System.out.println("CLICKED "+e);

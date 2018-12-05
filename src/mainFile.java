@@ -12,8 +12,8 @@ import Maps.Map;
 
 public class mainFile {
 
-	static String packmanImagePath = "Ex3\\PACMAN.png";
-	static String fruitImagePath ="Ex3\\fruit.png";
+	static String packmanImagePath = "GameData\\PACMAN.png";
+	static String fruitImagePath ="GameData\\fruit.png";
 	static Image packmanImage, fruitImage;
 	
 	public static void main(String[] args) {

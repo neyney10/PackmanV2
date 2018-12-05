@@ -50,6 +50,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import com.sun.java.swing.plaf.motif.MotifBorders.BevelBorder;
 
@@ -57,6 +58,7 @@ import Game.Game;
 import GameObjects.Fruit;
 import GameObjects.GameObject;
 import GameObjects.Packman;
+import GameObjects.TYPE;
 import Maps.Map;
 
 
@@ -65,13 +67,18 @@ public class MyFrame extends JFrame implements ComponentListener{
 	// JBackground component is an object that contains all GameSpirits elements and represent the "Game" object in UI.
 	private JBackground jb;
 	
-	// pnl_toolbar contains all the management buttons such load,save and run.
-
+	// images and media, see "init" function for initialization.
+	ImageIcon saveIcon;
+	ImageIcon loadIcon;
+	ImageIcon runIcon;
+	ImageIcon exitIcon;
+	ImageIcon pacmanIcon;
+	ImageIcon fruitIcon;
+	Image packmanImage, fruitImage, mapImage;
 	
-	// pnl_toolbar's Buttons
-	private JButton btn_load; // load game from file.
-	private JButton btn_save; // save game to file.
+	// menubar's Buttons
 	private JButton btn_run; // run current loaded game.
+	private JButton btn_exitDropMode;
 	
 	// starting size of MyFrame.
 	public int SIZEW = 1000;
@@ -114,15 +121,23 @@ public class MyFrame extends JFrame implements ComponentListener{
 		addComponentListener(this); // for resizing the component
 
 
-		// Set Component's settings
+		//// Set Component's settings
 		Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
+		 // icons
+		saveIcon = new ImageIcon(loadImage("GameData\\save_icon.png"));
+		loadIcon = new ImageIcon(loadImage("GameData\\load_icon.png"));
+		runIcon = new ImageIcon(loadImage("GameData\\run_icon.png"));
+		exitIcon = new ImageIcon(loadImage("GameData\\exit_icon.png"));
+		pacmanIcon = new ImageIcon(loadImage("GameData\\pacman_icon.png"));
+		fruitIcon = new ImageIcon(loadImage("GameData\\fruit_icon.png"));
+		packmanImage = loadImage("GameData\\PACMAN.png");
+		fruitImage = loadImage("GameData\\fruit.png");
+		mapImage = loadImage("GameData\\Ariel1.png"); // Should come from MAP
 
 		////////////////
 		// Background //
 		////////////////
-		Image img;
-		img = loadImage("Ex3\\Ariel1.png"); // Should come from MAP
-		jb = new JBackground(img);
+		jb = new JBackground(mapImage);
 		jb.setBounds(0,0,SIZEW,SIZEH);
 
 
@@ -140,52 +155,81 @@ public class MyFrame extends JFrame implements ComponentListener{
 		
 		JMenuBar menubar = new JMenuBar();
 		
+		// creating menus
 		JMenu menu = new JMenu("File");
 		menu.setFont(menuFont);
 		menu.setCursor(handCursor);
 		menu.setBorder(BorderFactory.createSoftBevelBorder(0));
+		
+		JMenu menuObjects = new JMenu("Game Objects");
+		menuObjects.setFont(menuFont);
+		menuObjects.setCursor(handCursor);
+		menuObjects.setBorder(BorderFactory.createSoftBevelBorder(0));
 
 		
-		/// create buttons for toolbar
+		/// create buttons for menubar's menus
 		JMenuItem i1 = new JMenuItem("Load game");
 		i1.setFont(itemFont);
 		i1.setCursor(handCursor);
+		i1.setBackground(Color.cyan);
+		i1.setIcon(loadIcon);
 		i1.addActionListener(new ActionListener() {
-			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				loadGame();
-			}
-		});
+			public void actionPerformed(ActionEvent e) {loadGame();}});
 		
 		JMenuItem i2 = new JMenuItem("Save game");
 		i2.setFont(itemFont);
 		i2.setCursor(handCursor);
+		i2.setBackground(Color.cyan);
+		i2.setIcon(saveIcon);
 		i2.addActionListener(new ActionListener() {
-			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveGame();
-			}
-		});
+			public void actionPerformed(ActionEvent e) {saveGame();}});
+		
+		JMenuItem gmobjAddPackman = new JMenuItem("Pokemon +");
+		gmobjAddPackman.setFont(itemFont);
+		gmobjAddPackman.setCursor(handCursor);
+		gmobjAddPackman.setBackground(Color.ORANGE); 
+		gmobjAddPackman.setIcon(pacmanIcon);
+		gmobjAddPackman.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {addPackman();}});
+		
+		JMenuItem gmobjAddFruit = new JMenuItem("Yummy +");
+		gmobjAddFruit.setFont(itemFont);
+		gmobjAddFruit.setCursor(handCursor);
+		gmobjAddFruit.setBackground(Color.ORANGE); 
+		gmobjAddFruit.setIcon(fruitIcon);
+		gmobjAddFruit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {addFruit(); }});
 		
 		btn_run = new JButton();
-		btn_run.setText("<- [RUN] ->");
-		btn_run.setForeground(Color.BLUE);
+		btn_run.setText("RUN");
+		btn_run.setForeground(Color.getHSBColor(0.35f, 1.0f, 0.5f));
 		btn_run.setCursor(handCursor);
+		btn_run.setIcon(runIcon);
+		btn_run.setHorizontalTextPosition(SwingConstants.LEFT); // TO SLIDE ICON TO THE RIGHT
 		btn_run.addActionListener(new ActionListener() {
-			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				MyFrame.this.Test();
-				
-			}
-		});
+			public void actionPerformed(ActionEvent e) {MyFrame.this.Test();}});
 		
-		// pack menu
+		btn_exitDropMode = new JButton();
+		btn_exitDropMode.setText("stop dropMode");
+		btn_exitDropMode.setVisible(false);
+		btn_exitDropMode.setIcon(exitIcon);
+		btn_exitDropMode.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {exitDropMode();}});
+		
+		// pack menus
 		menu.add(i1);
 		menu.add(i2);
+		menuObjects.add(gmobjAddPackman);
+		menuObjects.add(gmobjAddFruit);
 		menubar.add(menu);
+		menubar.add(menuObjects);
+		menubar.add(btn_exitDropMode);
 		menubar.add(btn_run);
 		
 		/* pack it up. from last to first generated components to create the 'Z' height layer property and 
@@ -198,7 +242,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 	/**
 	 * Loading an Image from file.
 	 * @see: https://stackoverflow.com/questions/18777893/jframe-background-image
-	 * @param path to the file, Ex: "Ex3\\Pacman.png" for Windows system.
+	 * @param path to the file, Ex: "GameData\\Pacman.png" for Windows system.
 	 * @return Image Object (can be casted into BufferedImage)
 	 */
 	public static Image loadImage(String path) {
@@ -320,6 +364,47 @@ public class MyFrame extends JFrame implements ComponentListener{
 	 */
 	public void runGame() {
 		
+	}
+	
+	
+	/**
+	 * setting the dropMode of this.JButton to true for allowing dropping items on map from type Packman.
+	 */
+	public void addPackman() {
+		if(jb == null) return;
+		
+		jb.dropItem = packmanImage;
+		enterDropMode();
+	}
+	
+	/**
+	 * setting the dropMode of this.JButton to true for allowing dropping items on map from type Fruit.
+	 */
+	public void addFruit() {
+		if(jb == null) return;
+		
+		jb.dropItem = fruitImage;
+		enterDropMode();
+	}
+	
+	/**
+	 * setting the dropMode of this.JButton to true for allowing dropping items on map.
+	 */
+	public void enterDropMode() {
+		if(jb == null) return;
+		
+		jb.dropMode = true;
+		btn_exitDropMode.setVisible(true);
+	}
+	
+	/**
+	 * Handles the click of exiting drop Mode
+	 */
+	public void exitDropMode() {
+		if(jb == null) return;
+		
+		jb.dropMode = false;
+		btn_exitDropMode.setVisible(false);
 	}
 	
 	/**
