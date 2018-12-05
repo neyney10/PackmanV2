@@ -4,7 +4,7 @@ import Geom.Point3D;
 
 import java.awt.Image;
 
-public abstract class GameObject {
+public abstract class GameObject implements Comparable<GameObject> {
     private TYPE type;
     private Point3D point;
     private int id;
@@ -40,6 +40,15 @@ public abstract class GameObject {
 
     public void setSpirit(Image spirit) {
         this.spirit = spirit;
+    }
+    
+    @Override
+    public int compareTo(GameObject o) {
+    	if(o.type == this.type) {
+    		return o.id - this.id;
+    	} else if(o.type == TYPE.P) {
+    		return -1;
+    	} else return 1;
     }
 
     @Override

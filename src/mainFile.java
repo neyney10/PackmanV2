@@ -1,6 +1,7 @@
 import java.awt.Image;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 import GUI.MyFrame;
 import Game.Game;
@@ -25,11 +26,11 @@ public class mainFile {
 		fruitImage = MyFrame.loadImage(fruitImagePath);
 		
 		// create new GameObjects
-		Packman p1 = new Packman(35.207805, 32.103723 ,30,TYPE.P, 1, 1); 
+		Packman p1 = new Packman(35.207805, 32.103723 ,30,0,TYPE.P, 1, 1); 
 		p1.setSpirit(packmanImage);
-		Packman p2 = new Packman(35.207446,32.104424,30,TYPE.P, 1, 1);
+		Packman p2 = new Packman(35.207446,32.104424,30,1,TYPE.P, 1, 1);
 		p2.setSpirit(MyFrame.rotateImage(packmanImage,33));
-		Fruit f1 = new Fruit(35.2024,32.1056,30,TYPE.F,0,0);
+		Fruit f1 = new Fruit(35.2024,32.1056,30,1,TYPE.F);
 		f1.setSpirit(fruitImage);
 		
 		Map m = new Map();
@@ -39,10 +40,8 @@ public class mainFile {
 		System.out.println(m.getAngle(new Point(551,331), new Point(251,331)));
 		System.out.println(m.getAngle(new Point(551,331), new Point(251,111)));
 		
-	
-		
 		// create game object
-		ArrayList<GameObject> objs = new ArrayList<GameObject>();
+		TreeSet<GameObject> objs = new TreeSet<GameObject>();
 		objs.add(p1);
 		objs.add(p2);
 		objs.add(f1);

@@ -57,8 +57,6 @@ public class MyFrame extends JFrame implements ComponentListener{
 	public int SIZEH = 600;
 	
 	private Game game;
-	
-	private Map map = new Map(); // temp;
 
 
 	/**
@@ -254,22 +252,16 @@ public class MyFrame extends JFrame implements ComponentListener{
 		// update Background
 		if(jb != null) {
 			jb.setSize(this.size());
-
-			this.map.updateScreenRange(this.getWidth(), this.getHeight()); // TEMP
-			// TODO: set the scalefactor inside the Map Object.
-			double scaleFactorX, scaleFactorY;
-			scaleFactorX = ((double)getWidth())/SIZEW;
-			scaleFactorY = ((double)getHeight())/SIZEH;
+			
+			if(game == null)
+				return;
+			
+			game.getMap().updateScreenRange(this.getWidth(), this.getHeight()); // TEMP
 
 			for(Component c : jb.getComponents()) {
 				if(c instanceof GameSpirit) {
 					GameSpirit gameComponent = (GameSpirit) c; 
-					gameComponent.setBounds(
-							(int)(gameComponent.startX*scaleFactorX),
-							(int)(gameComponent.startY*scaleFactorY),
-							(int)(gameComponent.startWidth*scaleFactorX),
-							(int)(gameComponent.startHeight*scaleFactorY)
-							);
+					game.getMap().updateLocationOnScreen(gameComponent);
 				} // if component instanceof GameSpirit
 			} // for over components
 		} // if jb != null 
@@ -312,10 +304,11 @@ public class MyFrame extends JFrame implements ComponentListener{
 		
 		for(GameObject obj : game.getObjects()) {
 			// TODO: set the width and height inside the
+			// TODO: set the gameGetMap inside JBackground
 			if(obj instanceof Packman)
-				jb.add(new GameSpirit(obj, Packman.width, Packman.height, map)); 
+				jb.add(new GameSpirit(obj, Packman.width, Packman.height, game.getMap())); 
 			else if(obj instanceof Fruit)
-				jb.add(new GameSpirit(obj, Fruit.width, Fruit.height, map));
+				jb.add(new GameSpirit(obj, Fruit.width, Fruit.height, game.getMap()));
 		}
 	}
 	
@@ -388,7 +381,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 		for(Component c : jb.getComponents()) {
 			if(c instanceof GameSpirit) {
 				GameSpirit gameComponent = (GameSpirit) c;
-				gameComponent.moveByPixel(10, 0);
+				game.getMap().moveLocationByPixels(gameComponent, 10, 0);
 			}
 		}
 	}

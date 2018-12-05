@@ -62,6 +62,12 @@ public class GameSpirit extends JComponent implements MouseListener{
 	}
 	
 	
+	public void updateLocationAndSize(int x, int y, int width, int height) {
+		updateLocation(x, y);
+		setSize(width, height);
+	}
+	
+	
 	
 	
 
