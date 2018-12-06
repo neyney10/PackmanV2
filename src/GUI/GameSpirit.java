@@ -20,7 +20,7 @@ public class GameSpirit extends JComponent implements MouseListener{
 		this.img = img;
 		setBounds(x, y, width, height); 
 		addMouseListener(this);
-		setToolTipText("<html><h3>[GameSpirit] " + "("+x+","+y+")</h3></html>"); //TODO: set tooltip text.
+		setToolTipText("<html><h3>[GameSpirit] " + "("+x+","+y+")</h3></html>"); 
 		
 		/////////////////////////////////////
 		// Used for Re-scaling of MyFrame. //
@@ -51,6 +51,19 @@ public class GameSpirit extends JComponent implements MouseListener{
 	}
 	
 	/**
+	 * Updating this GameSpirit size (width and height) using "setSize(w, h)", but updating GameSpirit's related properties
+	 * to match MyFrame's scaling algorithm <br>
+	 * use it for resizing the component (as Game component size).
+	 * @param width
+	 * @param height
+	 */
+	public void updateSize(int width, int height) {
+		startWidth = width;
+		startHeight = height;
+		setSize(width, height);
+	}
+	
+	/**
 	 * Moving the GameSpirit by x pixels horizontally and y pixels vertically (as right / down are positive and 
 	 * left / up are negative values)
 	 * @param x amount of pixels to shift right >>
@@ -61,15 +74,17 @@ public class GameSpirit extends JComponent implements MouseListener{
 	}
 	
 	
+	/**
+	 * Calling internally "updateLocation(x,y)" and "updateSize(w,h)".
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	public void updateLocationAndSize(int x, int y, int width, int height) {
 		updateLocation(x, y);
-		setSize(width, height);
+		updateSize(width, height);
 	}
-	
-	
-	
-	
-
 	
 	
 	/*

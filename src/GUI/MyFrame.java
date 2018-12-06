@@ -31,6 +31,7 @@ import Game.Game;
 import GameObjects.Fruit;
 import GameObjects.GameObject;
 import GameObjects.Packman;
+import Maps.Map;
 
 
 public class MyFrame extends JFrame implements ComponentListener{
@@ -54,8 +55,6 @@ public class MyFrame extends JFrame implements ComponentListener{
 	// starting size of MyFrame.
 	public int SIZEW = 1000;
 	public int SIZEH = 600;
-	
-	private Game game;
 
 
 	/**
@@ -252,15 +251,17 @@ public class MyFrame extends JFrame implements ComponentListener{
 		if(jb != null) {
 			jb.setSize(this.size());
 			
-			if(game == null)
+			if(jb.getGame() == null)
 				return;
 			
-			game.getMap().updateScreenRange(this.getWidth(), this.getHeight()); // TEMP
+			Map map = jb.getGame().getMap();
+			
+			map.updateScreenRange(this.getWidth(), this.getHeight());
 
 			for(Component c : jb.getComponents()) {
 				if(c instanceof GameSpirit) {
 					GameSpirit gameComponent = (GameSpirit) c; 
-					game.getMap().updateLocationOnScreen(gameComponent);
+					map.updateLocationOnScreen(gameComponent);
 				} // if component instanceof GameSpirit
 			} // for over components
 		} // if jb != null 
@@ -272,10 +273,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 	 * @param game - the game to set.
 	 */
 	public void setGame(Game game) {
-		this.game = game;
-		
-		if(game == null) return;
-			refreshGameUI();
+		jb.setGame(game);
 	}
 	
 	/**
@@ -292,36 +290,21 @@ public class MyFrame extends JFrame implements ComponentListener{
 			setGame(new Game(fd.getFiles()[0].getAbsolutePath()));
 	}
 	
-	/**
-	 * reloading all game components and objects.
-	 * TODO: might (?) be integrated inside JBackground
-	 */
-	public void refreshGameUI() {
-		if(game == null || jb == null) return;
-		
-		jb.removeAll();
-		
-		for(GameObject obj : game.getObjects()) {
-			// TODO: set the width and height inside the
-			// TODO: set the gameGetMap inside JBackground
-			if(obj instanceof Packman)
-				jb.add(new GameSpirit(obj, Packman.width, Packman.height, game.getMap())); 
-			else if(obj instanceof Fruit)
-				jb.add(new GameSpirit(obj, Fruit.width, Fruit.height, game.getMap()));
-		}
-	}
+	
 	
 	/**
 	 * Saving the current game to a CSV file
 	 * TODO: implement
 	 */
 	public void saveGame() {
+		if(jb == null) return;
+		
 		FileDialog fd = new FileDialog(new Frame(), "Save Game File (CSV)",FileDialog.SAVE);
 		fd.setDirectory("/");
 		fd.setFile("*.csv");
 		fd.setVisible(true);
 		if (fd.getFiles().length != 0)
-			game.toCsv(fd.getDirectory()+fd.getFile());
+			jb.getGame().toCsv(fd.getDirectory()+fd.getFile());
 	}
 	
 	/**
@@ -379,10 +362,12 @@ public class MyFrame extends JFrame implements ComponentListener{
 	public void Test() {
 		if(jb == null) return;
 		
+		Map map = jb.getGame().getMap();
+		
 		for(Component c : jb.getComponents()) {
 			if(c instanceof GameSpirit) {
 				GameSpirit gameComponent = (GameSpirit) c;
-				game.getMap().moveLocationByPixels(gameComponent, 10, 0);
+				map.moveLocationByPixels(gameComponent, 10, 0);
 			}
 		}
 	}
