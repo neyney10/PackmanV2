@@ -14,26 +14,37 @@ public class GameSpirit extends JComponent implements MouseListener{
 	
 	private static final long serialVersionUID = 3817775198749911544L;
 	public Image img;
-	public int startWidth, startHeight, startX, startY;
+	private int startWidth, startHeight, startX, startY;
 	
+
 	public GameSpirit(int x,int y, int width, int height, Image img) {
+		super();
 		this.img = img;
-		setBounds(x, y, width, height); 
+		setBounds(x - width/2, y - height/2, width, height); 
 		addMouseListener(this);
-		setToolTipText("<html><h3>[GameSpirit] " + "("+x+","+y+")</h3></html>"); 
+		setToolTipText("<html><h3>[GameSpirit] " + "("+x+","+y+")</h3></html>");  // TODO: update it every move.
 		
 		/////////////////////////////////////
 		// Used for Re-scaling of MyFrame. //
 		/////////////////////////////////////
 		this.startWidth = width;
 		this.startHeight = height; 
-		this.startX = x;
-		this.startY = y; 
+		this.startX = x - width/2;
+		this.startY = y - height/2; 
 	}
 	
 	// TEMP ONLY
-	public GameSpirit(GameObject obj, int width, int height, Map map) {
-		this(map.getLocationOnScreen(obj).x, map.getLocationOnScreen(obj).y, width, height, obj.getSpirit());
+	public GameSpirit(GameObject obj, Map map) {
+		this(map.getLocationOnScreen(obj).x, map.getLocationOnScreen(obj).y, obj.getInitialWidth(), obj.getInitialHeight(), obj.getSpirit());
+	}
+	
+	/**
+	 *  must have (x,y) pixel coordinates already processed position by a Map object. <br>
+	 *  preferable way is to generate this object with the "Game" object with "createGameSpirit(GameObject obj)".
+	 * @param obj GameObject
+	 */
+	public GameSpirit(GameObject obj, int x, int y) {
+		this(x, y, obj.getInitialWidth(), obj.getInitialHeight(), obj.getSpirit());
 	}
 	
 	/**
@@ -45,9 +56,9 @@ public class GameSpirit extends JComponent implements MouseListener{
 	 */
 	public void updateLocation(int x, int y)
 	{
-		startX = x;
-		startY = y;
-		setLocation(x,y);
+		startX = x - startWidth/2;
+		startY = y - startHeight/2;
+		setLocation(startX,startY);
 	}
 	
 	/**
@@ -70,7 +81,7 @@ public class GameSpirit extends JComponent implements MouseListener{
 	 * @param y amount of pixels to shift down 
 	 */
 	public void moveByPixel(int x, int y) {
-		updateLocation(startX + x, startY + y);
+		updateLocation((startX + startWidth/2) + x, (startY + startHeight/2) + y);
 	}
 	
 	
@@ -86,6 +97,62 @@ public class GameSpirit extends JComponent implements MouseListener{
 		updateSize(width, height);
 	}
 	
+
+	/**
+	 * @return the startWidth
+	 */
+	public int getStartWidth() {
+		return startWidth;
+	}
+
+	/**
+	 * @param startWidth the startWidth to set
+	 */
+	public void setStartWidth(int startWidth) {
+		this.startWidth = startWidth;
+	}
+
+	/**
+	 * @return the startHeight
+	 */
+	public int getStartHeight() {
+		return startHeight;
+	}
+
+	/**
+	 * @param startHeight the startHeight to set
+	 */
+	public void setStartHeight(int startHeight) {
+		this.startHeight = startHeight;
+	}
+	
+	/**
+	 * @return the startX
+	 */
+	public int getStartX() {
+		return startX;
+	}
+
+	/**
+	 * @param startX the startX to set
+	 */
+	public void setStartX(int startX) {
+		this.startX = startX;
+	}
+
+	/**
+	 * @return the startY
+	 */
+	public int getStartY() {
+		return startY;
+	}
+
+	/**
+	 * @param startY the startY to set
+	 */
+	public void setStartY(int startY) {
+		this.startY = startY;
+	}
 	
 	/*
 	 * [Developer Note] Status: Complete.

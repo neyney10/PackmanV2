@@ -46,7 +46,6 @@ public class MyFrame extends JFrame implements ComponentListener{
 	ImageIcon exitIcon;
 	ImageIcon pacmanIcon;
 	ImageIcon fruitIcon;
-	Image packmanImage, fruitImage, mapImage;
 	
 	// menubar's Buttons
 	private JButton btn_run; // run current loaded game.
@@ -98,14 +97,13 @@ public class MyFrame extends JFrame implements ComponentListener{
 		exitIcon = new ImageIcon(loadImage("GameData\\exit_icon.png"));
 		pacmanIcon = new ImageIcon(loadImage("GameData\\pacman_icon.png"));
 		fruitIcon = new ImageIcon(loadImage("GameData\\fruit_icon.png"));
-		packmanImage = loadImage("GameData\\PACMAN.png");
-		fruitImage = loadImage("GameData\\fruit.png");
-		mapImage = loadImage("GameData\\Ariel1.png"); // Should come from MAP
+
+	
 
 		////////////////
 		// Background //
 		////////////////
-		jb = new JBackground(mapImage);
+		jb = new JBackground();
 		jb.setBounds(0,0,SIZEW,SIZEH);
 
 
@@ -322,7 +320,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 	public void addPackman() {
 		if(jb == null) return;
 		
-		jb.dropItem = packmanImage;
+		jb.dropItem = new Packman();
 		enterDropMode();
 	}
 	
@@ -332,7 +330,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 	public void addFruit() {
 		if(jb == null) return;
 		
-		jb.dropItem = fruitImage;
+		jb.dropItem = new Fruit();
 		enterDropMode();
 	}
 	

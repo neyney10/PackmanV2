@@ -1,13 +1,15 @@
 package Game;
 
 import Files_format.Csv;
+import GUI.GameSpirit;
 import GameObjects.GameObject;
 import Maps.Map;
 
+import java.awt.Point;
 import java.util.TreeSet;
 
-public class Game {
-    //private ArrayList<GameObject> objects;
+public class Game implements BasicGameSpiritFactory {
+
     private TreeSet<GameObject> objects;
     private Map map = new Map(); // temp
     
@@ -38,4 +40,22 @@ public class Game {
     public void setMap(Map map) {
         this.map = map;
     }
+
+
+	@Override
+	public GameSpirit createGameSpirit(GameObject obj) {
+		Point p = map.getLocationOnScreen(obj);
+		GameSpirit gameComponent = new GameSpirit(obj, p.x, p.y);
+		map.updateLocationOnScreen(gameComponent);
+		return gameComponent;
+	}
+
+
+	@Override
+	public GameSpirit createGameSpiritXY(GameObject obj, int x, int y) {
+		Point p = map.transformByScale(x, y);
+		GameSpirit gameComponent = new GameSpirit(obj, p.x, p.y);
+		map.updateLocationOnScreen(gameComponent);
+		return gameComponent;
+	}
 }

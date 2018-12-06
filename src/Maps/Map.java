@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 import Coords.MyCoords;
 import GUI.GameSpirit;
+import GUI.MyFrame;
 import GameObjects.GameObject;
 import Geom.Point3D;
 
@@ -18,16 +19,26 @@ public class Map {
 
 	public Map() {
 		// default values
+		/*BOAZ SWITCH BETWEEN LATITUDE AND LONGITUDE
+		 * 		
 		double x1 = 35.2024f; // upper left corner
 		double y1 = 32.1056f;
 		double x2 = 35.2121f; // lower right corner
 		double y2 = 32.1022f;
+		 */
+		
+		double x1 = 32.1056f; // upper left corner
+		double y1 = 35.2024f;
+		double x2 = 32.1022f; // lower right corner
+		double y2 = 35.2121f;
 
 		mapRange = new MapRange(x1,y1,x2,y2);
 		screenRange = new Rectangle(0, 0, 1000, 600);
 		originalScreenRange = new Rectangle(0, 0, 1000, 600);
 		scaleFactorX = 1;
 		scaleFactorY = 1;
+		
+		background = MyFrame.loadImage("GameData\\Ariel1.png");
 	}
 
 	public double getX1() {
@@ -46,8 +57,10 @@ public class Map {
 	public Point getLocationOnScreen(GameObject obj) {
 		int x,y;
 		Point3D objPoint = obj.getPoint();
-		x = (int) ((objPoint.x() - mapRange.x1) * (screenRange.getWidth() / mapRange.getWidth()));
-		y = (int) ((objPoint.y() - mapRange.y1) * (screenRange.getHeight() / mapRange.getHeight()));
+
+		x = (int) ((objPoint.x() - Math.min(mapRange.x1, mapRange.x2)) * (screenRange.getWidth() / mapRange.getWidth()));
+		y = (int) ((objPoint.y() - Math.min(mapRange.y1, mapRange.y2)) * (screenRange.getHeight() / mapRange.getHeight()));
+
 
 		return new Point(x, y);
 	}
@@ -60,8 +73,8 @@ public class Map {
 	 */
 	public Point3D getLocationFromScreen(Point p) {
 		double x,y;
-		x = mapRange.x1 + p.getX() * (mapRange.getWidth()/screenRange.getWidth());
-		y = mapRange.y1 + p.getY() * (mapRange.getHeight()/screenRange.getHeight());
+		x = Math.min(mapRange.x1, mapRange.x2) + p.getX() * (mapRange.getWidth()/screenRange.getWidth());
+		y = Math.min(mapRange.y1, mapRange.y2) + p.getY() * (mapRange.getHeight()/screenRange.getHeight());
 
 		return new Point3D(x,y,0);
 	}
@@ -144,10 +157,10 @@ public class Map {
 	 */
 	public void updateLocationOnScreen(GameSpirit obj) {
 		obj.setBounds(
-				(int)(obj.startX*scaleFactorX),
-				(int)(obj.startY*scaleFactorY),
-				(int)(obj.startWidth*scaleFactorX),
-				(int)(obj.startHeight*scaleFactorY)
+				(int)(obj.getStartX()*scaleFactorX),
+				(int)(obj.getStartY()*scaleFactorY),
+				(int)(obj.getStartWidth()*scaleFactorX),
+				(int)(obj.getStartHeight()*scaleFactorY)
 				);
 	}
 	
@@ -173,8 +186,52 @@ public class Map {
 		obj.moveByPixel(x, y);
 		updateLocationOnScreen(obj);
 	}
+
+	/**
+	 * @return the scaleFactorX
+	 */
+	public double getScaleFactorX() {
+		return scaleFactorX;
+	}
+
+	/**
+	 * @param scaleFactorX the scaleFactorX to set
+	 */
+	public void setScaleFactorX(double scaleFactorX) {
+		this.scaleFactorX = scaleFactorX;
+	}
+
+	/**
+	 * @return the scaleFactorY
+	 */
+	public double getScaleFactorY() {
+		return scaleFactorY;
+	}
+
+	/**
+	 * @param scaleFactorY the scaleFactorY to set
+	 */
+	public void setScaleFactorY(double scaleFactorY) {
+		this.scaleFactorY = scaleFactorY;
+	}
 	
-	
+	public Point transformByScale(int x, int y) {
+		return new Point((int)(x/scaleFactorX), (int)(y/scaleFactorY));
+	}
+
+	/**
+	 * @return the background
+	 */
+	public Image getBackground() {
+		return background;
+	}
+
+	/**
+	 * @param background the background to set
+	 */
+	public void setBackground(Image background) {
+		this.background = background;
+	}
 	
 
 	

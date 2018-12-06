@@ -20,23 +20,26 @@ public class JBackground extends JPanel implements MouseListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 3817775198749911544L;
-	public Image img; //TODO: make getters and setters
 	public boolean dropMode = false; //TODO: make getters and setters
-	public Image dropItem; // temp, should be GameObject(?)
+	public GameObject dropItem; 
 	private Game game;
 	
 	
-	public JBackground(Image img) {
-		this.img = img;
+	public JBackground() {
+		super();
 		setLayout(null);
 		addMouseListener(this);
+	}
 	
+	public JBackground(Game game) {
+		this();
+		setGame(game);
 	}
 	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(img, 0, 0, getWidth(), getHeight(),this);
+		g.drawImage(game.getMap().getBackground(), 0, 0, getWidth(), getHeight(),this);
 	}
 	
 	/**
@@ -47,13 +50,13 @@ public class JBackground extends JPanel implements MouseListener{
 		
 		removeAll();
 		
-		for(GameObject obj : game.getObjects()) {
-			// TODO: set the width and height inside the
-			if(obj instanceof Packman)
-				add(new GameSpirit(obj, Packman.width, Packman.height, game.getMap())); 
-			else if(obj instanceof Fruit)
-				add(new GameSpirit(obj, Fruit.width, Fruit.height, game.getMap()));
+		for(GameObject obj : game.getObjects())  {
+				add(game.createGameSpirit(obj));
+				System.out.println(obj.getPoint() + " | "+ game.createGameSpirit(obj).getLocation() + " | " + game.getMap().getLocationFromScreen(game.createGameSpirit(obj).getLocation()));
 		}
+		
+		repaint();
+		
 	}
 	
 	@Override
@@ -73,15 +76,10 @@ public class JBackground extends JPanel implements MouseListener{
 		// ONLY FOR DEBUG
 		if(!dropMode) return;
 		
-		Map m = game.getMap();
-		
-		GameSpirit gs = new GameSpirit(e.getX(), e.getY(), 44, 44, dropItem);
-		add(gs);
-		m.updateLocationOnScreen(gs);
+		add(game.createGameSpiritXY(dropItem, e.getX(), e.getY()));
 		repaint();
 		System.out.println("CLICKED "+e);
-		
-		System.out.println(m.getDistance(new Point(0,0), new Point(e.getX(), e.getY())));
+		System.out.println(e.getLocationOnScreen()+ " | "+game.getMap().getLocationFromScreen(e.getLocationOnScreen()));
 }
 
 

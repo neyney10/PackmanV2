@@ -39,11 +39,11 @@ public class MapRange {
 	}
 	
 	public double getWidth() {
-		return (x2-x1);
+		return Math.abs(x2-x1);
 	}
 	
 	public double getHeight() {
-		return (y2-y1);
+		return Math.abs(y2-y1);
 	}
 
 	public void setY2(double y2) {

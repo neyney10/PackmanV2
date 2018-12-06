@@ -42,7 +42,7 @@ public class Csv {
                     }
                 }
                 else {
-                    if (column[type].compareTo("P")==0) {
+                    if (column[type].equals("P")) {
                         gameObjects.add(new Packman(Double.parseDouble(column[lat]), Double.parseDouble(column[lon]), Double.parseDouble(column[alt]),Integer.parseInt(column[id]), Double.parseDouble(column[speed]), Double.parseDouble(column[radius])));
                     }
                     else
