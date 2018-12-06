@@ -31,7 +31,6 @@ import Game.Game;
 import GameObjects.Fruit;
 import GameObjects.GameObject;
 import GameObjects.Packman;
-import Maps.Map;
 
 
 public class MyFrame extends JFrame implements ComponentListener{
@@ -228,7 +227,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 	}
 	
 	/**
-	 * @see https://stackoverflow.com/questions/8639567/java-rotating-images
+	 * @see "https://stackoverflow.com/questions/8639567/java-rotating-images"
 	 * @param img
 	 * @param angle
 	 * @return
@@ -281,7 +280,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 	
 	/**
 	 * Load game from CSV file.
-	 * @param path - to the file
+	 * @param *path - to the file
 	 */
 	public void loadGame() {
 		FileDialog fd = new FileDialog(new Frame(), "Load Game File (CSV)",FileDialog.LOAD);
@@ -313,14 +312,16 @@ public class MyFrame extends JFrame implements ComponentListener{
 	}
 	
 	/**
-	 * Saving the current game to a KML file
+	 * Saving the current game to a CSV file
 	 * TODO: implement
 	 */
 	public void saveGame() {
-		FileDialog fd = new FileDialog(new Frame(), "Save Game File (KML)",FileDialog.SAVE);
+		FileDialog fd = new FileDialog(new Frame(), "Save Game File (CSV)",FileDialog.SAVE);
 		fd.setDirectory("/");
-		fd.setFile("*.kml");
+		fd.setFile("*.csv");
 		fd.setVisible(true);
+		if (fd.getFiles().length != 0)
+			game.toCsv(fd.getDirectory()+fd.getFile());
 	}
 	
 	/**

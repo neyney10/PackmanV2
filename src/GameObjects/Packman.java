@@ -9,10 +9,10 @@ public class Packman extends GameObject {
 
     private double radius,speed;
 
-    public Packman(double lat, double lon, double alt,int id, TYPE type, double radius, double speed) {
+    public Packman(double lat, double lon, double alt,int id, double radius, double speed) {
         setPoint(new Point3D(lat,lon,alt));
         setId(id);
-        setType(type);
+        setType(TYPE.P);
         setRadius(radius);
         setSpeed(speed);
     }

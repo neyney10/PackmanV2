@@ -1,13 +1,9 @@
 package GUI;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import GameObjects.GameObject;
 import Maps.Map;
 
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;

@@ -1,12 +1,9 @@
 package Game;
 
+import Files_format.Csv;
 import GameObjects.GameObject;
 import Maps.Map;
-import jdk.nashorn.api.tree.Tree;
 
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class Game {
@@ -18,11 +15,14 @@ public class Game {
     public Game(TreeSet<GameObject> objects) {
         setObjects(objects);
     }
-    
-    public Game(String path) {
-    	
-    }
 
+
+    public Game(String path) {
+        setObjects(Csv.read(path));
+    }
+    public void toCsv(String path){
+        Csv.build(path,getObjects());
+    }
     public TreeSet<GameObject> getObjects() {
         return objects;
     }
@@ -31,12 +31,11 @@ public class Game {
         this.objects = objects;
     }
 
-	public Map getMap() {
-		return map;
-	}
+    public Map getMap() {
+        return map;
+    }
 
-	public void setMap(Map map) {
-		this.map = map;
-	}
-	
+    public void setMap(Map map) {
+        this.map = map;
+    }
 }
