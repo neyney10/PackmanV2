@@ -36,6 +36,8 @@ import Maps.Map;
 
 public class MyFrame extends JFrame implements ComponentListener{
 
+	final public static boolean DEBUG = true;
+	
 	// JBackground component is an object that contains all GameSpirits elements and represent the "Game" object in UI.
 	private JBackground jb;
 	
@@ -52,9 +54,10 @@ public class MyFrame extends JFrame implements ComponentListener{
 	private JButton btn_exitDropMode;
 	
 	// starting size of MyFrame.
-	public int SIZEW = 1000;
-	public int SIZEH = 600;
+	public int SIZEW = 1433;
+	public int SIZEH = 642;
 
+	
 
 	/**
 	 * Serialization version UIDl
@@ -365,7 +368,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 		for(Component c : jb.getComponents()) {
 			if(c instanceof GameSpirit) {
 				GameSpirit gameComponent = (GameSpirit) c;
-				map.moveLocationByPixels(gameComponent, 10, 0);
+				map.moveLocationByPixels(gameComponent, -10, 0);
 			}
 		}
 	}

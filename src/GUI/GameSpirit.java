@@ -22,7 +22,7 @@ public class GameSpirit extends JComponent implements MouseListener{
 		this.img = img;
 		setBounds(x - width/2, y - height/2, width, height); 
 		addMouseListener(this);
-		setToolTipText("<html><h3>[GameSpirit] " + "("+x+","+y+")</h3></html>");  // TODO: update it every move.
+		setToolTipText("<html><h3>[GameSpirit] " + "("+x+","+y+")</h3></html>"); 
 		
 		/////////////////////////////////////
 		// Used for Re-scaling of MyFrame. //
@@ -59,6 +59,9 @@ public class GameSpirit extends JComponent implements MouseListener{
 		startX = x - startWidth/2;
 		startY = y - startHeight/2;
 		setLocation(startX,startY);
+		
+		// update tooltip
+		setToolTipText("<html><h3>[GameSpirit] " + "("+x+","+y+")</h3></html>");
 	}
 	
 	/**

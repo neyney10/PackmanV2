@@ -1,5 +1,8 @@
 package Maps;
 
+import java.awt.Point;
+import java.awt.geom.Point2D;
+
 public class MapRange {
 	double x1,y1,x2,y2;
 	
@@ -8,6 +11,10 @@ public class MapRange {
 		this.y1 = y1;
 		this.x2 = x2;
 		this.y2 = y2;
+	}
+	
+	public MapRange(javafx.geometry.Point2D point2d, javafx.geometry.Point2D point2d2) {
+		this(point2d.getX(), point2d.getY(), point2d2.getX(), point2d2.getY());
 	}
 
 	public double getX1() {

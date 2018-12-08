@@ -110,8 +110,8 @@ public class MyCoords implements coords_converter {
 		double B = Math.sqrt(C*C-A*A);
 		arr[1] = Math.toDegrees(Math.atan(A/B));
 		arr[2] = distance3d(gps0, gps1);
-		System.out.println("Tan-1: "+ Math.toDegrees(Math.atan(A/B))+" | Sin-1: " + Math.toDegrees(Math.asin(A/C)));
-		System.out.println("angle:" +Math.toDegrees(p2m(gps0).angleZ(p2m(gps1))));
+		//System.out.println("Tan-1: "+ Math.toDegrees(Math.atan(A/B))+" | Sin-1: " + Math.toDegrees(Math.asin(A/C)));
+		//System.out.println("angle:" +Math.toDegrees(p2m(gps0).angleZ(p2m(gps1))));
 
 
 

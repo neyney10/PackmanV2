@@ -19,8 +19,8 @@ public class Packman extends GameObject {
         
         // initial values for this type
         setType(TYPE.P);
-        setInitialWidth(41);
-        setInitialHeight(41);
+        setInitialWidth(31);
+        setInitialHeight(31);
     	setSpirit(packmanImage);
     }
     

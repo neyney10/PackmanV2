@@ -25,11 +25,11 @@ public class mainFile {
 		fruitImage = MyFrame.loadImage(fruitImagePath);
 		
 		// create new GameObjects
-		Packman p1 = new Packman(32.10394266, 35.20724539 ,30,0, 1, 1);
+		Packman p1 = new Packman(32.103500, 35.207765 ,30,0, 1, 1);
 		p1.setSpirit(packmanImage);
-		Packman p2 = new Packman(32.10404121,35.20758436,30,1, 1, 1);
+		Packman p2 = new Packman(32.103717, 35.205679 ,30,1, 1, 1);
 		p2.setSpirit(MyFrame.rotateImage(packmanImage,33));
-		Packman p3 = new Packman(32.10333584,35.20895676,30,2, 1, 1);
+		Packman p3 = new Packman(32.103413, 35.207767 ,30,2, 1, 1);
 		p3.setSpirit(MyFrame.rotateImage(packmanImage,77));
 		Fruit f1 = new Fruit(32.10441982,35.20674934,30,3);
 		f1.setSpirit(fruitImage);
