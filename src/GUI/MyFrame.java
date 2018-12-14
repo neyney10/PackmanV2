@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,11 +28,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 
+import GUI.Animation.SimulatePath;
 import Game.Game;
 import GameObjects.Fruit;
 import GameObjects.GameObject;
 import GameObjects.Packman;
+import Geom.Point3D;
 import Maps.Map;
+import Path.Path;
 
 
 public class MyFrame extends JFrame implements ComponentListener{
@@ -51,13 +55,18 @@ public class MyFrame extends JFrame implements ComponentListener{
 	
 	// menubar's Buttons
 	private JButton btn_run; // run current loaded game.
-	private JButton btn_exitDropMode;
+	private JButton btn_exitDropMode; // stop the abillity to drop game objects
+	private JButton btn_stopSimulation;
+	
+	// Simulation
+	private SimulatePath simulation;
+	private boolean simulating = false;
 	
 	// starting size of MyFrame.
-	public int SIZEW = 1433;
-	public int SIZEH = 642;
+	public final int SIZEW = 1433;
+	public final int SIZEH = 642;
 
-	
+
 
 	/**
 	 * Serialization version UIDl
@@ -191,6 +200,14 @@ public class MyFrame extends JFrame implements ComponentListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {exitDropMode();}});
 		
+		btn_stopSimulation = new JButton();
+		btn_stopSimulation.setText("Stop simulation");
+		btn_stopSimulation.setVisible(false);
+		btn_stopSimulation.setIcon(exitIcon);
+		btn_stopSimulation.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {stop();}});
+		
 		// pack menus
 		menu.add(i1);
 		menu.add(i2);
@@ -200,6 +217,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 		menubar.add(menuObjects);
 		menubar.add(btn_exitDropMode);
 		menubar.add(btn_run);
+		menubar.add(btn_stopSimulation);
 		
 		/* pack it up. from last to first generated components to create the 'Z' height layer property and 
 		 stack components */
@@ -248,6 +266,14 @@ public class MyFrame extends JFrame implements ComponentListener{
 	}
 
 	public void componentResized(ComponentEvent ce) {
+		rescaleGameUI();
+	}
+	
+	/**
+	 * Rescaling the GameUI components to match screen size, width and height <br>
+	 * adjusting position and image size.
+	 */
+	public void rescaleGameUI() {
 		// update Background
 		if(jb != null) {
 			jb.setSize(this.size());
@@ -266,7 +292,6 @@ public class MyFrame extends JFrame implements ComponentListener{
 				} // if component instanceof GameSpirit
 			} // for over components
 		} // if jb != null 
-
 	}
 	
 	/**
@@ -275,6 +300,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 	 */
 	public void setGame(Game game) {
 		jb.setGame(game);
+		rescaleGameUI();
 	}
 	
 	/**
@@ -358,19 +384,67 @@ public class MyFrame extends JFrame implements ComponentListener{
 	}
 	
 	/**
+	 * Stop running, stopping simulation
+	 */
+	public void stop() {
+		
+		simulation.interrupt();
+		
+		try {
+			simulation.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		btn_run.setVisible(true);
+		btn_stopSimulation.setVisible(false);
+	}
+	
+	/**
 	 * [Developer Note] Only for debug and testing purposes
 	 */
 	public void Test() {
 		if(jb == null) return;
 		
-		Map map = jb.getGame().getMap();
+		btn_stopSimulation.setVisible(true);
+		btn_run.setVisible(false);
 		
-		for(Component c : jb.getComponents()) {
-			if(c instanceof GameSpirit) {
-				GameSpirit gameComponent = (GameSpirit) c;
-				map.moveLocationByPixels(gameComponent, -10, 0);
-			}
-		}
+		Path pat = new Path();
+		pat.add(new Point3D(35.211222,32.104496,30));
+		pat.add(new Point3D(35.207462,32.102482,30));
+		pat.add(new Point3D(35.208462,32.103482,30)); //different
+		pat.add(new Point3D(35.203462,32.103482,30)); //different
+		pat.add(new Point3D(35.204462,32.104082,30)); //different
+		
+
+		Path pat2 = new Path();
+		pat2.add(new Point3D(35.204462,32.104082,30)); //different
+		pat2.add(new Point3D(35.203462,32.103482,30)); //different
+		pat2.add(new Point3D(35.208462,32.103482,30)); //different
+		pat2.add(new Point3D(35.207462,32.102482,30));
+		pat2.add(new Point3D(35.211222,32.104496,30));
+		
+
+		GameSpirit s1 = (GameSpirit) jb.getComponent(1);
+		Packman p1 = (Packman) s1.getGameObj();
+		p1.setPath(pat);
+		
+		GameSpirit s2 = (GameSpirit) jb.getComponent(2);
+		Packman p2 = (Packman) s2.getGameObj();
+		p2.setPath(pat2);
+		
+
+		simulation = new SimulatePath(jb);
+		simulation.start();
+		
+//		Map map = jb.getGame().getMap();
+//		
+//		for(Component c : jb.getComponents()) {
+//			if(c instanceof GameSpirit) {
+//				GameSpirit gameComponent = (GameSpirit) c;
+//				map.moveLocationByPixels(gameComponent, -10, 10);
+//			}
+//		}
 	}
 
 	@Override

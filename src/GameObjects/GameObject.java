@@ -3,8 +3,9 @@ package GameObjects;
 import Geom.Point3D;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
-public abstract class GameObject implements Comparable<GameObject>, BasicGameSpirit {
+public abstract class GameObject implements Comparable<GameObject>, BasicGameSpirit, Cloneable{
     private TYPE type;
     private Point3D point;
     private int id;
@@ -36,7 +37,12 @@ public abstract class GameObject implements Comparable<GameObject>, BasicGameSpi
     }
 
     public Image getSpirit() {
-        return spirit;
+    	BufferedImage i = (BufferedImage) spirit;
+    	BufferedImage copyOfImage = 
+    			   new BufferedImage(i.getWidth(), i.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    	Graphics g = copyOfImage.createGraphics();
+    	g.drawImage(i, 0, 0, null);
+        return copyOfImage;
     }
 
     public void setSpirit(Image spirit) {
@@ -72,11 +78,29 @@ public abstract class GameObject implements Comparable<GameObject>, BasicGameSpi
     @Override
     public int compareTo(GameObject o) {
         if(o.type == this.type) {
-            return o.id - this.id;
+            return this.id - o.id;
         } else if(o.type == TYPE.P) {
             return -1;
         } else return 1;
     }
+    
+    @Override
+    public GameObject clone() {
+    	GameObject o;
+		try {
+			o = (GameObject) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return null;
+		}
+    	o.setId(getId());
+    	o.setInitialSize(getInitialWidth(), getInitialHeight());
+    	o.setSpirit(getSpirit());
+    	o.setPoint(new Point3D(point.x(), point.y(), point.z())); 
+    	o.setType(getType());
+    	return o;
+    }
+   
 
     @Override
     public String toString() {

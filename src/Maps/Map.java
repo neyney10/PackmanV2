@@ -21,17 +21,17 @@ public class Map {
 	public Map() {
 		// default values
 		/*BOAZ SWITCH BETWEEN LATITUDE AND LONGITUDE
-		 * 		
+		 */
 		double x1 = 35.2024f; // upper left corner
 		double y1 = 32.1056f;
 		double x2 = 35.2121f; // lower right corner
-		double y2 = 32.1022f;
-		 */
+		double y2 = 32.1019f;
+		 
 		
-		double x1 = 32.1050f; // upper left corner
-		double y1 = 35.2024f;
-		double x2 = 32.1022f; // lower right corner
-		double y2 = 35.2121f;
+//		double x1 = 32.1052f; // upper left corner
+//		double y1 = 35.2024f;
+//		double x2 = 32.1022f; // lower right corner
+//		double y2 = 35.2121f;
 
 		mapRange = new MapRange(x1,y1,x2,y2);
 		//mapRange = new MapRange(new javafx.geometry.Point2D(32.102263, 35.202302), new javafx.geometry.Point2D(32.105827, 35.212061));
@@ -81,12 +81,12 @@ public class Map {
 	
 	/**
 	 * NOT TESTED
-	 * @param origin
-	 * @param p
+	 * @param point2d
+	 * @param point2d2
 	 * @param angle
 	 * @return
 	 */
-	public Point rotateAxis(Point origin, Point p, double angle) {
+	public Point2D rotateAxis(javafx.geometry.Point2D point2d, javafx.geometry.Point2D point2d2, double angle) {
 		// translate the axes
 		
 		angle = Math.toRadians(angle);
@@ -94,15 +94,15 @@ public class Map {
 		
 		double x ,y;
 		// rotate whole system
-		x = p.x - origin.x;
-		y = p.y - origin.y;
+		x = point2d2.getX() - point2d.getX();
+		y = point2d2.getY() - point2d.getY();
 		
 		trP.x = (int) (x*Math.cos(angle) - y*Math.sin(angle)); 
 		trP.y = (int) +(y*Math.cos(angle) + x*Math.sin(angle));
 		
 		// retranslate the axes back
-		trP.x += origin.x;
-		trP.y += origin.y;
+		trP.x += point2d.getX();
+		trP.y += point2d.getY();
 		
 		return trP;
 		
@@ -115,6 +115,23 @@ public class Map {
 	public double getWidth() {
 		return mapRange.getWidth();
 	}
+	
+	
+	
+	/**
+	 * Get the place on screen in Pixels from the Geodetic/polar Point found on GameObject.
+	 * @param Point3D p3d
+	 * @return java.awt.Point, with (x,y) in Pixels represents the location on screen.
+	 */
+	public Point getLocationOnScreen(Point3D p3d) {
+		double x,y;
+
+		x =  ((p3d.x() - mapRange.x1)) * (screenRange.getWidth() / mapRange.getWidth());
+		y =  ((-p3d.y() + mapRange.y1)) * (screenRange.getHeight() / mapRange.getHeight());
+		//y *= -1; // FIX
+
+		return new Point((int)x, (int)y);
+	}
 
 	/**
 	 * Get the place on screen in Pixels from the Geodetic/polar Point found on GameObject.
@@ -122,15 +139,7 @@ public class Map {
 	 * @return java.awt.Point, with (x,y) in Pixels represents the location on screen.
 	 */
 	public Point getLocationOnScreen(GameObject obj) {
-		int x,y;
-		Point3D objPoint = obj.getPoint();
-
-		x = (int) ((objPoint.x() - Math.min(mapRange.x1, mapRange.x2)) * (screenRange.getWidth() / mapRange.getWidth()));
-		y = (int) ((objPoint.y() - Math.min(mapRange.y1, mapRange.y2)) * (screenRange.getHeight() / mapRange.getHeight()));
-		
-		
-		
-		return new Point(x, y);
+			return getLocationOnScreen(obj.getPoint());
 	}
 
 	/**
@@ -141,9 +150,9 @@ public class Map {
 	 */
 	public Point3D getLocationFromScreen(Point p) {
 		double x,y;
-		x = Math.min(mapRange.x1, mapRange.x2) + p.getX() * (mapRange.getWidth()/screenRange.getWidth());
-		y = Math.min(mapRange.y1, mapRange.y2) + p.getY() * (mapRange.getHeight()/screenRange.getHeight());
-
+		x = mapRange.x1 + p.getX() * (mapRange.getWidth()/screenRange.getWidth());
+		y = -mapRange.y1 + p.getY() * (mapRange.getHeight()/screenRange.getHeight());
+		y *=-1; // FIX
 		return new Point3D(x,y,0);
 	}
 
@@ -163,6 +172,7 @@ public class Map {
 
 	/**
 	 * Get distance between two points on screen (pixels) in PIXELS! <br>
+	 * Note: Calculating the distance by current scaling, its not RAW distance and might change by screen size <br>
 	 * [Developer Note] not tested, might not even work correctly.
 	 * @param p1 - point in pixels
 	 * @param p2 - point in pixels
@@ -173,11 +183,26 @@ public class Map {
 		deltaX = p2.x-p1.x;
 		deltaY = p2.y-p1.y;
 		return Math.sqrt(Math.abs((deltaX*deltaX)+(deltaY*deltaY)));
-
+	}
+	
+	/**
+	 * Get distance between two points on screen (pixels) in PIXELS! <br>
+	 * Note: Calculating the distance by ORIGINAL scaling, this is RAW data!
+	 * [Developer Note] not tested, might not even work correctly.
+	 * @param p1 - point in pixels
+	 * @param p2 - point in pixels
+	 * @return distance in SCREEN PIXELS.
+	 */
+	public double getDistanceByPixelRaw(Point p1, Point p2) {
+		double deltaX, deltaY;
+		deltaX = (p2.x-p1.x)/scaleFactorX;
+		deltaY = (p2.y-p1.y)/scaleFactorY;
+		return Math.sqrt(Math.abs((deltaX*deltaX)+(deltaY*deltaY)));
 	}
 
 	/**
 	 * Get the angle between two points on screen (pixels), in degrees. <br>
+	 * Note: Calculating Rescaled / non-original / non-Raw points. angle might be different with different screen sizes. <br>
 	 * Directly Upwards = 180 degrees. <br>
 	 * Directly on the Right = 90 degrees. <br>
 	 * Directly Downwards = 0 degrees. <br>
@@ -195,6 +220,21 @@ public class Map {
 		return (angle < 0)? angle+360 : angle;
 	}
 
+	/**
+	 * Get the angle between two points on screen (RAW pixels), in degrees. <br>
+	 * Note: calculating RAW points.
+	 * @param p1 - point in pixels
+	 * @param p2 - point in pixels
+	 * @return angle in degrees
+	 */
+	public double getAngleRaw(Point p1, Point p2) {
+		double deltaX, deltaY, angle;
+		deltaX = (p2.x-p1.x)/scaleFactorX;
+		deltaY = (p2.y-p1.y)/scaleFactorY;
+
+		angle = Math.toDegrees(Math.atan2(deltaX, deltaY));
+		return (angle < 0)? angle+360 : angle;
+	}
 	/**
 	 * updating screenRange from current MyFrame size on screen.
 	 * might be integrated inside MyFrame
@@ -253,6 +293,7 @@ public class Map {
 	public void moveLocationByPixels(GameSpirit obj, int x, int y) {
 		obj.moveByPixel(x, y);
 		updateLocationOnScreen(obj);
+
 	}
 
 	/**

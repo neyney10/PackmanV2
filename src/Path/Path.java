@@ -6,6 +6,11 @@ import java.util.LinkedList;
 import Coords.MyCoords;
 import Geom.Point3D;
 
+/**
+ * Path is an array of Geodetic Point3D points
+ * @author Ofek Bader
+ *
+ */
 public class Path {
 	LinkedList<Point3D> points;
 	
@@ -18,6 +23,19 @@ public class Path {
 		points.add(p3d);
 	}
 	
+	/**
+	 * returns the size of the list of points, the total amount of points in the path.
+	 * @return amount of points
+	 */
+	public int getPointAmount() {
+		return points.size();
+	}
+	
+	
+	/**
+	 * RETURNS THE SIZE IN METERS
+	 * @return
+	 */
 	public double length() {
 		if(points.size() <= 1)
 			return 0;

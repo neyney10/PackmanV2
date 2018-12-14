@@ -8,7 +8,9 @@ import GameObjects.Fruit;
 import GameObjects.GameObject;
 import GameObjects.Packman;
 import GameObjects.TYPE;
+import Geom.Point3D;
 import Maps.Map;
+import Path.Path;
 
 public class mainFile {
 
@@ -25,16 +27,16 @@ public class mainFile {
 		fruitImage = MyFrame.loadImage(fruitImagePath);
 		
 		// create new GameObjects
-		Packman p1 = new Packman(32.103500, 35.207765 ,30,0, 1, 1);
+		Packman p1 = new Packman(35.211222,32.104496,30,0, 1, 1);
 		p1.setSpirit(packmanImage);
-		Packman p2 = new Packman(32.103717, 35.205679 ,30,1, 1, 1);
-		p2.setSpirit(MyFrame.rotateImage(packmanImage,33));
-		Packman p3 = new Packman(32.103413, 35.207767 ,30,2, 1, 1);
-		p3.setSpirit(MyFrame.rotateImage(packmanImage,77));
-		Fruit f1 = new Fruit(32.10441982,35.20674934,30,3);
+		Packman p2 = new Packman(35.207462,32.102482,30,1, 1, 1);
+		p2.setSpirit(packmanImage);
+		Fruit f1 = new Fruit(35.207462,32.102482,30,3);
 		f1.setSpirit(fruitImage);
 		
 		Map m = new Map();
+		System.out.println("Check conversion: "+p1.getPoint()+" | "+m.getLocationOnScreen(p1)+ " | "+m.getLocationFromScreen(m.getLocationOnScreen(p1)));
+		System.out.println("Check conversion: "+p2.getPoint()+" | "+m.getLocationOnScreen(p2)+ " | "+m.getLocationFromScreen(m.getLocationOnScreen(p2)));
 		System.out.println(m.getDistance(new Point(551,331), new Point(555,555)));
 		System.out.println(m.getDistanceByPixel(new Point(551,331), new Point(555,555)));
 		System.out.println(m.getAngle(new Point(551,331), new Point(551,0)));
@@ -45,13 +47,23 @@ public class mainFile {
 		TreeSet<GameObject> objs = new TreeSet<GameObject>();
 		objs.add(p1);
 		objs.add(p2);
-		objs.add(p3);
 		objs.add(f1);
 		
 		Game game = new Game(objs);
 		
 		MyFrame f = new MyFrame();
 		f.setGame(game);
+		
+		Path p = new Path();
+		p.add(new Point3D(35.211222,32.104496,30));
+		p.add(new Point3D(35.207462,32.102482,30));
+		p.add(new Point3D(35.208462,32.103482,30)); //different
+		p.add(new Point3D(35.203462,32.103482,30)); //different
+		p.add(new Point3D(35.204462,32.104082,30)); //different
+		System.out.println("Path length: "+ p.length());
+		
+		p1.setPath(p);
+		
 	}
 
 }

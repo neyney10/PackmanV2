@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -13,9 +14,9 @@ import Maps.Map;
 public class GameSpirit extends JComponent implements MouseListener{
 	
 	private static final long serialVersionUID = 3817775198749911544L;
-	public Image img;
+	public Image img; // TODO: set getters and setters
 	private int startWidth, startHeight, startX, startY;
-	
+	private GameObject gameObj;
 
 	public GameSpirit(int x,int y, int width, int height, Image img) {
 		super();
@@ -36,6 +37,7 @@ public class GameSpirit extends JComponent implements MouseListener{
 	// TEMP ONLY
 	public GameSpirit(GameObject obj, Map map) {
 		this(map.getLocationOnScreen(obj).x, map.getLocationOnScreen(obj).y, obj.getInitialWidth(), obj.getInitialHeight(), obj.getSpirit());
+		this.setGameObj(obj);
 	}
 	
 	/**
@@ -45,6 +47,7 @@ public class GameSpirit extends JComponent implements MouseListener{
 	 */
 	public GameSpirit(GameObject obj, int x, int y) {
 		this(x, y, obj.getInitialWidth(), obj.getInitialHeight(), obj.getSpirit());
+		this.setGameObj(obj);
 	}
 	
 	/**
@@ -157,6 +160,13 @@ public class GameSpirit extends JComponent implements MouseListener{
 		this.startY = startY;
 	}
 	
+	/**
+	 * @return startX and startY
+	 */
+	public Point getStartLocation() {
+		return new Point(getStartX(), getStartY());
+	}
+	
 	/*
 	 * [Developer Note] Status: Complete.
 	 */
@@ -198,6 +208,20 @@ public class GameSpirit extends JComponent implements MouseListener{
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	/**
+	 * @return the gameObj
+	 */
+	public GameObject getGameObj() {
+		return gameObj;
+	}
+
+	/**
+	 * @param gameObj the gameObj to set
+	 */
+	public void setGameObj(GameObject gameObj) {
+		this.gameObj = gameObj;
 	}
 	
 	

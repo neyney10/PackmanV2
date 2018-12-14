@@ -43,10 +43,10 @@ public class Csv {
                 }
                 else {
                     if (column[type].equals("P")) {
-                        gameObjects.add(new Packman(Double.parseDouble(column[lat]), Double.parseDouble(column[lon]), Double.parseDouble(column[alt]),Integer.parseInt(column[id]), Double.parseDouble(column[speed]), Double.parseDouble(column[radius])));
+                        gameObjects.add(new Packman(Double.parseDouble(column[lon]), Double.parseDouble(column[lat]), Double.parseDouble(column[alt]),Integer.parseInt(column[id]), Double.parseDouble(column[speed]), Double.parseDouble(column[radius])));
                     }
                     else
-                        gameObjects.add(new Fruit(Double.parseDouble(column[lat]),Double.parseDouble(column[lon]),Double.parseDouble(column[alt]),Integer.parseInt(column[id])));
+                        gameObjects.add(new Fruit(Double.parseDouble(column[lon]),Double.parseDouble(column[lat]),Double.parseDouble(column[alt]),Integer.parseInt(column[id])));
                 }
                 count++;
             }
