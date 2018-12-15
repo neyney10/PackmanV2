@@ -46,7 +46,7 @@ public abstract class Map {
 	 * @param angle
 	 * @return
 	 */
-	public Point2D rotateAxis(javafx.geometry.Point2D point2d, javafx.geometry.Point2D point2d2, double angle) {
+	public Point2D rotateAxis(Point point2d, Point point2d2, double angle) {
 		// translate the axes
 		
 		angle = Math.toRadians(angle);
@@ -76,6 +76,20 @@ public abstract class Map {
 		return mapRange.getWidth();
 	}
 	
+	public int getScreenWidth() {
+		return (int) screenRange.getWidth();
+	}
+	
+	public int getScreenHeight() {
+		return (int) screenRange.getHeight();
+	}
+	
+	public int getOriginalScreenWidth() {
+		return (int) originalScreenRange.getWidth();
+	}
+	public int getOriginalScreenHeight() {
+		return (int) originalScreenRange.getHeight();
+	}
 	
 	
 	/**
@@ -162,10 +176,12 @@ public abstract class Map {
 
 	/**
 	 * Get the angle between two points on screen (pixels), in degrees. <br>
-	 * Note: Calculating Rescaled / non-original / non-Raw points. angle might be different with different screen sizes. <br>
-	 * Directly Upwards = 180 degrees. <br>
+	 * Note: Calculating Rescaled / non-original / non-Raw points. angle might be different with different screen sizes. unless
+	 * given a Raw points as arguments.<br>
+	 * the angle is in degrees and in clockwise <br>
+	 * Directly Upwards = 0 degrees. <br>
 	 * Directly on the Right = 90 degrees. <br>
-	 * Directly Downwards = 0 degrees. <br>
+	 * Directly Downwards = 180 degrees. <br>
 	 * Directly on the Left = 270 degrees 
 	 * @param p1 - point in pixels
 	 * @param p2 - point in pixels
@@ -182,7 +198,10 @@ public abstract class Map {
 
 	/**
 	 * Get the angle between two points on screen (RAW pixels), in degrees. <br>
-	 * Note: calculating RAW points.
+	 * Note: calculating RAW points. <br>
+	 * First the function reverting the points into a RAW-pixel points,
+	 * if Raw pixel points are passed as argument, the function would still try to revert the point to RAW
+	 * as it doesn't recognize which is RAW and which isn't, please provide only Non-RAW pixel coordinates.
 	 * @param p1 - point in pixels
 	 * @param p2 - point in pixels
 	 * @return angle in degrees
