@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JComponent;
 
+import GameObjects.BasicGameSpirit;
 import GameObjects.GameObject;
 import Maps.Map;
 
@@ -16,7 +17,7 @@ public class GameSpirit extends JComponent implements MouseListener{
 	private static final long serialVersionUID = 3817775198749911544L;
 	public Image img; // TODO: set getters and setters
 	private int startWidth, startHeight, startX, startY;
-	private GameObject gameObj;
+	private BasicGameSpirit gameObj;
 
 	public GameSpirit(int x,int y, int width, int height, Image img) {
 		super();
@@ -35,7 +36,7 @@ public class GameSpirit extends JComponent implements MouseListener{
 	}
 	
 	// TEMP ONLY
-	public GameSpirit(GameObject obj, Map map) {
+	public GameSpirit(BasicGameSpirit obj, Map map) {
 		this(map.getLocationOnScreen(obj).x, map.getLocationOnScreen(obj).y, obj.getInitialWidth(), obj.getInitialHeight(), obj.getSpirit());
 		this.setGameObj(obj);
 	}
@@ -45,7 +46,7 @@ public class GameSpirit extends JComponent implements MouseListener{
 	 *  preferable way is to generate this object with the "Game" object with "createGameSpirit(GameObject obj)".
 	 * @param obj GameObject
 	 */
-	public GameSpirit(GameObject obj, int x, int y) {
+	public GameSpirit(BasicGameSpirit obj, int x, int y) {
 		this(x, y, obj.getInitialWidth(), obj.getInitialHeight(), obj.getSpirit());
 		this.setGameObj(obj);
 	}
@@ -213,15 +214,15 @@ public class GameSpirit extends JComponent implements MouseListener{
 	/**
 	 * @return the gameObj
 	 */
-	public GameObject getGameObj() {
+	public BasicGameSpirit getGameObj() {
 		return gameObj;
 	}
 
 	/**
-	 * @param gameObj the gameObj to set
+	 * @param obj the gameObj to set
 	 */
-	public void setGameObj(GameObject gameObj) {
-		this.gameObj = gameObj;
+	public void setGameObj(BasicGameSpirit obj) {
+		this.gameObj = obj;
 	}
 	
 	

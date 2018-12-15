@@ -89,7 +89,7 @@ public class JBackground extends JPanel implements MouseListener{
 
 		for(GameObject obj : game.getObjects())  {
 			add(game.createGameSpirit(obj));
-			System.out.println(obj.getPoint() + " | "+ game.createGameSpirit(obj).getLocation() + " | " + game.getMap().getLocationFromScreen(game.createGameSpirit(obj).getLocation()));
+			//System.out.println(obj.getPoint() + " | "+ game.createGameSpirit(obj).getLocation() + " | " + game.getMap().getLocationFromScreen(game.createGameSpirit(obj).getLocation()));
 		}
 
 		repaint();

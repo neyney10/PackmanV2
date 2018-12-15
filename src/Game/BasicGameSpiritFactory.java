@@ -1,21 +1,22 @@
 package Game;
 
 import GUI.GameSpirit;
+import GameObjects.BasicGameSpirit;
 import GameObjects.GameObject;
 
 public interface BasicGameSpiritFactory {
 
 	/**
-	 * Create game spirit from GameObject Point3D geodetic coordinates
+	 * Create game spirit from BasicGameSpirit Point3D geodetic coordinates
 	 * @param obj
 	 * @return GameSpirit
 	 */
-	public GameSpirit createGameSpirit(GameObject obj);
+	public GameSpirit createGameSpirit(BasicGameSpirit obj);
 	
 	/**
-	 * Crate game spirit from GameObject from already given (x,y) pixel position.
+	 * Crate game spirit from BasicGameSpirit from already given (x,y) pixel position.
 	 * @param obj
 	 * @return GameSpirit
 	 */
-	public GameSpirit createGameSpiritXY(GameObject obj,int x, int y);
+	public GameSpirit createGameSpiritXY(BasicGameSpirit obj,int x, int y);
 }

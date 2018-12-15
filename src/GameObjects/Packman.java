@@ -4,15 +4,15 @@ import java.awt.Image;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import GUI.ImageFactory;
 import GUI.MyFrame;
 import Geom.Point3D;
 import Path.Path;
 
-public class Packman extends GameObject {
+public class Packman extends GameObject implements Cloneable {
 
     private double radius,speed;
 	private static final String packmanImagePath = "GameData\\PACMAN.png";
-	private static final Image packmanImage = MyFrame.loadImage(packmanImagePath);
 
 	private Path path;
 	
@@ -26,7 +26,7 @@ public class Packman extends GameObject {
         setType(TYPE.P);
         setInitialWidth(31);
         setInitialHeight(31);
-    	setSpirit(packmanImage);
+    	setSpirit(ImageFactory.getImageFromDisk(packmanImagePath));
     }
     
     /**
@@ -84,6 +84,12 @@ public class Packman extends GameObject {
 		//	timestamps.put(iter.next(), );
 			
 		}
+	}
+	
+	public Packman clone() {
+		Packman p = new Packman(point.x(),point.y(),point.z(),id,radius,speed);
+		p.setSpirit(getSpirit());
+		return p;
 	}
 
 

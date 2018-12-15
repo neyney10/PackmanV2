@@ -7,76 +7,36 @@ import java.awt.geom.Point2D;
 
 import Coords.MyCoords;
 import GUI.GameSpirit;
+import GUI.ImageFactory;
 import GUI.MyFrame;
+import GameObjects.BasicGameSpirit;
 import GameObjects.GameObject;
 import Geom.Point3D;
 
-public class Map {
-	private MapRange mapRange;
-	private Rectangle screenRange;
-	private Rectangle originalScreenRange;
-	private Image background;
+public abstract class Map {
+	protected MapRange mapRange;
+	protected Rectangle screenRange;
+	protected Rectangle originalScreenRange;
+	protected Image background;
 	double scaleFactorX, scaleFactorY, angleFactor;
 
 	public Map() {
-		// default values
-		/*BOAZ SWITCH BETWEEN LATITUDE AND LONGITUDE
-		 */
-		double x1 = 35.2024f; // upper left corner
-		double y1 = 32.1056f;
-		double x2 = 35.2121f; // lower right corner
-		double y2 = 32.1019f;
-		 
-		
-//		double x1 = 32.1052f; // upper left corner
-//		double y1 = 35.2024f;
-//		double x2 = 32.1022f; // lower right corner
-//		double y2 = 35.2121f;
 
-		mapRange = new MapRange(x1,y1,x2,y2);
-		//mapRange = new MapRange(new javafx.geometry.Point2D(32.102263, 35.202302), new javafx.geometry.Point2D(32.105827, 35.212061));
-		screenRange = new Rectangle(0, 0, 1433, 642);
-		originalScreenRange = new Rectangle(0, 0, 1433, 642);
-		scaleFactorX = 1;
-		scaleFactorY = 1;
-		
-		background = MyFrame.loadImage("GameData\\Ariel1.png");
-		
 		// DEVELOPER DEBUG
-		angleFactor = new MyCoords().azimuth_elevation_dist(new Point3D(x1,y1,0), new Point3D(32.105827, 35.212061))[0];
-		angleFactor = Math.toRadians(angleFactor);
-		if(MyFrame.DEBUG) {
-			System.out.print("[DEBUG][MAP] ");
-			System.out.println(angleFactor);
 
-//			// translate the axes
-//			double originX, originY;
-//			originX = 32.1055;
-//			originY = 35.2023;
-//			
+
+
+
 //			double x ,y;
 //			x = 32.1055 - originX;
 //			y = 35.2023 - originY;
 //			
-//			// rotate whole system
-//			x1 = -(x*Math.cos(angleFactor) - y*Math.sin(angleFactor)); // upper left corner
-//			y1 = +(y*Math.cos(angleFactor) + x*Math.sin(angleFactor));
-//		
 //			x = 32.102336 - originX;
 //			y = 35.212281 - originY;
 //			
-//			x2 = -(x*Math.cos(angleFactor) - y*Math.sin(angleFactor)); // lower right corner
-//			y2 = +(y*Math.cos(angleFactor) + x*Math.sin(angleFactor));
-//			
-//			// retranslate the axes back
-//			x1 += originX;
-//			y1 += originY;
-//			x2 += originX;
-//			y2 += originY;
-			
-			//mapRange = new MapRange(x1,y1,x2,y2);
 
-		}
+
+		
 	}
 	
 	/**
@@ -138,7 +98,7 @@ public class Map {
 	 * @param obj GameObject
 	 * @return java.awt.Point, with (x,y) in Pixels represents the location on screen.
 	 */
-	public Point getLocationOnScreen(GameObject obj) {
+	public Point getLocationOnScreen(BasicGameSpirit obj) {
 			return getLocationOnScreen(obj.getPoint());
 	}
 
@@ -324,6 +284,10 @@ public class Map {
 		this.scaleFactorY = scaleFactorY;
 	}
 	
+	/**
+	 * Returns RAW position from currently modified by scale (reverting scale factors)
+	 * @return a RAW point X,Y
+	 */
 	public Point transformByScale(int x, int y) {
 		return new Point((int)(x/scaleFactorX), (int)(y/scaleFactorY));
 	}

@@ -2,9 +2,13 @@ package Game;
 
 import Files_format.Csv;
 import GUI.GameSpirit;
+import GameObjects.BasicGameSpirit;
 import GameObjects.Fruit;
 import GameObjects.GameObject;
+import Maps.ArielMap;
 import Maps.Map;
+import Maps.MapFactory;
+import Maps.MapFactory.MapType;
 
 import java.awt.Point;
 import java.util.Iterator;
@@ -14,12 +18,11 @@ import java.util.TreeSet;
 public class Game implements BasicGameSpiritFactory {
 
     private TreeSet<GameObject> objects;
-    private Map map = new Map(); // temp
+    private Map map = MapFactory.getMap(MapType.ArielUniversity); // temp
     
     public Game(TreeSet<GameObject> objects) {
         setObjects(objects);
     }
-
 
     public Game(String path) {
         setObjects(Csv.read(path));
@@ -67,7 +70,7 @@ public class Game implements BasicGameSpiritFactory {
 
 
 	@Override
-	public GameSpirit createGameSpirit(GameObject obj) {
+	public GameSpirit createGameSpirit(BasicGameSpirit obj) {
 		Point p = map.getLocationOnScreen(obj);
 		GameSpirit gameComponent = new GameSpirit(obj, p.x, p.y);
 		map.updateLocationOnScreen(gameComponent);
@@ -76,7 +79,7 @@ public class Game implements BasicGameSpiritFactory {
 
 
 	@Override
-	public GameSpirit createGameSpiritXY(GameObject obj, int x, int y) {
+	public GameSpirit createGameSpiritXY(BasicGameSpirit obj, int x, int y) {
 		Point p = map.transformByScale(x, y);
 		GameSpirit gameComponent = new GameSpirit(obj, p.x, p.y);
 		map.updateLocationOnScreen(gameComponent);

@@ -6,11 +6,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class GameObject implements Comparable<GameObject>, BasicGameSpirit, Cloneable{
-    private TYPE type;
-    private Point3D point;
-    private int id;
-    private Image spirit;
-    private int width = 16, height = 16;
+    protected TYPE type;
+    protected Point3D point;
+    protected int id;
+    protected Image spirit;
+    protected int width = 16, height = 16;
 
     public TYPE getType() {
         return type;

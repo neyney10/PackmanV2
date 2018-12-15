@@ -38,8 +38,15 @@ import Maps.Map;
 import Path.Path;
 
 
-public class MyFrame extends JFrame implements ComponentListener{
+/**
+ * Singleton
+ * @author neyne
+ *
+ */
+public final class MyFrame extends JFrame implements ComponentListener{
 
+	private static MyFrame instance;
+	
 	final public static boolean DEBUG = true;
 	
 	// JBackground component is an object that contains all GameSpirits elements and represent the "Game" object in UI.
@@ -73,15 +80,21 @@ public class MyFrame extends JFrame implements ComponentListener{
 	 */
 	private static final long serialVersionUID = 121312L;
 
+	
+	public static MyFrame getInstance() {
+		if(instance == null)
+			instance = new MyFrame();
+		
+		return instance;
+	}
+	
 	/**
 	 * Constructor of MyFrame, initialization and showing the frame.
 	 */
-	public MyFrame() {
+	private MyFrame() {
 		super();
 		init();
 		this.setTitle("Packman!!!");
-		this.setVisible(true);
-		System.out.println("Making MyFrame visible...");
 	}
 	
 
@@ -103,12 +116,12 @@ public class MyFrame extends JFrame implements ComponentListener{
 		//// Set Component's settings
 		Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
 		 // icons
-		saveIcon = new ImageIcon(loadImage("GameData\\save_icon.png"));
-		loadIcon = new ImageIcon(loadImage("GameData\\load_icon.png"));
-		runIcon = new ImageIcon(loadImage("GameData\\run_icon.png"));
-		exitIcon = new ImageIcon(loadImage("GameData\\exit_icon.png"));
-		pacmanIcon = new ImageIcon(loadImage("GameData\\pacman_icon.png"));
-		fruitIcon = new ImageIcon(loadImage("GameData\\fruit_icon.png"));
+		saveIcon = new ImageIcon(ImageFactory.getImageFromDisk("GameData\\save_icon.png"));
+		loadIcon = new ImageIcon(ImageFactory.getImageFromDisk("GameData\\load_icon.png"));
+		runIcon = new ImageIcon(ImageFactory.getImageFromDisk("GameData\\run_icon.png"));
+		exitIcon = new ImageIcon(ImageFactory.getImageFromDisk("GameData\\exit_icon.png"));
+		pacmanIcon = new ImageIcon(ImageFactory.getImageFromDisk("GameData\\pacman_icon.png"));
+		fruitIcon = new ImageIcon(ImageFactory.getImageFromDisk("GameData\\fruit_icon.png"));
 
 	
 
@@ -226,23 +239,7 @@ public class MyFrame extends JFrame implements ComponentListener{
 
 	}
 
-	/**
-	 * Loading an Image from file.
-	 * @see: https://stackoverflow.com/questions/18777893/jframe-background-image
-	 * @param path to the file, Ex: "GameData\\Pacman.png" for Windows system.
-	 * @return Image Object (can be casted into BufferedImage)
-	 */
-	public static Image loadImage(String path) {
-		BufferedImage i = null;
-		try {
-			i =  ImageIO.read(new File(path));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
 
-		return i;//i.getScaledInstance(i.getWidth(), i.getWidth(), Image.SCALE_SMOOTH);
-	}
 	
 	/**
 	 * @see "https://stackoverflow.com/questions/8639567/java-rotating-images"

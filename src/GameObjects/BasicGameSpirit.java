@@ -2,6 +2,8 @@ package GameObjects;
 
 import java.awt.Image;
 
+import Geom.Point3D;
+
 /**
  * Interface for giving basic information/data for the implementing object to be instantiated as a
  * GameSpirit object. <br>
@@ -12,7 +14,7 @@ import java.awt.Image;
 public interface BasicGameSpirit {
 	
 	/**
-	 * get the current Spirit image.
+	 * get a copy of current Spirit image.
 	 * @return Image of the current Spirit
 	 */
 	public Image getSpirit();
@@ -53,4 +55,10 @@ public interface BasicGameSpirit {
 	 * @param height
 	 */
 	public void setInitialSize(int width, int height);
+	
+	/**
+	 * returns the 3D position.
+	 * @return returns a 3D point "Point3D"
+	 */
+	public Point3D getPoint();
 }

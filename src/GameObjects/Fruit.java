@@ -2,13 +2,14 @@ package GameObjects;
 
 import java.awt.Image;
 
+import GUI.ImageFactory;
 import GUI.MyFrame;
 import Geom.Point3D;
 
 public class Fruit extends GameObject {
 
 	private static final String fruitImagePath ="GameData\\fruit.png";
-	private static final Image fruitImage = MyFrame.loadImage(fruitImagePath);
+
 
 	
     public Fruit(double lat, double lon, double alt,int id) {
@@ -19,7 +20,7 @@ public class Fruit extends GameObject {
         setType(TYPE.F);
         setInitialWidth(25);
         setInitialHeight(25);
-    	setSpirit(fruitImage);
+    	setSpirit(ImageFactory.getImageFromDisk(fruitImagePath));
     }
     
     /**
