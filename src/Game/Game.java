@@ -1,25 +1,22 @@
 package Game;
 
+import java.awt.Point;
+import java.util.Iterator;
+import java.util.TreeSet;
+
 import Files_format.Csv;
 import GUI.GameSpirit;
 import GameObjects.BasicGameSpirit;
-import GameObjects.Fruit;
 import GameObjects.GameObject;
-import Maps.ArielMap;
 import Maps.Map;
 import Maps.MapFactory;
 import Maps.MapFactory.MapType;
-
-import java.awt.Point;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class Game implements BasicGameSpiritFactory {
 
     private TreeSet<GameObject> objects;
     private Map map = MapFactory.getMap(MapType.ArielUniversity); // temp
-    
+
     public Game(TreeSet<GameObject> objects) {
         setObjects(objects);
     }

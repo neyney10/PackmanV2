@@ -1,11 +1,9 @@
 package GameObjects;
 
-import java.awt.Image;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import GUI.ImageFactory;
-import GUI.MyFrame;
 import Geom.Point3D;
 import Path.Path;
 

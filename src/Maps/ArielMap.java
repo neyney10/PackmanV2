@@ -24,6 +24,7 @@ public final class ArielMap extends Map{
 //		double x2 = 32.1022f; // lower right corner
 //		double y2 = 35.2121f;
 
+		
 		mapRange = new MapRange(x1,y1,x2,y2);
 		screenRange = new Rectangle(0, 0, 1433, 642);
 		originalScreenRange = new Rectangle(0, 0, 1433, 642);

@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,10 +14,7 @@ import java.awt.event.ComponentListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -31,7 +27,6 @@ import javax.swing.SwingConstants;
 import GUI.Animation.SimulatePath;
 import Game.Game;
 import GameObjects.Fruit;
-import GameObjects.GameObject;
 import GameObjects.Packman;
 import Geom.Point3D;
 import Maps.Map;
@@ -390,7 +385,7 @@ public final class MyFrame extends JFrame implements ComponentListener{
 		try {
 			simulation.join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		btn_run.setVisible(true);
@@ -420,6 +415,7 @@ public final class MyFrame extends JFrame implements ComponentListener{
 		pat2.add(new Point3D(35.208462,32.103482,30)); //different
 		pat2.add(new Point3D(35.207462,32.102482,30));
 		pat2.add(new Point3D(35.211222,32.104496,30));
+
 		
 
 		GameSpirit s1 = (GameSpirit) jb.getComponent(1);

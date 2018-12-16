@@ -125,6 +125,7 @@ public class testMap {
 	@Test
 	public void testScaleFactors() {
 		Map map = MapFactory.getMap(MapType.ArielUniversity);
+
 		double scaleFactorX, scaleFactorY, scaleFactorErrorMargin = 0.1;
 		
 		// TEST 1

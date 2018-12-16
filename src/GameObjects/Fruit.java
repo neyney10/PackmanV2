@@ -1,9 +1,6 @@
 package GameObjects;
 
-import java.awt.Image;
-
 import GUI.ImageFactory;
-import GUI.MyFrame;
 import Geom.Point3D;
 
 public class Fruit extends GameObject {

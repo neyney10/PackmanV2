@@ -1,4 +1,3 @@
-import java.awt.Image;
 import java.awt.Point;
 import java.util.TreeSet;
 
@@ -7,9 +6,7 @@ import Game.Game;
 import GameObjects.Fruit;
 import GameObjects.GameObject;
 import GameObjects.Packman;
-import GameObjects.TYPE;
 import Geom.Point3D;
-import Maps.ArielMap;
 import Maps.Map;
 import Maps.MapFactory;
 import Maps.MapFactory.MapType;

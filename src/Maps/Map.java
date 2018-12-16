@@ -7,10 +7,7 @@ import java.awt.geom.Point2D;
 
 import Coords.MyCoords;
 import GUI.GameSpirit;
-import GUI.ImageFactory;
-import GUI.MyFrame;
 import GameObjects.BasicGameSpirit;
-import GameObjects.GameObject;
 import Geom.Point3D;
 
 public abstract class Map {
@@ -46,7 +43,7 @@ public abstract class Map {
 	 * @param angle
 	 * @return
 	 */
-	public Point2D rotateAxis(Point point2d, Point point2d2, double angle) {
+	public Point2D rotateAxis(Point origin, Point point2d2, double angle) {
 		// translate the axes
 		
 		angle = Math.toRadians(angle);
@@ -54,15 +51,15 @@ public abstract class Map {
 		
 		double x ,y;
 		// rotate whole system
-		x = point2d2.getX() - point2d.getX();
-		y = point2d2.getY() - point2d.getY();
+		x = point2d2.getX() - origin.getX();
+		y = point2d2.getY() - origin.getY();
 		
 		trP.x = (int) (x*Math.cos(angle) - y*Math.sin(angle)); 
 		trP.y = (int) +(y*Math.cos(angle) + x*Math.sin(angle));
 		
 		// retranslate the axes back
-		trP.x += point2d.getX();
-		trP.y += point2d.getY();
+		trP.x += origin.getX();
+		trP.y += origin.getY();
 		
 		return trP;
 		

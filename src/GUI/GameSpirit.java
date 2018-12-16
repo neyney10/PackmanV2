@@ -9,7 +9,6 @@ import java.awt.event.MouseListener;
 import javax.swing.JComponent;
 
 import GameObjects.BasicGameSpirit;
-import GameObjects.GameObject;
 import Maps.Map;
 
 public class GameSpirit extends JComponent implements MouseListener{

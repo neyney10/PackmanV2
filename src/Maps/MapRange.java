@@ -1,8 +1,5 @@
 package Maps;
 
-import java.awt.Point;
-import java.awt.geom.Point2D;
-
 public class MapRange {
 	double x1,y1,x2,y2;
 	

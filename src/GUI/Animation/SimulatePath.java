@@ -1,8 +1,6 @@
 package GUI.Animation;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,7 +9,6 @@ import GUI.GameSpirit;
 import GUI.JBackground;
 import GUI.MyFrame;
 import Game.Game;
-import GameObjects.GameObject;
 import GameObjects.Packman;
 import Geom.Point3D;
 import Maps.Map;

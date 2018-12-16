@@ -2,7 +2,7 @@ package Game;
 
 import GUI.GameSpirit;
 import GameObjects.BasicGameSpirit;
-import GameObjects.GameObject;
+
 
 public interface BasicGameSpiritFactory {
 
