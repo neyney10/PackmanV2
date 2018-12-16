@@ -19,20 +19,6 @@ public abstract class Map {
 
 	public Map() {
 
-		// DEVELOPER DEBUG
-
-
-
-
-//			double x ,y;
-//			x = 32.1055 - originX;
-//			y = 35.2023 - originY;
-//			
-//			x = 32.102336 - originX;
-//			y = 35.212281 - originY;
-//			
-
-
 		
 	}
 	

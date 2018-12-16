@@ -29,6 +29,7 @@ public class mainFile {
 		Packman p2 = new Packman(35.207462,32.102482,30,1, 1, 1);
 	
 		Fruit f1 = new Fruit(35.207462,32.102482,30,3);
+		Fruit f2 = new Fruit(35.206951,32.103022,30,4);
 
 		
 		Map m = MapFactory.getMap(MapType.ArielUniversity);
@@ -45,6 +46,7 @@ public class mainFile {
 		objs.add(p1);
 		objs.add(p2);
 		objs.add(f1);
+		objs.add(f2);
 		
 		Game game = new Game(objs);
 		
