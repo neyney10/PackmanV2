@@ -8,24 +8,25 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Random;
 
 import Coords.MyCoords;
 import Geom.Point3D;
 import Maps.Map;
 
-/**
- * Path is an array of Geodetic Point3D points
- * @author Ofek Bader
- *
- */
 public class Path {
 	
 	private LinkedList<Point3D> points;
-	private Color color;
-
+	private String color;
+	
+	/**
+	 * Path is an array of Geodetic Point3D points
+	 * @author Ofek Bader
+	 *
+	 */
 	public Path() {
 		points = new LinkedList<>();
-		setColor(Color.ORANGE); // default
+		setColor("#EC9242"); // default
 	}
 
 	public void add(Point3D p3d) {
@@ -64,16 +65,10 @@ public class Path {
 	
 
 	/**
-	 * @return the color
+	 * SetColor setting color of path
+	 * @param color String hex rgb of color
 	 */
-	public Color getColor() {
-		return color;
-	}
-
-	/**
-	 * @param color the color to set
-	 */
-	public void setColor(Color color) {
+	public void setColor(String color) {
 		this.color = color;
 	}
 
@@ -93,7 +88,7 @@ public class Path {
                 BasicStroke.JOIN_ROUND,
                 10.0f, new float[]{6f}, 0.0f);
 
-		g2.setColor(color); // color
+		g2.setColor(Color.decode(color)); // color
 
 		
 		Iterator<Point3D> iterPath = iterator();
@@ -118,6 +113,14 @@ public class Path {
 		} while(iterPath.hasNext());
 		
 		g2.drawOval(px2.x-16, px2.y-16, 32, 32);
+	}
+
+	/**
+	 * getColor getting color of path
+	 * @return color String hex rgb of color
+	 */
+	public String getColor() {
+		return color;
 
 	}
 
