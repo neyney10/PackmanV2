@@ -6,23 +6,22 @@ import java.util.LinkedList;
 import Coords.MyCoords;
 import Geom.Point3D;
 
-/**
- * Path is an array of Geodetic Point3D points
- * @author Ofek Bader
- *
- */
 public class Path {
-	LinkedList<Point3D> points;
-	
-	
+	private LinkedList<Point3D> points;
+	private String color;
+	/**
+	 * Path is an array of Geodetic Point3D points
+	 * @author Ofek Bader
+	 *
+	 */
 	public Path() {
 		points = new LinkedList<>();
 	}
-	
+
 	public void add(Point3D p3d) {
 		points.add(p3d);
 	}
-	
+
 	/**
 	 * returns the size of the list of points, the total amount of points in the path.
 	 * @return amount of points
@@ -30,8 +29,8 @@ public class Path {
 	public int getPointAmount() {
 		return points.size();
 	}
-	
-	
+
+
 	/**
 	 * RETURNS THE SIZE IN METERS
 	 * @return
@@ -52,7 +51,23 @@ public class Path {
 		
 		return len;
 	}
-	
+
+	/**
+	 * SetColor setting color of path
+	 * @param color String hex rgb of color
+	 */
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	/**
+	 * getColor getting color of path
+	 * @return color String hex rgb of color
+	 */
+	public String getColor() {
+		return color;
+	}
+
 	public Iterator<Point3D> iterator() {
 		return points.iterator();
 	}
