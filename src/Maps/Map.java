@@ -295,6 +295,14 @@ public abstract class Map {
 	}
 
 	/**
+	 * Returns RAW position from currently modified by scale (reverting scale factors)
+	 * @return a RAW point X,Y
+	 */
+	public Point transformByScale(Point point) {
+		return transformByScale(point.x,point.y);
+	}
+
+	/**
 	 * @return the background
 	 */
 	public Image getBackground() {

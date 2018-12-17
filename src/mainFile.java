@@ -18,11 +18,7 @@ public class mainFile {
 	
 	public static void main(String[] args) {
 		System.out.println("Main starting...");
-		
-		//// starting user simulation for testing
-		// get data
 
-		
 		// create new GameObjects
 		Packman p1 = new Packman(35.21166773101956,32.10505666762498,30,0, 1, 1);
 		

@@ -109,9 +109,9 @@ public class JBackground extends JPanel implements MouseListener {
 
 		// set the new computed point.
 		dropItem.setPoint(p3d);
-		dropItem.setId((int) (Math.random() * 42543)); //TODO: change. not to do random.
-
-		// genereate a Graphic element from this object.
+		dropItem.setId(game.generateID()); //TODO: change. not to do random.
+		// 
+		// generate a Graphic element from this object.
 		GameSpirit gs = game.createGameSpiritXY(dropItem,e.getX(),e.getY());
 
 		// add this game spirit and game object into game and to this graphic component.

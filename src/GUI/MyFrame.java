@@ -358,8 +358,12 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		fd.setFile("*.csv");
 		fd.setVisible(true);
 
-		if (fd.getFiles().length != 0)
-			setGame(new Game(fd.getFiles()[0].getAbsolutePath()));
+		if (fd.getFiles().length == 0)
+			return;
+
+		stop(); // stopping simulation if any.
+		setGame(new Game(fd.getFiles()[0].getAbsolutePath()));
+		
 
 		// TEMP
 		// TODO: remove.
@@ -387,7 +391,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * running the current game.
 	 */
 	public void runGame() {
-		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty())
+		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty() || simulating)
 			return;
 
 		btn_stopSimulation.setVisible(true);
@@ -395,6 +399,8 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 		simulation = new SimulatePath(jb);
 		simulation.start();
+
+		simulating = true;
 	}
 
 	/**
@@ -448,6 +454,8 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * Stop running, stopping simulation
 	 */
 	public void stop() {
+		if(!simulating)
+			return;
 
 		simulation.interrupt();
 
@@ -469,7 +477,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 				if (gs.getGameObj() instanceof Fruit)
 					co.setVisible(true);
 				else if(gs.getGameObj() instanceof Packman)  {
-					map.updateLocationOnScreen(gs,map.getLocationOnScreen(gs.getGameObj()));
+					map.updateLocationOnScreen(gs,map.transformByScale(map.getLocationOnScreen(gs.getGameObj())));
 				}
 					
 			}
@@ -477,6 +485,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 		btn_run.setVisible(true);
 		btn_stopSimulation.setVisible(false);
+		simulating = false;
 	}
 
 	/**

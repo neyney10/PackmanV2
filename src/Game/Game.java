@@ -16,6 +16,7 @@ public class Game implements BasicGameSpiritFactory {
 
     private TreeSet<GameObject> objects;
     private Map map = MapFactory.getMap(MapType.ArielUniversity); // temp
+    private int id = 0;
 
     /**
      * [Constructor] <br>
@@ -27,10 +28,12 @@ public class Game implements BasicGameSpiritFactory {
 
     public Game(TreeSet<GameObject> objects) {
         setObjects(objects);
+        id = getMaxID()+1;
     }
 
     public Game(String path) {
         setObjects(Csv.read(path));
+        id = getMaxID()+1;
     }
     public void toCsv(String path){
         Csv.build(path,getObjects());
@@ -40,7 +43,9 @@ public class Game implements BasicGameSpiritFactory {
     }
 
     public void setObjects(TreeSet<GameObject> objects) {
-        this.objects = objects;
+        this.objects = new TreeSet<>(objects);
+        id = getMaxID()+1;
+        
     }
     
     public Iterator<GameObject> iterator() {
@@ -56,6 +61,7 @@ public class Game implements BasicGameSpiritFactory {
 
     public void addGameObject(GameObject obj) {
         objects.add(obj);
+        id++;
     }
     
     /**
@@ -82,6 +88,26 @@ public class Game implements BasicGameSpiritFactory {
 
     public void setMap(Map map) {
         this.map = map;
+    }
+
+    private int getMaxID() {
+        if(isEmpty())
+            return -1;
+
+        int max = -5;
+        int objectID;
+        Iterator<GameObject> iter = iterator();
+        while(iter.hasNext()) {
+            objectID = iter.next().getId();
+            if(objectID > max)
+                max = objectID;
+        }
+
+        return max;
+    }
+
+    public int generateID() {
+        return id++;
     }
 
 

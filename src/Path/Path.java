@@ -33,6 +33,11 @@ public class Path {
 		setColor(ColorGenerator.getInstance().colorGenerate()); // default
 	}
 
+	public Path(Point3D point) {
+		this();
+		points.addFirst(point);
+	}
+
 	public void add(Point3D p3d) {
 		points.add(p3d);
 	}
