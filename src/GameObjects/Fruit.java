@@ -7,8 +7,6 @@ public class Fruit extends GameObject {
 
 	private static final String fruitImagePath ="GameData\\fruit.png";
 
-
-	
     public Fruit(double lat, double lon, double alt,int id) {
         setPoint(new Point3D(lat,lon,alt));
         setId(id);
@@ -26,6 +24,8 @@ public class Fruit extends GameObject {
     public Fruit() {
     	this(0, 0 ,0, (int)(Math.random()*334143)); //TODO: NOT RANDOM
     }
+
+
 
     @Override
     public String toString() {

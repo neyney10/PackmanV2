@@ -32,7 +32,7 @@ public class SimulatePath extends Thread {
 	public SimulatePath(JBackground gameUI) {
 		this.game = gameUI.getGame();
 		this.gameUI = gameUI;
-
+		
 		setDaemon(true);
 	}
 

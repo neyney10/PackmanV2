@@ -46,7 +46,7 @@ public class mainFile {
 		objs.add(p1);
 		objs.add(p2);
 		objs.add(f1);
-		objs.add(f2);
+		//objs.add(f2);
 		
 		Game game = new Game(objs);
 		

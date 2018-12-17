@@ -24,6 +24,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 
+import Algorithms.PathFinding;
 import GUI.Animation.SimulatePath;
 import Game.Game;
 import GameObjects.Fruit;
@@ -307,6 +308,12 @@ public final class MyFrame extends JFrame implements ComponentListener{
 
 		if(fd.getFiles().length != 0)
 			setGame(new Game(fd.getFiles()[0].getAbsolutePath()));
+
+		// TEMP
+		//TODO: remove.
+		PathFinding pf = new PathFinding(jb);
+		pf.calcPath();
+
 	}
 	
 	
@@ -401,7 +408,7 @@ public final class MyFrame extends JFrame implements ComponentListener{
 		btn_stopSimulation.setVisible(true);
 		btn_run.setVisible(false);
 		
-		Path pat = new Path();
+		/*Path pat = new Path();
 		pat.add(new Point3D(35.211222,32.104496,30));
 		pat.add(new Point3D(35.207462,32.102482,30));
 		pat.add(new Point3D(35.208462,32.103482,30)); //different
@@ -425,7 +432,7 @@ public final class MyFrame extends JFrame implements ComponentListener{
 		GameSpirit s2 = (GameSpirit) jb.getComponent(2);
 		Packman p2 = (Packman) s2.getGameObj();
 		p2.setPath(pat2);
-		
+		*/
 
 		simulation = new SimulatePath(jb);
 		simulation.start();

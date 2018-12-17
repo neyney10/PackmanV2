@@ -29,6 +29,11 @@ public class Path {
 		setColor("#EC9242"); // default
 	}
 
+	public Path(Point3D point) {
+		this();
+		this.add(point);
+	}
+
 	public void add(Point3D p3d) {
 		points.add(p3d);
 	}
