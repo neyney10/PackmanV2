@@ -5,7 +5,7 @@ import java.util.*;
 public class Solutions implements Set<Path> {
     LinkedList<Path> list;
     Random random;
-    Solutions(){
+    public Solutions(){
         list = new LinkedList<Path>();
         random = new Random();
     }
