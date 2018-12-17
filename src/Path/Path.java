@@ -9,10 +9,10 @@ import java.awt.Stroke;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
-
 import Coords.MyCoords;
 import Geom.Point3D;
 import Maps.Map;
+import Utli.ColorGenerator;
 
 public class Path {
 	
@@ -26,12 +26,7 @@ public class Path {
 	 */
 	public Path() {
 		points = new LinkedList<>();
-		setColor("#EC9242"); // default
-	}
-
-	public Path(Point3D point) {
-		this();
-		this.add(point);
+		setColor(ColorGenerator.getInstance().colorGenerate()); // default
 	}
 
 	public void add(Point3D p3d) {
