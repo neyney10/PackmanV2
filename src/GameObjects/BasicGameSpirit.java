@@ -61,4 +61,9 @@ public interface BasicGameSpirit {
 	 * @return returns a 3D point "Point3D"
 	 */
 	public Point3D getPoint();
+
+	/**
+	 * Cloning this BasicGameSpirit object with equal values but different pointer/reference
+	 */
+	public BasicGameSpirit clone();
 }

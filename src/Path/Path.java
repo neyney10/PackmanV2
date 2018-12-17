@@ -8,12 +8,14 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Random;
-
 import Coords.MyCoords;
 import Geom.Point3D;
 import Maps.Map;
 
+/**
+ * Path class is a class which contains a Geodetic Point3D points
+ * can be drawable on screen with a Map object to concvert geodetic points to pixels.
+ */
 public class Path {
 	
 	private LinkedList<Point3D> points;

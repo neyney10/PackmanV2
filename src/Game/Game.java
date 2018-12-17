@@ -17,6 +17,14 @@ public class Game implements BasicGameSpiritFactory {
     private TreeSet<GameObject> objects;
     private Map map = MapFactory.getMap(MapType.ArielUniversity); // temp
 
+    /**
+     * [Constructor] <br>
+     * an empty constructor, creates an empty Game object.
+     */
+    public Game() {
+        this.objects = new TreeSet<>();
+    }
+
     public Game(TreeSet<GameObject> objects) {
         setObjects(objects);
     }
@@ -37,6 +45,17 @@ public class Game implements BasicGameSpiritFactory {
     
     public Iterator<GameObject> iterator() {
     	return objects.iterator();
+    }
+
+    public boolean isEmpty() {
+        if(objects == null)
+            return true;
+            
+        return objects.isEmpty();
+    }
+
+    public void addGameObject(GameObject obj) {
+        objects.add(obj);
     }
     
     /**

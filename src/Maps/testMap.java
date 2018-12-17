@@ -19,7 +19,6 @@ import Maps.MapFactory.MapType;
  */
 public class testMap {
 
-	private final double errorMargin = 0.00001;
 	
 	/**
 	 * Testing the conversion of points from GSP-Geodetic type coordinates to
@@ -28,7 +27,8 @@ public class testMap {
 	@Test
 	public void testCoordinatesConversionFromGPStoPixel() {
 		Map map = MapFactory.getMap(MapType.ArielUniversity);
-		
+		double errorMargin = 0.00001;
+
 		// TEST 1
 		Packman p1 = new Packman(35.211222,32.104496,30,0, 1, 1);
 		Point3D p3d1 = p1.getPoint();
@@ -46,6 +46,21 @@ public class testMap {
 		
 		assertEquals(p3d1.x(), gpsPoint.x(), errorMargin);
 		assertEquals(p3d1.y(), gpsPoint.y(), errorMargin);
+
+		// random test
+		double lat,lon;
+		int tests = 10;
+		for(int i = 0 ; i<tests;i++) {
+			lat = 30+Math.random()*10;
+			lon = 30+Math.random()*10;
+			p3d1 = new Point3D(lat,lon,0);
+
+			pixelPoint = map.getLocationOnScreen(p3d1);
+			gpsPoint = map.getLocationFromScreen(pixelPoint);
+
+			assertEquals(p3d1.x(), gpsPoint.x(), errorMargin);
+			assertEquals(p3d1.y(), gpsPoint.y(), errorMargin);
+		}
 	}
 	
 	/**
@@ -125,7 +140,6 @@ public class testMap {
 	@Test
 	public void testScaleFactors() {
 		Map map = MapFactory.getMap(MapType.ArielUniversity);
-
 		double scaleFactorX, scaleFactorY, scaleFactorErrorMargin = 0.1;
 		
 		// TEST 1
@@ -153,6 +167,63 @@ public class testMap {
 		assertEquals(scaleFactorX, map.getScaleFactorX(), scaleFactorErrorMargin);
 		assertEquals(scaleFactorY, map.getScaleFactorY(), scaleFactorErrorMargin);
 
+	}
+
+	/**
+	 * Testing the TransformByScale function, which is returning RAW X,Y points from scaled ones.
+	 */
+	@Test
+	public void testTransform() {
+		Map map = MapFactory.getMap(MapType.ArielUniversity);
+		double transformErrorMargin = 0.000001;
+		Point p1, p2, result;
+
+		// test 1
+		p1 = new Point(100,100);
+		p2 = new Point(232,333);
+
+		result = map.transformByScale(p1.x, p1.y);
+
+		assertEquals(p1.x, result.x, transformErrorMargin);
+		assertEquals(p1.y, result.y, transformErrorMargin);
+
+		result = map.transformByScale(p2.x, p2.y);
+		
+		assertEquals(p2.x, result.x, transformErrorMargin);
+		assertEquals(p2.y, result.y, transformErrorMargin);
+
+		assertNotEquals(p1.x, result.x);
+		
+		// test random
+		int x,y;
+		int tests = 10;
+		for(int i = 0 ; i<tests;i++) {
+			x = (int) (Math.random()*1000);
+			y = (int) (Math.random()*1000);
+			p1 = new Point(x,y);
+
+			result = map.transformByScale(x, y);
+
+			assertEquals(p1.x, result.x, transformErrorMargin);
+			assertEquals(p1.y, result.y, transformErrorMargin);
+		}
+
+		// change scales
+		map.updateScreenRange((int)(map.getScreenWidth()*1.4), (int)(map.getScreenHeight()*1.4));
+
+		// test random
+		for(int i = 0 ; i<tests;i++) {
+			x = (int) (Math.random()*1000);
+			y = (int) (Math.random()*1000);
+			p1 = new Point(x,y);
+			p2 = new Point((int)(x/map.getScaleFactorX()), (int)(y/map.getScaleFactorY()));
+
+			result = map.transformByScale(x, y);
+
+			assertEquals(p2.x, result.x, transformErrorMargin);
+			assertEquals(p2.y, result.y, transformErrorMargin);
+		}
+		
 	}
 	
 

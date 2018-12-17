@@ -109,10 +109,10 @@ public class Csv {
                 point = object.getPoint();
                 if (object.getType() == TYPE.P) {
                     packman = (Packman) object;
-                    sb.append("P," + packman.getId() + "," + point.x() + "," + point.y() + "," + point.z() + "," + packman.getSpeed() + "," + packman.getRadius() + "\n");
+                    sb.append("P," + packman.getId() + "," + point.y() + "," + point.x() + "," + point.z() + "," + packman.getSpeed() + "," + packman.getRadius() + "\n");
                 } else {
                     fruit = (Fruit) object;
-                    sb.append("F," + fruit.getId() + "," + point.x() + "," + point.y() + "," + point.z() + "\n");
+                    sb.append("F," + fruit.getId() + "," + point.y() + "," + point.x() + "," + point.z() + "\n");
                 }
             }
             //create file

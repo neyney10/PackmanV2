@@ -103,7 +103,7 @@ public abstract class Map {
 	 * Get the geodetic/polar coordinate representing the screen position. <br>
 	 * [Developer note] Note: not tested yet
 	 * @param obj GameObject
-	 * @return java.awt.Point, with (x,y) in Pixels represents the location on screen.
+	 * @return Point3D Geodetic point.
 	 */
 	public Point3D getLocationFromScreen(Point p) {
 		double x,y;

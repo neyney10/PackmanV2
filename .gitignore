@@ -1,3 +1,13 @@
 /mainFile.class
 /MyFrame.class
 /bin/
+/.gitignore
+src/Maps/.gitignore
+.gitignore
+.vscode/launch.json
+.vscode/launch.test.json
+Ex3/test.csv
+src/Coords/.gitignore
+src/Game/.gitignore
+src/GameObjects/.gitignore
+src/Geom/.gitignore

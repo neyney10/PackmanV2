@@ -4,11 +4,13 @@ import java.awt.Component;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import GUI.GameSpirit;
 import GUI.JBackground;
 import GUI.MyFrame;
 import Game.Game;
+import GameObjects.Fruit;
 import GameObjects.Packman;
 import Geom.Point3D;
 import Maps.Map;
@@ -22,7 +24,7 @@ import Path.Path;
  */
 public class SimulatePath extends Thread {
 
-	public final static String version = "1.0";
+	public final static String version = "1.3";
 	public final static String versionStage = "Beta";
 	public final static int updateSpeed = 16; // milliseconds
 	private boolean finished = false;
@@ -45,6 +47,7 @@ public class SimulatePath extends Thread {
 		Map map = game.getMap();
 		Component[] components = gameUI.getComponents();
 		ArrayList<GameSpirit> gameSpirits = new ArrayList<>();
+		LinkedList<GameSpirit> fruits = new LinkedList<>();
 
 		for(int i = 0;i<components.length;i++) {
 			gamespirit = (GameSpirit) components[i];
@@ -57,8 +60,9 @@ public class SimulatePath extends Thread {
 				}
 
 				gameSpirits.add(gamespirit);
+			} else if(gamespirit.getGameObj() instanceof Fruit) {
+				fruits.add(gamespirit);
 			}
-
 		}
 		// stopping condition setup
 		int finish_amount = 0;
@@ -149,6 +153,7 @@ public class SimulatePath extends Thread {
 						p2d2[i] = map.getLocationOnScreen(p3d2[i]);
 						map.updateLocationOnScreen(gamespirit,(int)(p2d2[i].x/map.getScaleFactorX()), (int)(p2d2[i].y/map.getScaleFactorY()));
 						
+						hideFruit(fruits, p3d2[i]);
 						
 						/////// NEXT LINE SETUP //////////
 						if(!iterPath[i].hasNext()) {
@@ -196,6 +201,23 @@ public class SimulatePath extends Thread {
 		
 
 
+	}
+
+	/**
+	 * setting visibility to false of the gameSpirit of type fruit with equal Point3D.
+	 */
+	private void hideFruit(LinkedList<GameSpirit> fruits, Point3D point) {
+		GameSpirit gs;
+		Iterator<GameSpirit> iter = fruits.iterator();
+		while(iter.hasNext()) {
+			gs = iter.next();
+			if(gs.getGameObj().getPoint().equals(point)) {
+				gs.setVisible(false);
+				iter.remove();
+				return;
+			}
+
+		}
 	}
 
 

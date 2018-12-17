@@ -14,7 +14,7 @@ public class Packman extends GameObject implements Cloneable {
 
 	private Path path;
 	
-    public Packman(double lat, double lon, double alt,int id, double radius, double speed) {
+    public Packman(double lat, double lon, double alt,int id, double speed, double radius) {
         setPoint(new Point3D(lat,lon,alt));
         setId(id);
         setRadius(radius);

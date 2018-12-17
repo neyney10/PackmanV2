@@ -1,18 +1,15 @@
 package Algorithms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import Coords.MyCoords;
 import GUI.JBackground;
-import GUI.MyFrame;
 import Game.Game;
+import GameObjects.Fruit;
 import GameObjects.GameObject;
 import GameObjects.Packman;
-import GameObjects.Fruit;
 import Path.Path;
 
 public class PathFinding {
@@ -26,20 +23,16 @@ public class PathFinding {
 		this.game = gameUI.getGame();
 		this.costs = new ArrayList<>();
 
-		int packCount = 0;
-		int fruitCount = 0;
 		GameObject obj;
 		Iterator<GameObject> iter = game.iterator();
 		while (iter.hasNext()) {
 			obj = iter.next();
 			if (obj instanceof Packman) {
-				packCount++;
+				;
 
 				((Packman) obj).setPath(new Path(obj.getPoint()));
 			}
 
-			else if (obj instanceof Fruit)
-				fruitCount++;
 		}
 
 	}
@@ -48,10 +41,8 @@ public class PathFinding {
 	 * NAIVE
 	 * 
 	 * @param game
-	 * @return
 	 */
-	public LinkedList<Path> calcPath() {
-		LinkedList<Path> solution = new LinkedList<Path>();
+	public void calcPath() {
 		MyCoords co = new MyCoords();
 
 		// SETUP
@@ -75,11 +66,6 @@ public class PathFinding {
 
 		// sort
 		costs.sort(new CostComperator());
-
-		// DEBUG
-		if (MyFrame.DEBUG) {
-			System.out.println(costs.toString());
-		}
 
 		// START
 		while (costs.size() > 0) {
@@ -110,15 +96,9 @@ public class PathFinding {
 					// sort
 		costs.sort(new CostComperator());
 
-			// DEBUG
-			if (MyFrame.DEBUG) {
-				System.out.println("Ate Fruit: ");
-				System.out.println(costs.toString());
-			}
-
 		}
 
-		return solution;
+
 	}
 
 	class Cost {
