@@ -107,6 +107,9 @@ public class JBackground extends JPanel implements MouseListener {
 		if (!dropMode || dropItem == null)
 			return;
 
+		if(game == null) 
+			setGame(new Game());
+		
 		// get a new Clone of the item.
 		dropItem = dropItem.clone();
 		
