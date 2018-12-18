@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+<name>Paths</name>
+<Style id="color_path@1">
+<LineStyle>
+<color>ffdab140</color>
+<width>4</width>
+</LineStyle>
+<PolyStyle>
+<color>5fdab140</color>
+</PolyStyle>
+</Style>
+<Style id="color_path@2">
+<LineStyle>
+<color>ff86d4f0</color>
+<width>4</width>
+</LineStyle>
+<PolyStyle>
+<color>5f86d4f0</color>
+</PolyStyle>
+</Style>
+<Style id="color_path@3">
+<LineStyle>
+<color>ff58960e</color>
+<width>4</width>
+</LineStyle>
+<PolyStyle>
+<color>5f58960e</color>
+</PolyStyle>
+</Style>
+<Style id="color_path@4">
+<LineStyle>
+<color>ffc28d75</color>
+<width>4</width>
+</LineStyle>
+<PolyStyle>
+<color>5fc28d75</color>
+</PolyStyle>
+</Style>
+<Placemark>
+<name>Path 1</name>
+<styleUrl>#color_path@1</styleUrl>
+<LineString>
+<extrude>1</extrude>
+<tessellate>1</tessellate>
+<altitudeMode>relativeToGround</altitudeMode>
+<coordinates>35.21166773101956,32.10505666762498,30.0
+</coordinates>
+</LineString>
+</Placemark>
+<Placemark>
+<name>Path 2</name>
+<styleUrl>#color_path@2</styleUrl>
+<LineString>
+<extrude>1</extrude>
+<tessellate>1</tessellate>
+<altitudeMode>relativeToGround</altitudeMode>
+<coordinates>35.211011083992894,32.102860721100896,30.0
+35.21116678380334,32.10302786663685,30.0
+35.208522007315274,32.103762444649036,30.0
+</coordinates>
+</LineString>
+</Placemark>
+<Placemark>
+<name>Path 3</name>
+<styleUrl>#color_path@3</styleUrl>
+<LineString>
+<extrude>1</extrude>
+<tessellate>1</tessellate>
+<altitudeMode>relativeToGround</altitudeMode>
+<coordinates>34.77566291137474,32.08897960747664,0.0
+34.776825943852856,32.08900903426791,0.0
+34.77824444143272,32.088758906542054,0.0
+34.7814087821878,32.08833221806854,0.0
+34.78266360696999,32.08802323676012,0.0
+</coordinates>
+</LineString>
+</Placemark>
+<Placemark>
+<name>Path 4</name>
+<styleUrl>#color_path@4</styleUrl>
+<LineString>
+<extrude>1</extrude>
+<tessellate>1</tessellate>
+<altitudeMode>relativeToGround</altitudeMode>
+<coordinates>34.7899470464666,32.08669903115265,0.0
+34.78891045208132,32.08613992211838,0.0
+34.78801025169409,32.08734642056075,0.0
+34.78989248886737,32.08811151713395,0.0
+34.79128370764762,32.087508267912774,0.0
+34.79158377444337,32.08621348909657,0.0
+34.79152921684414,32.08616934890966,0.0
+34.79043806485963,32.085345398753894,0.0
+</coordinates>
+</LineString>
+</Placemark>
+</Document>
+</kml>

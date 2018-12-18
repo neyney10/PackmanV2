@@ -15,6 +15,7 @@ import java.awt.event.ComponentListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -26,11 +27,14 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 
 import Algorithms.PathFinding;
+import Files_format.Path2Kml;
 import GUI.Animation.SimulatePath;
 import Game.Game;
 import GameObjects.Fruit;
+import GameObjects.GameObject;
 import GameObjects.Packman;
 import Maps.Map;
+import Path.Solutions;
 
 /**
  * Singleton
@@ -162,7 +166,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			}
 		});
 
-		JMenuItem i2 = new JMenuItem("Save game");
+		JMenuItem i2 = new JMenuItem("Save game -> CSV");
 		i2.setFont(itemFont);
 		i2.setCursor(handCursor);
 		i2.setBackground(Color.cyan);
@@ -171,6 +175,18 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				saveGame();
+			}
+		});
+		
+		JMenuItem export = new JMenuItem("Export game -> KML");
+		export.setFont(itemFont);
+		export.setCursor(handCursor);
+		export.setBackground(Color.cyan);
+		export.setIcon(saveIcon);
+		export.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				exportGame();
 			}
 		});
 
@@ -261,6 +277,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		// pack menus
 		menu.add(i1);
 		menu.add(i2);
+		menu.add(export);
 		menu.add(clear);
 		menuObjects.add(gmobjAddPackman);
 		menuObjects.add(gmobjAddFruit);
@@ -385,6 +402,22 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		fd.setVisible(true);
 		if (fd.getFiles().length != 0)
 			jb.getGame().toCsv(fd.getDirectory() + fd.getFile());
+	}
+	
+	/**
+	 * Exporting the  current game into a KML file.
+	 */
+	public void exportGame() {
+		if(jb == null || jb.getGame() == null || jb.getGame().isEmpty())
+			return;
+		
+		//TODO: REMOVE, THIS IS ONLY TEMP.
+		Solutions solution = new Solutions();
+		Iterator<GameObject> iter = jb.getGame().typeIterator(new Packman());
+		while(iter.hasNext()) {
+			solution.add(((Packman)(iter.next())).getPath());
+		}
+		Path2Kml.create(solution, "myKml.kml");
 	}
 
 	/**
