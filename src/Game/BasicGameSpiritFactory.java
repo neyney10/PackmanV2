@@ -3,7 +3,9 @@ package Game;
 import GUI.GameSpirit;
 import GameObjects.BasicGameSpirit;
 
-
+/**
+ * an interface / contract for an object to have the ability to be a Factory for GameSpirits.
+ */
 public interface BasicGameSpiritFactory {
 
 	/**

@@ -11,13 +11,26 @@ import javax.swing.JComponent;
 import GameObjects.BasicGameSpirit;
 import Maps.Map;
 
+/**
+ * GameSpirit objects is a graphic representation of GameObjects and is basicly the UI.
+ * it extends JComponent for use inside a other swing elements.
+ */
 public class GameSpirit extends JComponent implements MouseListener{
 	
 	private static final long serialVersionUID = 3817775198749911544L;
-	public Image img; // TODO: set getters and setters
+	private Image img; // TODO: set getters and setters
 	private int startWidth, startHeight, startX, startY;
 	private BasicGameSpirit gameObj;
 
+	/**
+	 * [Constructor] <Br>
+	 * creates new GameSpirit.
+	 * @param x - RAW X pixel position.
+	 * @param y - RAW Y pixel position.
+	 * @param width - width of the image.
+	 * @param height - height of the image.
+	 * @param img - the image.
+	 */
 	public GameSpirit(int x,int y, int width, int height, Image img) {
 		super();
 		this.img = img;
@@ -34,7 +47,12 @@ public class GameSpirit extends JComponent implements MouseListener{
 		this.startY = y - height/2; 
 	}
 	
-	// TEMP ONLY
+	/**
+	 * [Constructor] <br>
+	 * Creates new GameSpirit object.
+	 * @param obj BasicGameSpirit (can be GameObject)
+	 * @param map Map for coordinates conversion of Geodetic points of GameObject to Pixels XY.
+	 */
 	public GameSpirit(BasicGameSpirit obj, Map map) {
 		this(map.getLocationOnScreen(obj).x, map.getLocationOnScreen(obj).y, obj.getInitialWidth(), obj.getInitialHeight(), obj.getSpirit());
 		this.setGameObj(obj);
@@ -218,6 +236,22 @@ public class GameSpirit extends JComponent implements MouseListener{
 	 */
 	public void setGameObj(BasicGameSpirit obj) {
 		this.gameObj = obj;
+	}
+
+	/**
+	 * Get this GameSpirit image, can be different from the underlying GameObject.
+	 * @return Image as image sprite.
+	 */
+	public Image getImage() {
+		return img;
+	}
+
+	/**
+	 * Set new Image. (does not change the underlying GameObject image)
+	 * @param img
+	 */
+	public void setImage(Image img) {
+		this.img = img;
 	}
 	
 	

@@ -56,7 +56,7 @@ public class JBackground extends JPanel implements MouseListener {
 			return;
 
 		Map m = game.getMap();
-		Iterator<GameObject> iter = game.typeIterator(new Packman());
+		Iterator<GameObject> iter = game.typeIterator(new Packman(0));
 
 		Packman p;
 		Path path;
@@ -121,7 +121,7 @@ public class JBackground extends JPanel implements MouseListener {
 
 		// set the new computed point.
 		dropItem.setPoint(p3d);
-		dropItem.setId(game.generateID()); //TODO: change. not to do random.
+		dropItem.setId(game.generateID()); 
 		// 
 		// generate a Graphic element from this object.
 		GameSpirit gs = game.createGameSpiritXY(dropItem,e.getX(),e.getY());
@@ -192,7 +192,7 @@ public class JBackground extends JPanel implements MouseListener {
 	}
 	
 	public void updateMapWithNewScreenSize(int width, int height) {
-		//map.updateScreenRange(width, height);
+		map.updateScreenRange(width, height);
 		if(game == null || game.getMap() == null)
 			return;
 		

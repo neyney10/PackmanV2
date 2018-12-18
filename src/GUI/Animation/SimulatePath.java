@@ -19,6 +19,7 @@ import Path.Path;
 /**
  * Class for simulating Path on Graphical user interface.
  * Moving objects along a certain path and speed.
+ * running in a different Thread, call SimulatePath.start() function to start
  * @author Ofek Bader
  *
  */
@@ -27,10 +28,16 @@ public class SimulatePath extends Thread {
 	public final static String version = "1.3";
 	public final static String versionStage = "Beta";
 	public final static int updateSpeed = 16; // milliseconds
-	private boolean finished = false;
+	private boolean  finished = false;
 	private Game game;
 	private JBackground gameUI;
 
+	/**
+	 * [Constructor] <br>
+	 * creating a new Simulation of paths.
+	 * Must pass a JBackground UI which contain a none Null Game object.
+	 * @param gameUI
+	 */
 	public SimulatePath(JBackground gameUI) {
 		this.game = gameUI.getGame();
 		this.gameUI = gameUI;
@@ -129,7 +136,7 @@ public class SimulatePath extends Thread {
 					
 					// set orientation of pacman
 					// TODO: optimize, this is called on every step instead of every line.
-					gamespirit.img = MyFrame.rotateImage(pacman.getSpirit(), (float)Math.toDegrees(angle[i])+180); //TODO: fix
+					gamespirit.setImage(MyFrame.rotateImage(pacman.getSpirit(), (float)Math.toDegrees(angle[i])+180)); //TODO: fix
 
 					steps[i] = (int) (distMeters[i]/speed);
 

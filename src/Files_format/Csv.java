@@ -13,6 +13,11 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+/**
+ * CSV Static class (cannot create instances from it, directly use its functions)
+ * Reading game's CSV file and Building/saving CSV file.
+ * @author Adi Lichy.
+ */
 public class Csv {
     //private static ArrayList<GameObject> gameObjects;
     private static TreeSet<GameObject> gameObjects;//temp

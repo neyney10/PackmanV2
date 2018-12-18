@@ -27,7 +27,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 
-import Algorithms.PathFinding;
+import Algorithms.ShortestPathAlgo;
 import Files_format.Path2Kml;
 import GUI.Animation.SimulatePath;
 import Game.Game;
@@ -71,6 +71,8 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	private JButton btn_stopSimulation;
 	private JButton btn_compute; // compute shortest path algo
 
+	// path algorithm
+	private ShortestPathAlgo pathFindingAlgorithm;
 	// Simulation
 	private SimulatePath simulation;
 	private boolean simulating = false;
@@ -243,8 +245,8 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		mapAriel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				jb.setMap(MapFactory.getMap(MapType.ArielUniversity)); //TODO: NULL CHECK
+				if(jb == null) return;
+				jb.setMap(MapFactory.getMap(MapType.ArielUniversity));
 				jb.repaint();
 			}
 		});
@@ -256,7 +258,8 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		mapTelAviv.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					jb.setMap(MapFactory.getMap(MapType.TelAviv));//TODO: NULL CHECK
+					if(jb == null) return;
+					jb.setMap(MapFactory.getMap(MapType.TelAviv));
 					jb.repaint();
 			}
 		});
@@ -409,8 +412,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	/**
 	 * Load game from CSV file.
-	 * 
-	 * @param *path - to the file
 	 */
 	public void loadGame() {
 		FileDialog fd = new FileDialog(new Frame(), "Load Game File (CSV)", FileDialog.LOAD);
@@ -427,8 +428,8 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 		// TEMP
 		// TODO: remove.
-		PathFinding pf = new PathFinding(jb);
-		pf.calcPath();
+		pathFindingAlgorithm = new ShortestPathAlgo(jb.getGame());
+		pathFindingAlgorithm.calcPath();
 
 	}
 
@@ -454,13 +455,20 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if(jb == null || jb.getGame() == null || jb.getGame().isEmpty())
 			return;
 		
-		//TODO: REMOVE, THIS IS ONLY TEMP.
-		Solutions solution = new Solutions();
-		Iterator<GameObject> iter = jb.getGame().typeIterator(new Packman());
-		while(iter.hasNext()) {
-			solution.add(((Packman)(iter.next())).getPath());
-		}
-		Path2Kml.create(solution, "myKml.kml");
+			if (jb == null)
+			return;
+
+		FileDialog fd = new FileDialog(new Frame(), "Export Game File (KML)", FileDialog.SAVE);
+		fd.setDirectory("/");
+		fd.setFile("*.kml");
+		fd.setVisible(true);
+		
+		// if didnt choose a name
+		if (fd.getFiles().length == 0)
+			return;
+		
+		Solutions solution = ShortestPathAlgo.convertIntoPathSolutions(jb.getGame());
+		Path2Kml.create(solution, (fd.getDirectory() + fd.getFile()));
 	}
 
 	/**
@@ -487,7 +495,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if (jb == null)
 			return;
 
-		jb.dropItem = new Packman();
+		jb.dropItem = new Packman(0);
 		enterDropMode();
 	}
 
@@ -499,7 +507,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if (jb == null)
 			return;
 
-		jb.dropItem = new Fruit();
+		jb.dropItem = new Fruit(0);
 		enterDropMode();
 	}
 
@@ -569,9 +577,12 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * the class set the path on each pacman after calculation.
 	 */
 	public void computePath() {
+		if(jb == null || jb.getGame() == null)
+			return;
+
 		// compute paths
-		PathFinding pf = new PathFinding(jb);
-		pf.calcPath();
+		pathFindingAlgorithm = new ShortestPathAlgo(jb.getGame());
+		pathFindingAlgorithm.calcPath();
 
 		// repaint
 		repaint();

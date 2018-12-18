@@ -5,41 +5,50 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 import Coords.MyCoords;
-import GUI.JBackground;
 import Game.Game;
 import GameObjects.Fruit;
 import GameObjects.GameObject;
 import GameObjects.Packman;
 import Path.Path;
+import Path.Solutions;
 
-public class PathFinding {
+/**
+ * Path finding algorithm,
+ * getting a Game, with pacmans and fruits, calculating the shortest path for all
+ * pacmans to move for eating all fruits in the fastest way possible.
+ * using a simillar algorithm to Dijkstra. <br>
+ * Use: first create a new instance of this class by giving it a game object to work on,
+ * and then use the "calcPath()" function to compute.
+ * NOTE: the algorithm setting its result of each pacman's path in the Packman's Path object in each pacman.
+ */
+public class ShortestPathAlgo {
 
+	// Costs MINHEAP, COST = time to go from point A to point B.
 	ArrayList<Cost> costs;
-	private JBackground gameUI;
+
+	// the Game object to compute.
 	private Game game;
 
-	public PathFinding(JBackground gameUI) {
-		this.gameUI = gameUI;
-		this.game = gameUI.getGame();
+	/**
+	 * Create a new ShortestPathAlgo object for computing each Pacman's paths.
+	 * @param game
+	 */
+	public ShortestPathAlgo(Game game) {
+		this.game = game;
 		this.costs = new ArrayList<>();
 
 		GameObject obj;
-		Iterator<GameObject> iter = game.iterator();
+		Iterator<GameObject> iter = game.typeIterator(new Packman(0));
 		while (iter.hasNext()) {
 			obj = iter.next();
-			if (obj instanceof Packman) {
-				;
-
 				((Packman) obj).setPath(new Path(obj.getPoint()));
-			}
-
 		}
 
 	}
 
 	/**
-	 * NAIVE
-	 * 
+	 * Using a custom Dijkstra algoritm to compute path's of each pacman.
+	 * setting the Path object in each Packman's object as a result.
 	 * @param game
 	 */
 	public void calcPath() {
@@ -101,11 +110,21 @@ public class PathFinding {
 
 	}
 
+	/**
+	 * Cost object for saving the cost of each Edge in the graph.
+	 * From origin point P to destination point of fruit F.
+	 */
 	class Cost {
 		Packman p;
 		Fruit f;
 		double cost;
 
+		/**
+		 * creates new cost wrapper obj
+		 * @param pacman
+		 * @param fruit
+		 * @param cost - distance/speed = time or any other "cost" calculation. that can be saved.
+		 */
 		public Cost(Packman pacman, Fruit fruit, double cost) {
 			this.p = pacman;
 			this.f = fruit;
@@ -118,6 +137,10 @@ public class PathFinding {
 		}
 	}
 
+	/**
+	 * Comperator for "Cost" object, comparing the Cost.cost field of each two Cost objects
+	 * Ordering by cost (primitive Double).
+	 */
 	class CostComperator implements Comparator<Cost> {
 
 		@Override
@@ -125,6 +148,22 @@ public class PathFinding {
 			return (int) (o1.cost - o2.cost);
 		}
 
+	}
+
+	/**
+	 * Get a Game object, and iterate over all pacmans in this game, combining all of thier path's into
+	 * one Solutions object for using for KML conversion, manipulating and sharing.
+	 * @param game
+	 * @return Solutions as a Paths array.
+	 */
+	public static Solutions convertIntoPathSolutions(Game game) {
+		Solutions solution = new Solutions();
+		Iterator<GameObject> iter = game.typeIterator(new Packman(0));
+		while(iter.hasNext()) {
+			solution.add(((Packman)(iter.next())).getPath());
+		}
+
+		return solution;
 	}
 
 }
