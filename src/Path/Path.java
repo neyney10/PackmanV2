@@ -8,7 +8,7 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Random;
+
 import Coords.MyCoords;
 import Geom.Point3D;
 import Maps.Map;

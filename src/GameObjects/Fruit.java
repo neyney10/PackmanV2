@@ -21,8 +21,8 @@ public class Fruit extends GameObject {
     /**
      * create an empty object with default values.
      */
-    public Fruit() {
-    	this(0, 0 ,0, (int)(Math.random()*334143)); //TODO: NOT RANDOM
+    public Fruit(int id) {
+    	this(0, 0 ,0, id);
     }
 
 

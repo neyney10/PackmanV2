@@ -90,6 +90,10 @@ public class Game implements BasicGameSpiritFactory {
         this.map = map;
     }
 
+    /**
+     * getx the highest id number that the GameObject has.
+     * @return the highest id found.
+     */
     private int getMaxID() {
         if(isEmpty())
             return -1;
@@ -106,6 +110,10 @@ public class Game implements BasicGameSpiritFactory {
         return max;
     }
 
+    /**
+     * Get a new ID from this game container.
+     * @return a brand new ID!
+     */
     public int generateID() {
         return id++;
     }

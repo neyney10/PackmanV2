@@ -30,8 +30,8 @@ public class Packman extends GameObject implements Cloneable {
     /**
      *  creates an empty Object with default values
      */
-    public Packman() {
-    	this(0, 0, 0, (int)(Math.random()*432133), 1, 1);// TODO: do not make it random, count ID's instead
+    public Packman(int id) {
+    	this(0, 0, 0, id, 1, 1);
     }
 
     public double getRadius() {

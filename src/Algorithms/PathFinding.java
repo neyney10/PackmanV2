@@ -47,13 +47,13 @@ public class PathFinding {
 
 		// SETUP
 		Iterator<GameObject> iterPack;
-		Iterator<GameObject> iterFruit = game.typeIterator(new Fruit());
+		Iterator<GameObject> iterFruit = game.typeIterator(new Fruit(0));
 		Packman pacman;
 		Fruit fruit;
 
 		while (iterFruit.hasNext()) {
 			fruit = (Fruit) iterFruit.next();
-			iterPack = game.typeIterator(new Packman());
+			iterPack = game.typeIterator(new Packman(0));
 			while (iterPack.hasNext()) {
 				pacman = (Packman) iterPack.next();
 				double c = ((co.distance3d(pacman.getPoint(), fruit.getPoint())) - pacman.getRadius())
