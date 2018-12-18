@@ -46,10 +46,12 @@ public class JBackground extends JPanel implements MouseListener {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(game.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
-		System.out.println(game.getMap());
-		// PAINT PATHS
+		
+		if(game != null)
+			g.drawImage(game.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
+		else g.drawImage(this.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
 
+		// PAINT PATHS
 		if(game == null || game.isEmpty())
 			return;
 
