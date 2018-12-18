@@ -125,6 +125,7 @@ public class Packman extends GameObject implements Cloneable {
 	 */
 	public void setPath(Path path) {
 		this.path = path;
+		this.path.setID(id);
 	}
 	
 	/** 

@@ -22,6 +22,7 @@ public class Path {
 	
 	private LinkedList<Point3D> points;
 	private String color;
+	private int id;
 	
 	/**
 	 * Path is an array of Geodetic Point3D points
@@ -140,6 +141,22 @@ public class Path {
 	public String getColor() {
 		return color;
 
+	}
+
+	/**
+	 * Sets a new ID
+	 * @param id
+	 */
+	public void setID(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * gets this Path's id.
+	 * @return id (integer)
+	 */
+	public int getID() {
+		return this.id;
 	}
 
 	/**
