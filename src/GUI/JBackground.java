@@ -13,6 +13,8 @@ import GameObjects.GameObject;
 import GameObjects.Packman;
 import Geom.Point3D;
 import Maps.Map;
+import Maps.MapFactory;
+import Maps.MapFactory.MapType;
 import Path.Path;
 
 public class JBackground extends JPanel implements MouseListener {
@@ -24,11 +26,16 @@ public class JBackground extends JPanel implements MouseListener {
 	public boolean dropMode = false; // TODO: make getters and setters
 	public GameObject dropItem;
 	private Game game;
+	private Map map;
+
+
 
 	public JBackground() {
 		super();
 		setLayout(null);
 		addMouseListener(this);
+		// default map
+		map = MapFactory.getMap(MapType.ArielUniversity);
 	}
 
 	public JBackground(Game game) {
@@ -39,10 +46,12 @@ public class JBackground extends JPanel implements MouseListener {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(game.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
+		
+		if(game != null)
+			g.drawImage(game.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
+		else g.drawImage(this.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
 
 		// PAINT PATHS
-
 		if(game == null || game.isEmpty())
 			return;
 
@@ -98,6 +107,9 @@ public class JBackground extends JPanel implements MouseListener {
 		if (!dropMode || dropItem == null)
 			return;
 
+		if(game == null) 
+			setGame(new Game());
+		
 		// get a new Clone of the item.
 		dropItem = dropItem.clone();
 		
@@ -151,8 +163,40 @@ public class JBackground extends JPanel implements MouseListener {
 
 		if (game == null)
 			return;
-
+		if(game.getMap() == null)
+			game.setMap(this.map);
+		
 		refreshGameUI();
+	}
+	
+	/**
+	 * returns this game's map, if the game does not have a map
+	 * then returning a default map or last used map.
+	 * @return
+	 */
+	public Map getMap() {
+		if(game!=null && game.getMap() != null)
+			return game.getMap();
+		return map;
+	}
+
+	public void setMap(Map map) {
+		this.map = map;
+		
+		if (game == null)
+			return;
+		
+		game.setMap(this.map);
+		refreshGameUI();
+		
+	}
+	
+	public void updateMapWithNewScreenSize(int width, int height) {
+		//map.updateScreenRange(width, height);
+		if(game == null || game.getMap() == null)
+			return;
+		
+		game.getMap().updateScreenRange(width, height);
 	}
 
 }

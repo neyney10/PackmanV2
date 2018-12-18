@@ -7,7 +7,8 @@ public class MapFactory {
 	
 	private static HashMap<MapType, Map> maps = new HashMap<>();
 	public enum MapType {
-		ArielUniversity
+		ArielUniversity,
+		TelAviv
 	}
 	
 	public static Map getMap(MapType type) {
@@ -17,11 +18,18 @@ public class MapFactory {
 			switch(type) {
 				case ArielUniversity:
 					map = new ArielMap();
+					break;
+				case TelAviv:
+					map = new TelAvivMap();
+					break;
 			}
+			maps.put(type, map);
 		}
 		
 		return map;
 	}
+	
+
 	
 	
 
