@@ -7,6 +7,7 @@ import GUI.ImageFactory;
 public final class ArielMap extends Map{
 	
 	public ArielMap() {
+		super();
 		// default values
 		double x1 = 35.2024f; // upper left corner
 		double y1 = 32.1056f;
@@ -15,9 +16,10 @@ public final class ArielMap extends Map{
 		 
 		mapRange = new MapRange(x1,y1,x2,y2);
 		screenRange = new Rectangle(0, 0, 1433, 642);
-		originalScreenRange = new Rectangle(0, 0, 1433, 642);
 
 		background = ImageFactory.getImageFromDisk("GameData\\Ariel1.png");
 	}
+	
+
 
 }

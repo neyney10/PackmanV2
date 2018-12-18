@@ -165,10 +165,18 @@ public class JBackground extends JPanel implements MouseListener {
 			return;
 		if(game.getMap() == null)
 			game.setMap(this.map);
+		
 		refreshGameUI();
 	}
 	
+	/**
+	 * returns this game's map, if the game does not have a map
+	 * then returning a default map or last used map.
+	 * @return
+	 */
 	public Map getMap() {
+		if(game!=null && game.getMap() != null)
+			return game.getMap();
 		return map;
 	}
 
@@ -181,6 +189,14 @@ public class JBackground extends JPanel implements MouseListener {
 		game.setMap(this.map);
 		refreshGameUI();
 		
+	}
+	
+	public void updateMapWithNewScreenSize(int width, int height) {
+		//map.updateScreenRange(width, height);
+		if(game == null || game.getMap() == null)
+			return;
+		
+		game.getMap().updateScreenRange(width, height);
 	}
 
 }

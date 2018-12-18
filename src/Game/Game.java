@@ -15,7 +15,7 @@ import Maps.MapFactory.MapType;
 public class Game implements BasicGameSpiritFactory {
 
     private TreeSet<GameObject> objects;
-    private Map map; // temp
+    private Map map;
     private int id = 0;
 
     /**
@@ -114,9 +114,8 @@ public class Game implements BasicGameSpiritFactory {
 	@Override
 	public GameSpirit createGameSpirit(BasicGameSpirit obj) {
 		Point p = map.getLocationOnScreen(obj);
-		GameSpirit gameComponent = new GameSpirit(obj, p.x, p.y);
-		map.updateLocationOnScreen(gameComponent);
-		return gameComponent;
+		return createGameSpiritXY(obj,p.x,p.y);
+
 	}
 
 

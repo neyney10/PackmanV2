@@ -369,12 +369,17 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if (jb != null) {
 			jb.setSize(this.size());
 
+			if (jb.getMap() == null)
+				return;
+			
+			jb.updateMapWithNewScreenSize(this.getWidth(), this.getHeight());
+			
 			if (jb.getGame() == null)
 				return;
 
-			Map map = jb.getGame().getMap();
+			Map map = jb.getMap();
 
-			map.updateScreenRange(this.getWidth(), this.getHeight());
+			//map.updateScreenRange(this.getWidth(), this.getHeight());
 
 			for (Component c : jb.getComponents()) {
 				if (c instanceof GameSpirit) {

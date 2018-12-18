@@ -24,6 +24,17 @@ public abstract class Map {
 	public Map() {
 		scaleFactorX = 1;
 		scaleFactorY = 1;
+		originalScreenRange = new Rectangle(0, 0, 1433, 642);
+	}
+	
+	/**
+	 * Creating a new map object with
+	 * @param screenWidth
+	 * @param screenHeight
+	 */
+	public Map(int screenWidth, int screenHeight) {
+		originalScreenRange = new Rectangle(0, 0, screenWidth, screenHeight);
+
 	}
 	
 	/**
