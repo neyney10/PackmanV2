@@ -594,6 +594,10 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 		// repaint
 		repaint();
+
+		//temp TODO: remove
+		System.out.println(((Packman)(jb.getGame().getObjects().last())).getTimeStamps().toString());;
+		System.out.println(((Packman)(jb.getGame().getObjects().last())).getPath().length());;
 	}
 
 

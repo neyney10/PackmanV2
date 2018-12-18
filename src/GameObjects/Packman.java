@@ -3,6 +3,7 @@ package GameObjects;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import Coords.MyCoords;
 import GUI.ImageFactory;
 import Geom.Point3D;
 import Path.Path;
@@ -127,18 +128,53 @@ public class Packman extends GameObject implements Cloneable {
 	}
 	
 	/** 
-	 * NOT COMPLETE
+	 * Get this pacman's path time stamps (in seconds) in total of N steps.
+	 * @return HashMap<String, Point3D> points and thier timestamps in seconds.
 	 */
-	public void getTimeStamps() {
-		long time = 0;
-		HashMap<Point3D, String> timestamps = new HashMap<>();
+	public HashMap<String, Point3D> getTimeStamps() {
+		long time = 0, steps = 0;
+		Point3D  vectorNormal, stepPoint;
+		double normal, precentage;
+		MyCoords c = new MyCoords();
+
+		HashMap<String, Point3D> timestamps = new HashMap<>(path.getPointAmount()*2);
+
 		Iterator<Point3D> iter = path.iterator();
 		Point3D p1 = iter.next();
 		while(iter.hasNext()) {
 			Point3D p2 = iter.next();
-		//	timestamps.put(iter.next(), );
+
+			//get the vector between those two points
+			vectorNormal = new Point3D(p2.x()-p1.x(), p2.y()-p1.y(),p2.z()-p1.z());
 			
-		}
+			// get the vector's normal
+			normal =Math.sqrt(Math.pow(vectorNormal.x(), 2)+
+					Math.pow(vectorNormal.y(), 2)+
+					Math.pow(vectorNormal.z(), 2));
+
+			// normalize the vector.
+			vectorNormal = new Point3D(vectorNormal.x()/normal,
+										vectorNormal.y()/normal,
+										vectorNormal.z()/normal);
+
+			steps =(int) (c.distance3d(p1, p2)/speed)/10;
+
+			for(int i = 0 ; i < steps-1 ; i++) {
+				
+				precentage = (i/steps);
+				stepPoint = new Point3D(p1.x() + vectorNormal.x()*precentage,
+										p1.y() + vectorNormal.y()*precentage,
+										p1.z() + vectorNormal.z()*precentage);
+				timestamps.put(time+"", stepPoint); //TODO: set an actual timestamp string.
+				time += 10; // 10 seconds.
+				
+			}
+
+			p1 = p2;
+			
+		} // while(iter.hasNext())
+
+		return timestamps;
 	}
 	
 	/**
