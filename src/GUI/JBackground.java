@@ -13,6 +13,8 @@ import GameObjects.GameObject;
 import GameObjects.Packman;
 import Geom.Point3D;
 import Maps.Map;
+import Maps.MapFactory;
+import Maps.MapFactory.MapType;
 import Path.Path;
 
 public class JBackground extends JPanel implements MouseListener {
@@ -24,11 +26,16 @@ public class JBackground extends JPanel implements MouseListener {
 	public boolean dropMode = false; // TODO: make getters and setters
 	public GameObject dropItem;
 	private Game game;
+	private Map map;
+
+
 
 	public JBackground() {
 		super();
 		setLayout(null);
 		addMouseListener(this);
+		// default map
+		map = MapFactory.getMap(MapType.ArielUniversity);
 	}
 
 	public JBackground(Game game) {
@@ -40,7 +47,7 @@ public class JBackground extends JPanel implements MouseListener {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(game.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
-
+		System.out.println(game.getMap());
 		// PAINT PATHS
 
 		if(game == null || game.isEmpty())
@@ -151,8 +158,24 @@ public class JBackground extends JPanel implements MouseListener {
 
 		if (game == null)
 			return;
-
+		if(game.getMap() == null)
+			game.setMap(this.map);
 		refreshGameUI();
+	}
+	
+	public Map getMap() {
+		return map;
+	}
+
+	public void setMap(Map map) {
+		this.map = map;
+		
+		if (game == null)
+			return;
+		
+		game.setMap(this.map);
+		refreshGameUI();
+		
 	}
 
 }

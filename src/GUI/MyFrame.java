@@ -24,6 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 
 import Algorithms.PathFinding;
@@ -34,6 +35,8 @@ import GameObjects.Fruit;
 import GameObjects.GameObject;
 import GameObjects.Packman;
 import Maps.Map;
+import Maps.MapFactory;
+import Maps.MapFactory.MapType;
 import Path.Solutions;
 
 /**
@@ -152,6 +155,13 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		menuObjects.setFont(menuFont);
 		menuObjects.setCursor(handCursor);
 		menuObjects.setBorder(BorderFactory.createSoftBevelBorder(0));
+		
+		// would be inside gameobjects menu
+		JMenu menuMap = new JMenu("Maps");
+		menuMap.setFont(menuFont);
+		menuMap.setCursor(handCursor);
+		menuMap.setBackground(Color.WHITE);
+		menuMap.setBorder(BorderFactory.createSoftBevelBorder(0));
 
 		/// create buttons for menubar's menus
 		JMenuItem i1 = new JMenuItem("Load game");
@@ -225,6 +235,31 @@ public final class MyFrame extends JFrame implements ComponentListener {
 				addFruit();
 			}
 		});
+		
+		JMenuItem mapAriel = new JMenuItem("Ariel University");
+		mapAriel.setFont(itemFont);
+		mapAriel.setCursor(handCursor);
+		mapAriel.setBackground(Color.GRAY);
+		mapAriel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				jb.setMap(MapFactory.getMap(MapType.ArielUniversity)); //TODO: NULL CHECK
+				jb.repaint();
+			}
+		});
+		
+		JMenuItem mapTelAviv = new JMenuItem("Tel-Aviv");
+		mapTelAviv.setFont(itemFont);
+		mapTelAviv.setCursor(handCursor);
+		mapTelAviv.setBackground(Color.GRAY);
+		mapTelAviv.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+					jb.setMap(MapFactory.getMap(MapType.TelAviv));//TODO: NULL CHECK
+					jb.repaint();
+			}
+		});
 
 		btn_run = new JButton();
 		btn_run.setText("RUN");
@@ -275,12 +310,15 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		});
 
 		// pack menus
+		menuMap.add(mapAriel);
+		menuMap.add(mapTelAviv);
 		menu.add(i1);
 		menu.add(i2);
 		menu.add(export);
 		menu.add(clear);
 		menuObjects.add(gmobjAddPackman);
 		menuObjects.add(gmobjAddFruit);
+		menuObjects.add(menuMap); // adding a submenu
 		menubar.add(menu);
 		menubar.add(menuObjects);
 		menubar.add(btn_exitDropMode);

@@ -15,7 +15,7 @@ import Maps.MapFactory.MapType;
 public class Game implements BasicGameSpiritFactory {
 
     private TreeSet<GameObject> objects;
-    private Map map = MapFactory.getMap(MapType.TelAviv); // temp
+    private Map map; // temp
     private int id = 0;
 
     /**
