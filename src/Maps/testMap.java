@@ -19,6 +19,18 @@ import Maps.MapFactory.MapType;
  */
 public class testMap {
 
+
+	/**
+	 * Because of the Flyweight MAP Pool ("Cache")
+	 * the same map is shared between tests, so we need to reset it.
+	 * @param Mp the map to rest
+	 */
+	private void restMap(Map map) { 
+		map.scaleFactorY = 1;
+		map.scaleFactorX = 1;
+		map.screenRange.width = map.getOriginalScreenWidth();
+		map.screenRange.height = map.getOriginalScreenHeight();
+	}
 	
 	/**
 	 * Testing the conversion of points from GSP-Geodetic type coordinates to
@@ -27,6 +39,7 @@ public class testMap {
 	@Test
 	public void testCoordinatesConversionFromGPStoPixel() {
 		Map map = MapFactory.getMap(MapType.ArielUniversity);
+		restMap(map);
 		double errorMargin = 0.00001;
 
 		// TEST 1
@@ -72,6 +85,7 @@ public class testMap {
 	@Test
 	public void testDistanceMeters() {
 		Map map = MapFactory.getMap(MapType.ArielUniversity);
+		restMap(map);
 		double distance, distanceErrorMarginInMeters = 0.75;
 		
 		// TEST 1
@@ -85,6 +99,7 @@ public class testMap {
 	@Test
 	public void testDistancePixels() {
 		Map map = MapFactory.getMap(MapType.ArielUniversity);
+
 		double distance, distanceErrorMargin = 0.1;
 		
 		// TEST 1
@@ -115,6 +130,7 @@ public class testMap {
 	@Test
 	public void testAngle() {
 		Map map = MapFactory.getMap(MapType.ArielUniversity);
+		restMap(map);
 		double angle, angleErrorMariginInDegrees = 0.3;
 		
 		// TEST 1 (from down to up)
@@ -140,6 +156,7 @@ public class testMap {
 	@Test
 	public void testScaleFactors() {
 		Map map = MapFactory.getMap(MapType.ArielUniversity);
+		restMap(map);
 		double scaleFactorX, scaleFactorY, scaleFactorErrorMargin = 0.1;
 		
 		// TEST 1
@@ -175,6 +192,7 @@ public class testMap {
 	@Test
 	public void testTransform() {
 		Map map = MapFactory.getMap(MapType.ArielUniversity);
+		restMap(map);
 		double transformErrorMargin = 0.000001;
 		Point p1, p2, result;
 

@@ -15,7 +15,6 @@ import java.awt.event.ComponentListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -24,7 +23,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 
 import Algorithms.ShortestPathAlgo;
@@ -32,7 +30,6 @@ import Files_format.Path2Kml;
 import GUI.Animation.SimulatePath;
 import Game.Game;
 import GameObjects.Fruit;
-import GameObjects.GameObject;
 import GameObjects.Packman;
 import Maps.Map;
 import Maps.MapFactory;
