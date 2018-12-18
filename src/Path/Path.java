@@ -26,18 +26,27 @@ public class Path {
 	/**
 	 * Path is an array of Geodetic Point3D points
 	 * @author Ofek Bader
-	 *
 	 */
 	public Path() {
 		points = new LinkedList<>();
 		setColor(ColorGenerator.getInstance().colorGenerate()); // default
 	}
 
+
+	/**
+	 * Path is an array of Geodetic Point3D points
+	 * with a starting point
+	 * @param Point3D point - starting point.
+	 */
 	public Path(Point3D point) {
 		this();
 		points.addFirst(point);
 	}
 
+	/**
+	 * add new point to this Path.
+	 * @param p3d a new point to add.
+	 */
 	public void add(Point3D p3d) {
 		points.add(p3d);
 	}
@@ -133,6 +142,10 @@ public class Path {
 
 	}
 
+	/**
+	 * get the iterator over this Path which iterates over Point3D
+	 * @return Iterator<Point3D> iterator.
+	 */
 	public Iterator<Point3D> iterator() {
 		return points.iterator();
 	}

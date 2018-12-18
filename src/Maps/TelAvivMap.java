@@ -4,10 +4,14 @@ import java.awt.Rectangle;
 
 import GUI.ImageFactory;
 
+/**
+ * A game map of Tel-Aviv city, (Enum value: MapType.TelAviv)
+ */
 public class TelAvivMap extends Map{
 
 	/**
-	 * Creates a new Map object with TelAviv coordinates and background image.
+	 * Creates a new Map object with TelAviv coordinates and background image. <Br>
+	 * default image path: "GameData\\TelAviv.png"
 	 */
 	public TelAvivMap() {
 		// default values

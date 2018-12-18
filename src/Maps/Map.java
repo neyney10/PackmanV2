@@ -11,7 +11,8 @@ import GameObjects.BasicGameSpirit;
 import Geom.Point3D;
 
 /**
- * 
+ * an abstract Map class which defines the basic properties of map such as image, current screen range, Geodetic Map range,
+ * and original screen range.
  * @author Neyney / Ofek Bader.
  */
 public abstract class Map {
@@ -38,13 +39,13 @@ public abstract class Map {
 	}
 	
 	/**
-	 * NOT TESTED
-	 * @param point2d
-	 * @param point2d2
-	 * @param angle
-	 * @return
+	 * Rotate position of Point by given angle relative to an origin point
+	 * @param point2d origin point
+	 * @param point2d2 the point to rotate
+	 * @param angle how much to rotate in Degrees!
+	 * @return a rotated point Point
 	 */
-	public Point2D rotateAxis(Point origin, Point point2d2, double angle) {
+	public Point rotateAxis(Point origin, Point point2d2, double angle) {
 		// translate the axes
 		
 		angle = Math.toRadians(angle);
@@ -66,25 +67,74 @@ public abstract class Map {
 		
 	}
 
+	/**
+	 * get the geodetic latitude of the top left corner Point.
+	 * @return latitude
+	 */
 	public double getX1() {
 		return mapRange.getX1();
 	}
 
+		/**
+	 * get the geodetic latitude of the bottom right corner Point.
+	 * @return latitude
+	 */
+	public double getX2() {
+		return mapRange.getX2();
+	}
+
+	/** 
+	* get the geodetic longitude of the top left corner Point.
+	* @return latitude
+	*/
+   public double getY1() {
+	   return mapRange.getY1();
+   }
+
+	   /**
+	* get the geodetic longitude of the bottom right corner Point.
+	* @return latitude
+	*/
+   public double getY2() {
+	   return mapRange.getY2();
+   }
+
+   /**
+	* get the Delta latitude of the map.(width)
+	@param double the delta Latitude
+    */
 	public double getWidth() {
 		return mapRange.getWidth();
 	}
 	
+	/**
+	 * get the current Screen/window width.
+	 * @return width in pixels.
+	 */
 	public int getScreenWidth() {
 		return (int) screenRange.getWidth();
 	}
 	
+	/**
+	 * get the current Screen/Window height
+	 * @return height - in pixels
+	 */
 	public int getScreenHeight() {
 		return (int) screenRange.getHeight();
 	}
 	
+	/**
+	 * get the original / starting width of the window/screen.
+	 * @return int the original width in pixels.
+	 */
 	public int getOriginalScreenWidth() {
 		return (int) originalScreenRange.getWidth();
 	}
+
+	/**
+	 * get the original / starting height of the window/screen.
+	 * @return int the original height in pixels.
+	 */
 	public int getOriginalScreenHeight() {
 		return (int) originalScreenRange.getHeight();
 	}
@@ -116,7 +166,6 @@ public abstract class Map {
 
 	/**
 	 * Get the geodetic/polar coordinate representing the screen position. <br>
-	 * [Developer note] Note: not tested yet
 	 * @param obj GameObject
 	 * @return Point3D Geodetic point.
 	 */
@@ -130,7 +179,6 @@ public abstract class Map {
 
 	/**
 	 * Get distance between two points on screen (pixels) in METERES! <br>
-	 * [Developer Note] not tested, might not even work correctly.
 	 * @param p1 - point in pixels
 	 * @param p2 - point in pixels
 	 * @return distance in METERS.
@@ -145,7 +193,6 @@ public abstract class Map {
 	/**
 	 * Get distance between two points on screen (pixels) in PIXELS! <br>
 	 * Note: Calculating the distance by current scaling, its not RAW distance and might change by screen size <br>
-	 * [Developer Note] not tested, might not even work correctly.
 	 * @param p1 - point in pixels
 	 * @param p2 - point in pixels
 	 * @return distance in SCREEN PIXELS.
@@ -160,7 +207,6 @@ public abstract class Map {
 	/**
 	 * Get distance between two points on screen (pixels) in PIXELS! <br>
 	 * Note: Calculating the distance by ORIGINAL scaling, this is RAW data!
-	 * [Developer Note] not tested, might not even work correctly.
 	 * @param p1 - point in pixels
 	 * @param p2 - point in pixels
 	 * @return distance in SCREEN PIXELS.

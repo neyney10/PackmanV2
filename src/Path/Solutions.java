@@ -2,8 +2,16 @@ package Path;
 
 import java.util.*;
 
+/**
+ * A warapple class over many Paths.
+ * it is basicly set of paths.
+ */
 public class Solutions implements Set<Path> {
     LinkedList<Path> list;
+
+    /**
+     * create new Solution object.
+     */
     public Solutions(){
         list = new LinkedList<Path>();
     }

@@ -17,6 +17,10 @@ import Maps.MapFactory;
 import Maps.MapFactory.MapType;
 import Path.Path;
 
+/**
+ * A JPanel component which handles all the game interface, updating locations,
+ * handles gameSpirits and drawing.
+ */
 public class JBackground extends JPanel implements MouseListener {
 
 	/**
@@ -29,7 +33,10 @@ public class JBackground extends JPanel implements MouseListener {
 	private Map map;
 
 
-
+	/**
+	 * [Constructor] <br>
+	 * Creates a new JBackground object, initializing new defualt Map.
+	 */
 	public JBackground() {
 		super();
 		setLayout(null);
@@ -180,6 +187,12 @@ public class JBackground extends JPanel implements MouseListener {
 		return map;
 	}
 
+	/**
+	 * set a new Map for this defualt map of JBackground and set the map into
+	 * the "Game" object of JBackground.
+	 * and then RefreshingGameUI. in O(N) when N is the GameObjects.
+	 * @param map
+	 */
 	public void setMap(Map map) {
 		this.map = map;
 		
@@ -191,6 +204,11 @@ public class JBackground extends JPanel implements MouseListener {
 		
 	}
 	
+	/**
+	 * updates the new window (frame) size.
+	 * @param width screen width
+	 * @param height screen height
+	 */
 	public void updateMapWithNewScreenSize(int width, int height) {
 		map.updateScreenRange(width, height);
 		if(game == null || game.getMap() == null)

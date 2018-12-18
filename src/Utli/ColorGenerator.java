@@ -3,6 +3,9 @@ package Utli;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Color generator class is a Singleton Anti-pattern design pattern for randomly generate colors.
+ */
 public class ColorGenerator {
     private static ColorGenerator ourInstance = new ColorGenerator();
     private ArrayList<String> blacklist = new ArrayList<>();
@@ -19,6 +22,11 @@ public class ColorGenerator {
         blacklist.add(color);
         return false;
     }
+
+    /**
+     * get a new Color in HEXA
+     * @return new string of HEXA color ARGB 
+     */
     public String colorGenerate(){
         Random r = new Random();
         final char [] hex = { '0', '1', '2', '3', '4', '5', '6', '7',

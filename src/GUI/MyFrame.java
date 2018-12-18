@@ -41,9 +41,9 @@ import Path.Solutions;
 
 /**
  * Singleton
- * 
+ * the main Window of the game.
+ * have default window size of 1433x642
  * @author neyne
- *
  */
 public final class MyFrame extends JFrame implements ComponentListener {
 
@@ -86,6 +86,10 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 */
 	private static final long serialVersionUID = 121312L;
 
+	/**
+	 * Get this Singleton's instance.
+	 * @return instance of MyFrame object.
+	 */
 	public static MyFrame getInstance() {
 		if (instance == null)
 			instance = new MyFrame();
@@ -342,7 +346,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * @see "https://stackoverflow.com/questions/8639567/java-rotating-images"
 	 * @param img
 	 * @param angle
-	 * @return
+	 * @return Image - rotated Image
 	 */
 	public static Image rotateImage(Image img, float angle) {
 		BufferedImage image = (BufferedImage) img;
@@ -359,6 +363,10 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		return op.filter(image, null);
 	}
 
+	/**
+	 * called when the user resizing the Window. updating the images and game objects position 
+	 * scaling all width , heights, and x y positions.
+	 */
 	public void componentResized(ComponentEvent ce) {
 		rescaleGameUI();
 	}
@@ -588,51 +596,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		repaint();
 	}
 
-	/**
-	 * [Developer Note] Only for debug and testing purposes
-	 */
-	public void Test() {
-		if (jb == null)
-			return;
-
-		btn_stopSimulation.setVisible(true);
-		btn_run.setVisible(false);
-
-		/*
-		 * Path pat = new Path(); pat.add(new Point3D(35.211222,32.104496,30));
-		 * pat.add(new Point3D(35.207462,32.102482,30)); pat.add(new
-		 * Point3D(35.208462,32.103482,30)); //different pat.add(new
-		 * Point3D(35.203462,32.103482,30)); //different pat.add(new
-		 * Point3D(35.204462,32.104082,30)); //different
-		 * 
-		 * 
-		 * Path pat2 = new Path(); pat2.add(new Point3D(35.204462,32.104082,30));
-		 * //different pat2.add(new Point3D(35.203462,32.103482,30)); //different
-		 * pat2.add(new Point3D(35.208462,32.103482,30)); //different pat2.add(new
-		 * Point3D(35.207462,32.102482,30)); pat2.add(new
-		 * Point3D(35.211222,32.104496,30));
-		 * 
-		 * 
-		 * 
-		 * GameSpirit s1 = (GameSpirit) jb.getComponent(1); Packman p1 = (Packman)
-		 * s1.getGameObj(); p1.setPath(pat);
-		 * 
-		 * GameSpirit s2 = (GameSpirit) jb.getComponent(2); Packman p2 = (Packman)
-		 * s2.getGameObj(); p2.setPath(pat2);
-		 */
-
-		simulation = new SimulatePath(jb);
-		simulation.start();
-
-		// Map map = jb.getGame().getMap();
-		//
-		// for(Component c : jb.getComponents()) {
-		// if(c instanceof GameSpirit) {
-		// GameSpirit gameComponent = (GameSpirit) c;
-		// map.moveLocationByPixels(gameComponent, -10, 10);
-		// }
-		// }
-	}
 
 	@Override
 	public void componentHidden(ComponentEvent arg0) {

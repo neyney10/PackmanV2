@@ -3,9 +3,14 @@ package Maps;
 import java.awt.Rectangle;
 import GUI.ImageFactory;
 
-
+/**
+ * A game map of Ariel University, (Enum value: MapType.ArielUniversity)
+ */
 public final class ArielMap extends Map{
-	
+	/**
+	 * Creates a new ArielMap map, with Ariel's coordinates and background image. <Br>
+	 * default image path: "GameData\\Ariel1.png"
+	 */
 	public ArielMap() {
 		super();
 		// default values
