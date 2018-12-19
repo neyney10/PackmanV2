@@ -46,9 +46,26 @@ you choose an object from the GameObject menu, let it be pacman or fruit, and on
 
 - <u>Step 4:</u> after you had a great time watching the pacmans playing the game of their lives, you can export your file into a KML and start watching those pacmans running over the Real world on Google Earth!
 # How to save a game into a CSV file
+- <u>Step 1:</u> go to the toolbar and select the "File" menu. <br>
+
+- <u>Step 2:</u> select "Save game". <br>
+
+- <u>Step 3:</u> set a file name with extension of ".csv" and click save. and thats it!
 # How to load a saved CSV game file
+- <u>Step 1:</u> go to the toolbar and select the "File" menu. <br>
+
+- <u>Step 2:</u> select "Load game". <br>
+
+- <u>Step 3:</u> select the game file you want to load!
 # How to export the game into a KML file
+Note: you must first have computed the paths of each pacman with the "Compute" button to be able to export as KML.
+- <u>Step 1:</u> go to the toolbar and select the "File" menu. <br>
+
+- <u>Step 2:</u> select "Export game". <br>
+
+- <u>Step 3:</u> set a file name with extension of ".kml" and click save. and thats it!
 # How to load a KML file into Google Earth
+See: https://support.google.com/earth/answer/7365595?co=GENIE.Platform%3DDesktop&hl=en
 # Game's Shortest Path Finding Algorithm
 The algorithm is a forked Dijkstra algorithm, not famillar with Dijkstra? look up here:<br>
 https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm <br>
