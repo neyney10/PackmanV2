@@ -16,6 +16,7 @@ the goal in this game is to let the pacmans play in a group, and their group goa
 Of course the game is a simulation so they figure their routes by themselves but it's cool to see them chasing those little fruits!
 
 ## How to actually play?
+- <u>Extra: Step 0:</u> Choose a map from the "GameObject" submenu, currently supports only "Ariel University" and "Tel-Aviv".
 - <u>Step 1:</u> As was written earlier, this is a simulation game! <br>
 you choose an object from the GameObject menu, let it be pacman or fruit, and once you click an item you'll enter to a "drop mode" which allows you to click anywhere on the map to place your chosen item!  <br>
 
@@ -55,8 +56,11 @@ Short summary of the algorithm: <br>
 - 2.2. "Relax" all other Edges/Lines of all OTHER pacmans which isn't in the line we just got from the MinHeap by the time took the pacman to eat the fruit.
 
 
-# Game's Code Library Structure
-
+# Summary of Game's Code Library Structure
+[Blue lines = Game Logic & Data] <br>
+[Green Lines = GameUI and graphic interface]
+<br> <br>
+![alt text](Other/GitHubMedia/SystemStructure.png)
 # Packman - Project Status [19/12/2018]
 Packman eat fruits in the shortest path
 

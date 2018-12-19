@@ -154,10 +154,10 @@ public class Packman extends GameObject implements Cloneable {
 					Math.pow(vectorNormal.z(), 2));
 
 			// normalize the vector.
-			vectorNormal = new Point3D(vectorNormal.x()/normal,
-										vectorNormal.y()/normal,
-										vectorNormal.z()/normal);
-
+			vectorNormal = new Point3D(vectorNormal.x()*normal,
+										vectorNormal.y()*normal,
+										vectorNormal.z()*normal);
+			
 			steps =(int) (c.distance3d(p1, p2)/speed)/10;
 
 			for(int i = 0 ; i < steps-1 ; i++) {
