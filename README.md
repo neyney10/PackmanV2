@@ -4,6 +4,12 @@
 This is a Multi-pacman game simulation over Google Earth! <br>
 You can fork this repisoritory and add new GameObjects by yourself!
 
+<br>
+![alt text](Other/GitHubMedia/Pic1Main.jpg)
+<br>
+![alt text](Other/GitHubMedia/Pic2Main.jpg)
+<br>
+
 ## Contributors:
 - Ofek Bader:
 	-   -> https://github.com/neyney10
