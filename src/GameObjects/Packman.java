@@ -162,7 +162,7 @@ public class Packman extends GameObject implements Cloneable {
 
 			for(int i = 0 ; i < steps-1 ; i++) {
 				
-				precentage = (i/steps);
+				precentage = ((double)i/(double)steps);
 				stepPoint = new Point3D(p1.x() + vectorNormal.x()*precentage,
 										p1.y() + vectorNormal.y()*precentage,
 										p1.z() + vectorNormal.z()*precentage);
