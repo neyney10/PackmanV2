@@ -19,9 +19,8 @@ import java.util.TreeSet;
  * @author Adi Lichy.
  */
 public class Csv {
-    //private static ArrayList<GameObject> gameObjects;
     private static TreeSet<GameObject> gameObjects;//temp
-    private static int type,id,lat,lon,alt,speed,radius;
+    private static int type,id = -1,lat,lon,alt,speed,radius;
 
     /**
      * Csv is a static class
@@ -38,6 +37,8 @@ public class Csv {
             gameObjects = new TreeSet<>();
             String line;
             String[] column;
+            int countidP = 0;
+            int countidF = 0;
             int count = 0;
             while ((line = reader.readLine()) != null){
                 column = line.split(",");
@@ -47,11 +48,21 @@ public class Csv {
                     }
                 }
                 else {
-                    if (column[type].equals("P")) {
-                        gameObjects.add(new Packman(Double.parseDouble(column[lon]), Double.parseDouble(column[lat]), Double.parseDouble(column[alt]),Integer.parseInt(column[id]), Double.parseDouble(column[speed]), Double.parseDouble(column[radius])));
+                    if (id>-1) {
+                        if (column[type].equals("P")) {
+                            gameObjects.add(new Packman(Double.parseDouble(column[lon]), Double.parseDouble(column[lat]), Double.parseDouble(column[alt]), Integer.parseInt(column[id]), Double.parseDouble(column[speed]), Double.parseDouble(column[radius])));
+                        } else
+                            gameObjects.add(new Fruit(Double.parseDouble(column[lon]), Double.parseDouble(column[lat]), Double.parseDouble(column[alt]), Integer.parseInt(column[id])));
+                    }else{
+
+                        if (column[type].equals("P")) {
+                            gameObjects.add(new Packman(Double.parseDouble(column[lon]), Double.parseDouble(column[lat]), Double.parseDouble(column[alt]), countidP, Double.parseDouble(column[speed]), Double.parseDouble(column[radius])));
+                            countidP++;
+                        } else{
+                            gameObjects.add(new Fruit(Double.parseDouble(column[lon]), Double.parseDouble(column[lat]), Double.parseDouble(column[alt]), countidF));
+                            countidF++;
+                        }
                     }
-                    else
-                        gameObjects.add(new Fruit(Double.parseDouble(column[lon]),Double.parseDouble(column[lat]),Double.parseDouble(column[alt]),Integer.parseInt(column[id])));
                 }
                 count++;
             }
@@ -100,6 +111,9 @@ public class Csv {
      */
     public static void build(String path,TreeSet<GameObject> gameObjects){
         try {
+            if (!path.toLowerCase().endsWith(".csv")){
+                path += ".csv";
+            }
             StringBuilder sb = new StringBuilder();
             Iterator<GameObject> iterator = gameObjects.iterator();
             GameObject object;

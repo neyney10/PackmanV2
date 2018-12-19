@@ -473,7 +473,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			return;
 		
 		Solutions solution = ShortestPathAlgo.convertIntoPathSolutions(jb.getGame());
-		Path2Kml.create(solution, (fd.getDirectory() + fd.getFile()));
+		Path2Kml.create(jb.getGame(),solution, (fd.getDirectory() + fd.getFile()));
 	}
 
 	/**
