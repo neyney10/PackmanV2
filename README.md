@@ -61,7 +61,7 @@ Note: you must first have computed the paths of each pacman with the "Compute" b
 # How to load a KML file into Google Earth
 See: https://support.google.com/earth/answer/7365595?co=GENIE.Platform%3DDesktop&hl=en <br>
 
-![alt text](Other/GitHubMedia/PicGoogleEarth1.jpg)
+![alt text](Other/GitHubMedia/PicGoogleEarth1.JPG)
 # Game's Shortest Path Finding Algorithm
 The algorithm is a forked Dijkstra algorithm, not famillar with Dijkstra? look up here:<br>
 https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm <br>
