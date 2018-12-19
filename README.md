@@ -1,35 +1,14 @@
-# Packman
-Packman eat fruits in the shortest path
 
-## Development Status: in progress 
-#### Software objectives:
-- ~~**Graphical user interface (GUI) of MyFrame**~~ [COMPLETED]
-	- ~~Load and Save CSV game file into Game class object.~~ [COMPLETED]
-	- ~~Add new game objects with mouse click.~~ [COMPLETED]
--  ~~Game objects such as pacman and fruit~~ [COMPLETED]
-- "**Map**" class:
-	- ~~Store map range~~ [COMPLETED]
-	- ~~Calculate distance between two pixelXY points in pixels.~~[COMPLETED]
-	 ~~Calculate distance in meters between two GPS points or two pixelXY points by converting them first to GPS - like points.~~ [COMPLETED]
-	- Convert from geodetic coordinates to pixel XY.
-- "**Path**" class.
-- "**Path2Kml**" class.
--	"**ShortestPathAlgo**" class.
 
-#### General objectives:
-- Write for each function and class a Javadoc description.
-- Generate Javadoc folder.
-- Edit readme.md file to have HOW-TO-USE toturial and software description.
+# What is it?
+This is a Multi-pacman game simulation over Google Earth! <br>
+You can fork this repisoritory and add new GameObjects by yourself!
 
 ## Contributors:
 - Ofek Bader:
 	-   -> https://github.com/neyney10
 - Adi Lichy:
 	-   -> https://github.com/Lichy24
-
-# What is it?
-This is a Multi-pacman game simulation over Google Earth! <br>
-You can form this repisoritory and add new GameObjects by yourself!
 
 # How to play the game?
 ## Game goals and notes
@@ -78,4 +57,25 @@ Short summary of the algorithm: <br>
 
 # Game's Code Library Structure
 
+# Packman - Project Status [19/12/2018]
+Packman eat fruits in the shortest path
 
+## Development Status: in progress 
+#### Software objectives:
+- ~~**Graphical user interface (GUI) of MyFrame**~~ [COMPLETED]
+	- ~~Load and Save CSV game file into Game class object.~~ [COMPLETED]
+	- ~~Add new game objects with mouse click.~~ [COMPLETED]
+-  ~~Game objects such as pacman and fruit~~ [COMPLETED]
+- "**Map**" class:
+	- ~~Store map range~~ [COMPLETED]
+	- ~~Calculate distance between two pixelXY points in pixels.~~[COMPLETED]
+	 ~~Calculate distance in meters between two GPS points or two pixelXY points by converting them first to GPS - like points.~~ [COMPLETED]
+	- Convert from geodetic coordinates to pixel XY.
+- "**Path**" class.
+- "**Path2Kml**" class.
+-	"**ShortestPathAlgo**" class.
+
+#### General objectives:
+- Write for each function and class a Javadoc description.
+- Generate Javadoc folder.
+- Edit readme.md file to have HOW-TO-USE toturial and software description.
