@@ -18,7 +18,15 @@ import Maps.Map;
 public class GameSpirit extends JComponent implements MouseListener{
 	
 	private static final long serialVersionUID = 3817775198749911544L;
-	private Image img; // TODO: set getters and setters
+	private Image img; 
+
+	public Image getImg() {
+		return this.img;
+	}
+
+	public void setImg(Image img) {
+		this.img = img;
+	}
 	private int startWidth, startHeight, startX, startY;
 	private BasicGameSpirit gameObj;
 
