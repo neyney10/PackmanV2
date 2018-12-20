@@ -6,13 +6,13 @@ import java.util.*;
  * A warapple class over many Paths.
  * it is basicly set of paths.
  */
-public class Solutions implements Set<Path> {
+public class Solution implements Set<Path> {
     LinkedList<Path> list;
 
     /**
      * create new Solution object.
      */
-    public Solutions(){
+    public Solution(){
         list = new LinkedList<Path>();
     }
     @Override

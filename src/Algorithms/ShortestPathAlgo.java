@@ -9,8 +9,7 @@ import Game.Game;
 import GameObjects.Fruit;
 import GameObjects.GameObject;
 import GameObjects.Packman;
-import Path.Path;
-import Path.Solutions;
+import Path.*;
 
 /**
  * Path finding algorithm,
@@ -20,6 +19,7 @@ import Path.Solutions;
  * Use: first create a new instance of this class by giving it a game object to work on,
  * and then use the "calcPath()" function to compute.
  * NOTE: the algorithm setting its result of each pacman's path in the Packman's Path object in each pacman.
+ * @author: Ofek Bader
  */
 public class ShortestPathAlgo {
 
@@ -152,12 +152,12 @@ public class ShortestPathAlgo {
 
 	/**
 	 * Get a Game object, and iterate over all pacmans in this game, combining all of thier path's into
-	 * one Solutions object for using for KML conversion, manipulating and sharing.
+	 * one Solution object for using for KML conversion, manipulating and sharing.
 	 * @param game
-	 * @return Solutions as a Paths array.
+	 * @return Solution as a Paths array.
 	 */
-	public static Solutions convertIntoPathSolutions(Game game) {
-		Solutions solution = new Solutions();
+	public static Solution convertIntoPathSolutions(Game game) {
+		Solution solution = new Solution();
 		Iterator<GameObject> iter = game.typeIterator(new Packman(0));
 		while(iter.hasNext()) {
 			solution.add(((Packman)(iter.next())).getPath());

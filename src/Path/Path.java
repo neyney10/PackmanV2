@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import Coords.MyCoords;
 import Geom.Point3D;
 import Maps.Map;
-import Utli.ColorGenerator;
+import Util.ColorGenerator;
 
 /**
  * Path class is a class which contains a Geodetic Point3D points

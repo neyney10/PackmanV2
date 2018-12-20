@@ -20,5 +20,5 @@ public interface BasicGameSpiritFactory {
 	 * @param obj
 	 * @return GameSpirit
 	 */
-	public GameSpirit createGameSpiritXY(BasicGameSpirit obj,int x, int y);
+	public GameSpirit createGameSpiritXY(BasicGameSpirit obj, int x, int y);
 }

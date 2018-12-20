@@ -34,7 +34,7 @@ import GameObjects.Packman;
 import Maps.Map;
 import Maps.MapFactory;
 import Maps.MapFactory.MapType;
-import Path.Solutions;
+import Path.Solution;
 
 /**
  * Singleton
@@ -472,7 +472,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if (fd.getFiles().length == 0)
 			return;
 		
-		Solutions solution = ShortestPathAlgo.convertIntoPathSolutions(jb.getGame());
+		Solution solution = ShortestPathAlgo.convertIntoPathSolutions(jb.getGame());
 		Path2Kml.create(jb.getGame(),solution, (fd.getDirectory() + fd.getFile()));
 	}
 

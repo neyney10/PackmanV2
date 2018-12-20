@@ -24,6 +24,7 @@ import java.util.*;
  * with basic features such as creating color for each path and basic animation.
  * NOTE: !!!!!the kml animation of packman motion is used by timespan in order to see it work you need both begin&end to work
  *      on slide!!!!!
+ *      @author: Adi Lichy
  */
 public class Path2Kml {
     private static DocumentBuilderFactory factory;
@@ -34,20 +35,20 @@ public class Path2Kml {
     private Path2Kml(){}
 
     /**
-     * create creates a kml file from given solutions
+     * create creates a kml file from given solution
      * @param game Game object of game
-     * @param solutions
-     * @param filePath
+     * @param solution Solution hold the paths of packmans
+     * @param filePath String name of file and path
      */
-    public static void create(Game game,Solutions solutions, String filePath){
+    public static void create(Game game, Solution solution, String filePath){
         try {
             factory = DocumentBuilderFactory.newInstance();
             builder = factory.newDocumentBuilder();
             document = builder.newDocument();
-            setupKml(solutions.iterator());//setup
+            setupKml(solution.iterator());//setup
             start = new Date();
             Iterator<GameObject> iterator = game.typeIterator(new Packman(0));
-            for (Path p:solutions) {
+            for (Path p: solution) {
                 addIconAnimation(p,(Packman) iterator.next());
                 addPath(p);
             }
