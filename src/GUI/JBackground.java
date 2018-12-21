@@ -27,8 +27,8 @@ public class JBackground extends JPanel implements MouseListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 3817775198749911544L;
-	public boolean dropMode = false; // TODO: make getters and setters
-	public GameObject dropItem;
+	private boolean dropMode = false; 
+	private GameObject dropItem;
 	private Game game;
 	private Map map;
 
@@ -202,6 +202,37 @@ public class JBackground extends JPanel implements MouseListener {
 		game.setMap(this.map);
 		refreshGameUI();
 		
+	}
+	/**
+	 *  is dropping mode for mouse click
+	 * @return true if in drop mode
+	 */
+	public boolean isDropMode() {
+		return this.dropMode;
+	}
+
+	/**
+	 * change the drop mode
+	 * @param boolean true to activate, false to deactivate
+	 */
+	public void setDropMode(boolean dropMode) {
+		this.dropMode = dropMode;
+	}
+
+	/**
+	 * get the item to drop in dropMode
+	 * @return GameObject as the item to drop.
+	 */
+	public GameObject getDropItem() {
+		return this.dropItem;
+	}
+
+	/**
+	 * set a drop item in dropMode
+	 * @param dropItem GameObject to drop
+	 */
+	public void setDropItem(GameObject dropItem) {
+		this.dropItem = dropItem;
 	}
 	
 	/**

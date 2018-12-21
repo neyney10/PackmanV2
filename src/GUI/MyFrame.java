@@ -500,7 +500,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if (jb == null)
 			return;
 
-		jb.dropItem = new Packman(0);
+		jb.setDropItem(new Packman(0));
 		enterDropMode();
 	}
 
@@ -512,7 +512,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if (jb == null)
 			return;
 
-		jb.dropItem = new Fruit(0);
+		jb.setDropItem(new Fruit(0));
 		enterDropMode();
 	}
 
@@ -524,7 +524,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if (jb == null)
 			return;
 
-		jb.dropMode = true;
+		jb.setDropMode(true);
 		btn_exitDropMode.setVisible(true);
 	}
 
@@ -535,7 +535,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if (jb == null)
 			return;
 
-		jb.dropMode = false;
+		jb.setDropMode(false);
 		btn_exitDropMode.setVisible(false);
 	}
 
@@ -591,10 +591,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 		// repaint
 		repaint();
-
-		//temp TODO: remove
-		System.out.println(((Packman)(jb.getGame().getObjects().last())).getTimeStamps().toString());;
-		System.out.println(((Packman)(jb.getGame().getObjects().last())).getPath().length());;
 	}
 
 
