@@ -114,6 +114,9 @@ public class Path2Kml {
     private static void addIconAnimation(Path path,Packman packman){
 
         MyCoords myCoords = new MyCoords();
+        ArrayList<String> time = new ArrayList<>();
+        ArrayList<Point3D> coords = new ArrayList<>();
+
         Iterator<Point3D> points = path.iterator();
         Point3D p1,p2;
 
@@ -130,21 +133,69 @@ public class Path2Kml {
                 p2 = points.next();//point 2
                 date.setTime(date.getTime()+((long) (myCoords.distance3d(p1,p2)/packman.getSpeed()*1000)));//added time
                 end = setTimeStamp(date);//end span
-                createIcon(TYPE.P,p1,begin, end);//begin->end
+                time.add(begin);
+                coords.add(p1);
                 createIcon(TYPE.F,p2,startingPoint, end);//start->end
                 begin = end;//progress
                 p1 = p2;//progress
             }
 
             if (end!=startingPoint) {
-                date.setTime(date.getTime() + 1000);//added time
+                date.setTime(date.getTime() + 700);//added time
                 end = setTimeStamp(date);
             }
 
+            time.add(begin);
+            coords.add(p1);
+
+            createMovement(time,coords);
             createIcon(TYPE.P,p1,end,"non");
         }
     }
 
+    /**
+     * CreateMovement creates animation movement using track
+     * @param time ArrayList of String which contains timestamps for kml
+     * @param coordinates ArrayList of Point3D which contains coordinates on path
+     */
+    private static void createMovement(ArrayList<String> time,ArrayList<Point3D> coordinates){
+
+        Element trackmark = document.createElement("Placemark");
+        doc.appendChild(trackmark);
+
+        Element track = document.createElement("gx:Track");
+        trackmark.appendChild(track);
+
+        Element when;
+        Element coords;
+        Element angles;
+
+        Iterator<String> iterTime = time.iterator();
+        while (iterTime.hasNext()){
+            when = document.createElement("when");
+            when.appendChild(document.createTextNode(iterTime.next()));
+            track.appendChild(when);
+        }
+
+        Iterator<Point3D> iterPoint = coordinates.iterator();
+        Point3D point;
+        while (iterPoint.hasNext()){
+            point = iterPoint.next();
+            coords = document.createElement("gx:coord");
+            coords.appendChild(document.createTextNode(point.x()+" "+point.y()+" "+(point.z()+1)));
+            track.appendChild(coords);
+        }
+
+        for (int i =0;i<time.size();i++) {
+            angles = document.createElement("gx:angles");
+            angles.appendChild(document.createTextNode("270 270 270"));
+            track.appendChild(angles);
+        }
+
+        Element urlstyle = document.createElement("styleUrl");
+        urlstyle.appendChild(document.createTextNode("#Packman"));
+        trackmark.appendChild(urlstyle);
+    }
     /**
      * createIcon creates icon for given placemark
      * @param type enum type of game object
@@ -201,6 +252,7 @@ public class Path2Kml {
     private static void setupKml(Iterator<Path> solutionsIterator) {
         Element root = document.createElement("kml");
         root.setAttribute("xmlns","http://www.opengis.net/kml/2.2");
+        root.setAttribute("xmlns:gx","http://www.google.com/kml/ext/2.2");
         document.appendChild(root);
 
         doc = document.createElement("Document");
