@@ -1,3 +1,21 @@
+## Development Status: In development 
+forked from https://github.com/Lichy24/Packman.
+#### Software objectives:
+- make player
+- make ghosts
+- make black rectangles no go zone.
+- make "server" like system that the play can play against
+- database system/data collector
+- design & develop an autonomous system for playing
+- game report
+- update readme
+- update javadoc
+- update UML
+
+#### General objectives:
+- ~~Write for each function and class a Javadoc description.~~ [COMPLETED]
+- ~~Generate Javadoc folder.~~ [COMPLETED]
+- ~~Edit readme.md file to have HOW-TO-USE toturial and software description.~~ [COMPLETED]
 
 
 # What is it?
@@ -80,22 +98,3 @@ Short summary of the algorithm: <br>
 # Packman - Project Status [19/12/2018]
 Packman eat fruits in the shortest path
 
-## Development Status: Complete 
-#### Software objectives:
-- ~~**Graphical user interface (GUI) of MyFrame**~~ [COMPLETED]
-	- ~~Load and Save CSV game file into Game class object.~~ [COMPLETED]
-	- ~~Add new game objects with mouse click.~~ [COMPLETED]
--  ~~Game objects such as pacman and fruit~~ [COMPLETED]
-- ~~"**Map**" class:~~
-	- ~~Store map range~~ [COMPLETED]
-	- ~~Calculate distance between two pixelXY points in pixels.~~[COMPLETED]
-	 ~~Calculate distance in meters between two GPS points or two pixelXY points by converting them first to GPS - like points.~~ [COMPLETED]
-	- ~~Convert from geodetic coordinates to pixel XY.~~ [COMPLETED]
-- ~~"**Path**" class.~~ [COMPLETED]
-- ~~"**Path2Kml**" class.~~ [COMPLETED]
--	~~"**ShortestPathAlgo**" class.~~ [COMPLETED]
-
-#### General objectives:
-- ~~Write for each function and class a Javadoc description.~~ [COMPLETED]
-- ~~Generate Javadoc folder.~~ [COMPLETED]
-- ~~Edit readme.md file to have HOW-TO-USE toturial and software description.~~ [COMPLETED]
