@@ -126,9 +126,8 @@ public abstract class GameObject implements Comparable<GameObject>, BasicGameSpi
     public int compareTo(GameObject o) {
         if(o.type == this.type) {
             return this.id - o.id;
-        } else if(o.type == TYPE.P) {
-            return -1;
-        } else return 1;
+        } else return (this.type.getValue() - o.type.getValue());
+
     }
     
     @Override

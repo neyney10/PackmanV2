@@ -16,15 +16,14 @@ import Path.Path;
  * please use a BasicGameSpiritFactory for creating GameSpirits from an GameObject. <br>
  * default sprite image location (relative): "GameData\\PACMAN.png"
  */
-public class Packman extends GameObject implements Cloneable {
+public class Ghost extends GameObject implements Cloneable {
 	
 	// eating radius, movment speed (in meters) and oreintation in degrees.
 	private double radius,speed, orientation;
 	// the imagePath of the pacman game sprite.
-	private static final String packmanImagePath = "GameData\\PACMAN.png";
-	// the Path of eating fruits, can be calculated by the ShortestPathAlgo.
-	private Path path;
-	
+	private static final String ghostImagePath = "GameData\\ghost.png";
+
+
 	/**
 	 * [Constructor] <br>
 	 * Creating a new pacman with new values of Position (Lat, lon and alt),
@@ -39,17 +38,17 @@ public class Packman extends GameObject implements Cloneable {
 	 * @param speed - speed in meters.
 	 * @param radius - eating radius in meters
 	 */
-    public Packman(double lat, double lon, double alt,int id, double speed, double radius) {
+    public Ghost(double lat, double lon, double alt,int id, double speed, double radius) {
         setPoint(new Point3D(lat,lon,alt));
         setId(id);
         setRadius(radius);
         setSpeed(speed);
         
         // initial values for this type
-        setType(TYPE.P);
+        setType(TYPE.G);
         setInitialWidth(31);
         setInitialHeight(31);
-    	setSpirit(ImageFactory.getImageFromDisk(packmanImagePath));
+    	setSpirit(ImageFactory.getImageFromDisk(ghostImagePath));
     }
     
     /**
@@ -57,7 +56,7 @@ public class Packman extends GameObject implements Cloneable {
      *  creates an empty Object with default values, must supply id from Game.generateID.
 	 *  lat = 0, lon = 0, alt = 0, speed = 1, radius = 1.
      */
-    public Packman(int id) {
+    public Ghost(int id) {
     	this(0, 0, 0, id, 1, 1);
     }
 
@@ -110,31 +109,18 @@ public class Packman extends GameObject implements Cloneable {
 
     @Override
     public String toString() {
-        return "Packman: [ "+super.toString()+" , Speed: "+getSpeed()+" , Radius: "+getRadius()+" ]";
+        return "Ghost: [ "+super.toString()+" , Speed: "+getSpeed()+" , Radius: "+getRadius()+" ]";
     }
 
-	/**
-	 * @return the path
-	 */
-	public Path getPath() {
-		return path;
-	}
 
-	/**
-	 * @param path the path to set
-	 */
-	public void setPath(Path path) {
-		this.path = path;
-		this.path.setID(id);
-	}
 	
 	
 	/**
 	 * Cloning this Packman and returning a new Packman with same values.
 	 * @return Packman 
 	 */
-	public Packman clone() {
-		Packman p = new Packman(point.x(),point.y(),point.z(),id,radius,speed);
+	public Ghost clone() {
+		Ghost p = new Ghost(point.x(),point.y(),point.z(),id,radius,speed);
 		p.setSpirit(getSpirit());
 		return p;
 	}

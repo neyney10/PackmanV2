@@ -1,6 +1,8 @@
 package GUI;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -54,22 +56,44 @@ public class JBackground extends JPanel implements MouseListener {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		if(game != null)
+		if(game == null)
+		{
+			g.drawImage(this.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
+			return;
+		}
+		else
 			g.drawImage(game.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
-		else g.drawImage(this.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
+
+		Point position;
+		GameObject obj;
+		Map m = game.getMap();
+		Iterator<GameObject> iter = game.iterator();
+		while(iter.hasNext()) {
+			obj = iter.next();
+			position = map.getLocationOnScreen(obj);
+			//obj.setSpirit(MyFrame.rotateImage(obj.getSpirit(), obj.getOrientation()));
+
+			g.drawImage(
+				obj.getSpirit(), 
+				position.x-obj.getInitialWidth()/2, 
+				position.y-obj.getInitialHeight()/2, 
+				(int)(obj.getInitialWidth()*map.getScaleFactorX()), 
+				(int)(obj.getInitialHeight()*map.getScaleFactorY()), 
+				this);
+		}
 
 		// PAINT PATHS
 		if(game == null || game.isEmpty())
 			return;
 
-		Map m = game.getMap();
-		Iterator<GameObject> iter = game.typeIterator(new Packman(0));
+		
+		Iterator<GameObject> iterPack = game.typeIterator(new Packman(0));
 
 		Packman p;
 		Path path;
 
-		while (iter.hasNext()) {
-			p = (Packman) iter.next();
+		while (iterPack.hasNext()) {
+			p = (Packman) iterPack.next();
 			path = p.getPath();
 
 			if (path == null || path.getPointAmount() < 2)
@@ -140,14 +164,7 @@ public class JBackground extends JPanel implements MouseListener {
 		repaint();
 
 		if (MyFrame.DEBUG) {
-			System.out.println("CLICKED " + e.getPoint());
-			System.out.println(p3d);
-			System.out.println(gs.getLocation());
-			System.out.println(gs.getStartLocation());
-			System.out.println(m.getLocationOnScreen(p3d));
-			// GameSpirit gs = game.createGameSpiritXY(dropItem, e.getX(), e.getY());
-			// System.out.println(gs.getLocation()+ " | "+
-			// m.getLocationFromScreen(gs.getLocation()));
+
 		}
 	}
 

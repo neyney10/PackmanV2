@@ -7,5 +7,6 @@ public class mainFile {
 		MyFrame.getInstance().setVisible(true);
 		
 		System.out.println("Making MyFrame visible...");
+		
 	}
 }

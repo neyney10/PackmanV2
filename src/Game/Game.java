@@ -119,10 +119,10 @@ public class Game implements BasicGameSpiritFactory {
     public Iterator<GameObject> typeIterator(GameObject example) {
     	GameObject lowestObject = example.clone();
     	lowestObject.setId(0);
-    	
-    	GameObject heighestObject = example.clone();
-    	heighestObject.setId(Integer.MAX_VALUE);
 
+    	GameObject heighestObject = example.clone();
+        heighestObject.setId(Integer.MAX_VALUE);
+        
     	return objects.subSet(lowestObject, heighestObject).iterator();
     }
     

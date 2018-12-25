@@ -31,6 +31,13 @@ public class SimulatePath extends Thread {
 	private boolean  finished = false;
 	private Game game;
 	private JBackground gameUI;
+	
+	Iterator<Point3D>[] iterPath;
+	Point3D[] p3d1;
+	Point3D[] p3d2;
+	Point[] p2d1,p2d2, startP;
+	double[] distance,distMeters,pix2mtrRatio,angle,stepX,stepY; 
+	int[]   step,steps;
 
 	/**
 	 * [Constructor] <br>
@@ -77,18 +84,18 @@ public class SimulatePath extends Thread {
 		// rest of setup
 
 		Iterator<Point3D>[] iterPath = new Iterator[gameSpirits.size()];
-		Point3D[] p3d1 = new Point3D[gameSpirits.size()];
-		Point3D[] p3d2 = new Point3D[gameSpirits.size()];;
-		Point[] p2d1 = new Point[gameSpirits.size()],
-				p2d2 = new Point[gameSpirits.size()],
+		p3d1 = new Point3D[gameSpirits.size()];
+		p3d2 = new Point3D[gameSpirits.size()];;
+		p2d1 = new Point[gameSpirits.size()];
+				p2d2 = new Point[gameSpirits.size()];
 				startP = new Point[gameSpirits.size()];
-		double[] distance 	 = new double[gameSpirits.size()], // DISTANCE IN RAW PIXELS (RAW IS THE ORIGINAL PIXEL SIZE WITHOUT SCALE
-				distMeters   = new double[gameSpirits.size()], // distance in meters
-				pix2mtrRatio = new double[gameSpirits.size()], // the ratio between 1 meter and 1 pixel
-				angle 		 = new double[gameSpirits.size()], // the angle / orientation between 2 points
-				stepX 		 = new double[gameSpirits.size()], // next X position
+		distance 	 = new double[gameSpirits.size()]; // DISTANCE IN RAW PIXELS (RAW IS THE ORIGINAL PIXEL SIZE WITHOUT SCALE
+				distMeters   = new double[gameSpirits.size()]; // distance in meters
+				pix2mtrRatio = new double[gameSpirits.size()]; // the ratio between 1 meter and 1 pixel
+				angle 		 = new double[gameSpirits.size()]; // the angle / orientation between 2 points
+				stepX 		 = new double[gameSpirits.size()]; // next X position
 				stepY 		 = new double[gameSpirits.size()]; // next Y position
-		int[]   step 		 = new int[gameSpirits.size()], // current step counter in line
+				step 		 = new int[gameSpirits.size()]; // current step counter in line
 				steps 		 = new int[gameSpirits.size()]; // total steps for each line (2 points)
 
 		for(int i =0 ; i<gameSpirits.size(); i++) {
@@ -136,7 +143,7 @@ public class SimulatePath extends Thread {
 					
 					// set orientation of pacman
 					// TODO: optimize, this is called on every step instead of every line.
-					gamespirit.setImage(MyFrame.rotateImage(pacman.getSpirit(), (float)Math.toDegrees(angle[i])+180)); //TODO: fix
+					gamespirit.setImage(MyFrame.rotateImage(pacman.getSpirit(), (float)Math.toDegrees(angle[i]))); //TODO: fix
 
 					steps[i] = (int) (distMeters[i]/speed);
 
@@ -144,8 +151,8 @@ public class SimulatePath extends Thread {
 					if(step[i] <= steps[i])
 					{
 						// calculate step sizes
-						stepX[i] = Math.round(startP[i].x + Math.sin(angle[i])*(speed*step[i]*pix2mtrRatio[i]));
-						stepY[i] = Math.round(startP[i].y + Math.cos(angle[i])*(speed*step[i]*pix2mtrRatio[i]));
+						stepX[i] = Math.round(startP[i].x + Math.cos(angle[i])*(speed*step[i]*pix2mtrRatio[i]));
+						stepY[i] = Math.round(startP[i].y + Math.sin(angle[i])*(speed*step[i]*pix2mtrRatio[i]));
 						//System.out.println("[Simulation] stepX: " +stepX[i]+" stepY: "+stepY[i]);
 
 						// animate movement. -> move the object.

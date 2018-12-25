@@ -16,12 +16,12 @@ import Path.Path;
  * please use a BasicGameSpiritFactory for creating GameSpirits from an GameObject. <br>
  * default sprite image location (relative): "GameData\\PACMAN.png"
  */
-public class Packman extends GameObject implements Cloneable {
+public class Player extends GameObject implements Cloneable {
 	
 	// eating radius, movment speed (in meters) and oreintation in degrees.
 	private double radius,speed, orientation;
 	// the imagePath of the pacman game sprite.
-	private static final String packmanImagePath = "GameData\\PACMAN.png";
+	private static final String playerImagePath = "GameData\\player.png";
 	// the Path of eating fruits, can be calculated by the ShortestPathAlgo.
 	private Path path;
 	
@@ -39,17 +39,17 @@ public class Packman extends GameObject implements Cloneable {
 	 * @param speed - speed in meters.
 	 * @param radius - eating radius in meters
 	 */
-    public Packman(double lat, double lon, double alt,int id, double speed, double radius) {
+    public Player(double lat, double lon, double alt,int id, double speed, double radius) {
         setPoint(new Point3D(lat,lon,alt));
         setId(id);
         setRadius(radius);
         setSpeed(speed);
         
         // initial values for this type
-        setType(TYPE.P);
-        setInitialWidth(31);
-        setInitialHeight(31);
-    	setSpirit(ImageFactory.getImageFromDisk(packmanImagePath));
+        setType(TYPE.M);
+        setInitialWidth(51);
+        setInitialHeight(51);
+    	setSpirit(ImageFactory.getImageFromDisk(playerImagePath));
     }
     
     /**
@@ -57,7 +57,7 @@ public class Packman extends GameObject implements Cloneable {
      *  creates an empty Object with default values, must supply id from Game.generateID.
 	 *  lat = 0, lon = 0, alt = 0, speed = 1, radius = 1.
      */
-    public Packman(int id) {
+    public Player(int id) {
     	this(0, 0, 0, id, 1, 1);
     }
 
@@ -110,7 +110,7 @@ public class Packman extends GameObject implements Cloneable {
 
     @Override
     public String toString() {
-        return "Packman: [ "+super.toString()+" , Speed: "+getSpeed()+" , Radius: "+getRadius()+" ]";
+        return "Player: [ "+super.toString()+" , Speed: "+getSpeed()+" , Radius: "+getRadius()+" ]";
     }
 
 	/**
@@ -133,8 +133,8 @@ public class Packman extends GameObject implements Cloneable {
 	 * Cloning this Packman and returning a new Packman with same values.
 	 * @return Packman 
 	 */
-	public Packman clone() {
-		Packman p = new Packman(point.x(),point.y(),point.z(),id,radius,speed);
+	public Player clone() {
+		Player p = new Player(point.x(),point.y(),point.z(),id,radius,speed);
 		p.setSpirit(getSpirit());
 		return p;
 	}

@@ -1,5 +1,7 @@
 package Maps;
 
+import java.awt.geom.Point2D;
+
 /**
  * Stores the polar/geodetic map range coordinates,
  * have different mathods of Width and Height.
@@ -28,7 +30,7 @@ public class MapRange {
 	 * @param point2d left top point (polar -> (lat,lon,alt))
 	 * @param point2d2 right bottom point (polar -> (lat,lon,alt))
 	 */
-	public MapRange(javafx.geometry.Point2D point2d, javafx.geometry.Point2D point2d2) {
+	public MapRange(Point2D point2d, Point2D point2d2) {
 		this(point2d.getX(), point2d.getY(), point2d2.getX(), point2d2.getY());
 	}
 

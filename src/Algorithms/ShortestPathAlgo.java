@@ -8,6 +8,7 @@ import Coords.MyCoords;
 import Game.Game;
 import GameObjects.Fruit;
 import GameObjects.GameObject;
+import GameObjects.Ghost;
 import GameObjects.Packman;
 import Path.*;
 

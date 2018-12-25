@@ -30,7 +30,9 @@ import Files_format.Path2Kml;
 import GUI.Animation.SimulatePath;
 import Game.Game;
 import GameObjects.Fruit;
+import GameObjects.Ghost;
 import GameObjects.Packman;
+import GameObjects.Player;
 import Maps.Map;
 import Maps.MapFactory;
 import Maps.MapFactory.MapType;
@@ -238,6 +240,44 @@ public final class MyFrame extends JFrame implements ComponentListener {
 				addFruit();
 			}
 		});
+
+		JMenuItem gmobjAddGhost = new JMenuItem("Boo +");
+		gmobjAddGhost.setFont(itemFont);
+		gmobjAddGhost.setCursor(handCursor);
+		gmobjAddGhost.setBackground(Color.ORANGE);
+		gmobjAddGhost.setIcon(fruitIcon);
+		gmobjAddGhost.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addGhost();
+			}
+		});
+
+		JMenuItem gmobjAddBox = new JMenuItem("Blacky +");
+		gmobjAddBox.setFont(itemFont);
+		gmobjAddBox.setCursor(handCursor);
+		gmobjAddBox.setBackground(Color.ORANGE);
+		gmobjAddBox.setIcon(fruitIcon);
+		gmobjAddBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addBox();
+			}
+		});
+
+		JMenuItem gmobjAddPlayer = new JMenuItem("The Chosen one +");
+		gmobjAddPlayer.setFont(itemFont);
+		gmobjAddPlayer.setCursor(handCursor);
+		gmobjAddPlayer.setBackground(Color.ORANGE);
+		gmobjAddPlayer.setIcon(fruitIcon);
+		gmobjAddPlayer.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addPlayer();
+			}
+		});
+
+
 		
 		JMenuItem mapAriel = new JMenuItem("Ariel University");
 		mapAriel.setFont(itemFont);
@@ -322,6 +362,9 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		menu.add(clear);
 		menuObjects.add(gmobjAddPackman);
 		menuObjects.add(gmobjAddFruit);
+		menuObjects.add(gmobjAddGhost);
+		menuObjects.add(gmobjAddBox);
+		menuObjects.add(gmobjAddPlayer);
 		menuObjects.add(menuMap); // adding a submenu
 		menubar.add(menu);
 		menubar.add(menuObjects);
@@ -338,6 +381,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		add(jb);
 
 	}
+
 
 	/**
 	 * @see "https://stackoverflow.com/questions/8639567/java-rotating-images"
@@ -515,6 +559,31 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		jb.setDropItem(new Fruit(0));
 		enterDropMode();
 	}
+
+	private void addBox() {
+		if (jb == null)
+		return;
+
+		//jb.setDropItem(new Box(0));
+		enterDropMode();
+	}
+
+	private void addPlayer() {
+		if (jb == null)
+		return;
+
+		jb.setDropItem(new Player(0));
+		enterDropMode();
+	}
+
+	private void addGhost() {
+		if (jb == null)
+		return;
+
+		jb.setDropItem(new Ghost(0));
+		enterDropMode();
+	}
+
 
 	/**
 	 * setting the dropMode of this.JButton to true for allowing dropping items on

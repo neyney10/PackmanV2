@@ -236,7 +236,7 @@ public abstract class Map {
 		deltaX = p2.x-p1.x;
 		deltaY = p2.y-p1.y;
 
-		angle = Math.toDegrees(Math.atan2(deltaX, deltaY));
+		angle = Math.toDegrees(Math.atan2(deltaY, deltaX));
 		return (angle < 0)? angle+360 : angle;
 	}
 
@@ -254,8 +254,8 @@ public abstract class Map {
 		double deltaX, deltaY, angle;
 		deltaX = (p2.x-p1.x)/scaleFactorX;
 		deltaY = (p2.y-p1.y)/scaleFactorY;
-
-		angle = Math.toDegrees(Math.atan2(deltaX, deltaY));
+		
+		angle = Math.toDegrees(Math.atan2(deltaY, deltaX));
 		return (angle < 0)? angle+360 : angle;
 	}
 	/**
