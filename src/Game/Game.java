@@ -1,14 +1,14 @@
 package Game;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
 
 import Files_format.Csv;
 import GUI.GameSpirit;
-import GameObjects.BasicGameSpirit;
-import GameObjects.GameObject;
-import GameObjects.Player;
+import GameObjects.*;
+import Geom.Point3D;
 import Maps.Map;
 
 /**
@@ -34,7 +34,28 @@ public class Game implements BasicGameSpiritFactory {
     public Game() {
         this.objects = new TreeSet<>();
     }
-
+    public Game(ArrayList<String> gameData){
+        Iterator<String> iter = gameData.iterator();
+        String line;
+        String[] data;
+        GameObject obj = null;
+        objects = new TreeSet<>();
+            while (iter.hasNext()){
+                line = iter.next();
+                data = line.split(",");
+                if (data[0].compareTo("P")==0)
+                    obj = new Packman(Double.parseDouble(data[2]),Double.parseDouble(data[3]),Double.parseDouble(data[4]),Integer.parseInt(data[1]),Double.parseDouble(data[5]),Double.parseDouble(data[6]));
+                if (data[0].compareTo("F")==0)
+                    obj = new Fruit(Double.parseDouble(data[2]),Double.parseDouble(data[3]),Double.parseDouble(data[4]),Integer.parseInt(data[1]));
+                if (data[0].compareTo("G")==0)
+                    obj = new Ghost(Double.parseDouble(data[2]),Double.parseDouble(data[3]),Double.parseDouble(data[4]),Integer.parseInt(data[1]),Double.parseDouble(data[5]),Double.parseDouble(data[6]));
+                if (data[0].compareTo("M")==0)
+                    obj = new Player(Double.parseDouble(data[2]),Double.parseDouble(data[3]),Double.parseDouble(data[4]),Integer.parseInt(data[1]),Double.parseDouble(data[5]),Double.parseDouble(data[6]));
+                if (data[0].compareTo("B")==0)
+                    obj = new Box(new Point3D(Double.parseDouble(data[2]),Double.parseDouble(data[3]),Double.parseDouble(data[4])),new Point3D(Double.parseDouble(data[5]),Double.parseDouble(data[6]),Double.parseDouble(data[7])));
+                objects.add(obj);
+            }
+    }
     /**
      * [Constructor] <br>
      * a constructor that receiveds a TreeSet of game Objects.
@@ -122,10 +143,10 @@ public class Game implements BasicGameSpiritFactory {
     public Iterator<GameObject> typeIterator(GameObject example) {
     	GameObject lowestObject = example.clone();
     	lowestObject.setId(0);
-
+    	
     	GameObject heighestObject = example.clone();
-        heighestObject.setId(Integer.MAX_VALUE);
-        
+    	heighestObject.setId(Integer.MAX_VALUE);
+
     	return objects.subSet(lowestObject, heighestObject).iterator();
     }
     
