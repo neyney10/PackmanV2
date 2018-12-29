@@ -37,7 +37,7 @@ public class Game implements BasicGameSpiritFactory {
         String line;
         String[] data;
         GameObject obj = null;
-        objects.clear();
+        objects = new TreeSet<>();
             while (iter.hasNext()){
                 line = iter.next();
                 data = line.split(",");
