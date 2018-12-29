@@ -33,10 +33,12 @@ import GameObjects.Fruit;
 import GameObjects.Ghost;
 import GameObjects.Packman;
 import GameObjects.Player;
+import Geom.Point3D;
 import Maps.Map;
 import Maps.MapFactory;
 import Maps.MapFactory.MapType;
 import Path.Solution;
+import Robot.Play;
 
 /**
  * Singleton
@@ -524,16 +526,20 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * running the current game.
 	 */
 	public void runGame() {
-		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty() || simulating)
+		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty()) // || simulating
 			return;
+
+		Point3D playerPos3D = jb.getGame().getPlayer().getPoint();
+		Play play = new Play("Ex4_OOP/data/Ex4_OOP_example8.csv");
+		play.setIDs(999999888);
+		play.setInitLocation(playerPos3D.x(),playerPos3D.y());
+		jb.setPlay(play);
+		play.start();
 
 		btn_stopSimulation.setVisible(true);
 		btn_run.setVisible(false);
 
-		simulation = new SimulatePath(jb);
-		simulation.start();
-
-		simulating = true;
+		//simulating = true;
 	}
 
 	/**

@@ -135,19 +135,19 @@ public class testMap {
 		
 		// TEST 1 (from down to up)
 		angle = map.getAngle(new Point(551,331), new Point(551,555));
-		assertEquals(0, angle, angleErrorMariginInDegrees);
+		assertEquals(90, angle, angleErrorMariginInDegrees);
 		
 		// TEST 2 (from left to right)
 		angle = map.getAngle(new Point(5,331), new Point(125,331));
-		assertEquals(90, angle, angleErrorMariginInDegrees);
+		assertEquals(0, angle, angleErrorMariginInDegrees);
 		
 		// TEST 3 (from right to left)
 		angle = map.getAngle(new Point(125,331), new Point(3,331));
-		assertEquals(270, angle, angleErrorMariginInDegrees);
+		assertEquals(180, angle, angleErrorMariginInDegrees);
 		
 		// TEST 4 (two edge points on screen)
 		angle = map.getAngle(new Point(0,0), new Point(map.getScreenWidth(),map.getScreenHeight()));
-		assertEquals(65.85, angle, angleErrorMariginInDegrees);
+		assertEquals(24.1, angle, angleErrorMariginInDegrees);
 	}
 	
 	/**

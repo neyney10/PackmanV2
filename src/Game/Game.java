@@ -8,6 +8,7 @@ import Files_format.Csv;
 import GUI.GameSpirit;
 import GameObjects.BasicGameSpirit;
 import GameObjects.GameObject;
+import GameObjects.Player;
 import Maps.Map;
 
 /**
@@ -19,6 +20,8 @@ public class Game implements BasicGameSpiritFactory {
 
     // GameObjects
     private TreeSet<GameObject> objects;
+    // Player object
+    private Player player;
     // Map, have current map coordinates and background image.
     private Map map;
     // id counter for GameObjects.
@@ -140,6 +143,22 @@ public class Game implements BasicGameSpiritFactory {
      */
     public void setMap(Map map) {
         this.map = map;
+    }
+
+    /**
+     * get the game's current player object
+     * @return Player
+     */
+    public Player getPlayer() {
+        return this.player;
+    }
+
+     /**
+      * set up a new player
+      * @param Player player
+      */
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     /**

@@ -1,9 +1,5 @@
 package GameObjects;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
-import Coords.MyCoords;
 import GUI.ImageFactory;
 import Geom.Point3D;
 import Path.Path;
@@ -20,6 +16,7 @@ public class Packman extends GameObject implements Cloneable {
 	
 	// eating radius, movment speed (in meters) and oreintation in degrees.
 	private double radius,speed, orientation;
+	
 	// the imagePath of the pacman game sprite.
 	private static final String packmanImagePath = "GameData\\PACMAN.png";
 	// the Path of eating fruits, can be calculated by the ShortestPathAlgo.

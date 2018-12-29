@@ -13,11 +13,13 @@ import javax.swing.JPanel;
 import Game.Game;
 import GameObjects.GameObject;
 import GameObjects.Packman;
+import GameObjects.TYPE;
 import Geom.Point3D;
 import Maps.Map;
 import Maps.MapFactory;
 import Maps.MapFactory.MapType;
 import Path.Path;
+import Robot.Play;
 
 /**
  * A JPanel component which handles all the game interface, updating locations,
@@ -33,7 +35,10 @@ public class JBackground extends JPanel implements MouseListener {
 	private GameObject dropItem;
 	private Game game;
 	private Map map;
+	private Play play; // Boaz's Play object manager/server
 
+	// for box creation with mouse click
+	private Point3D pbox1, pbox2;
 
 	/**
 	 * [Constructor] <br>
@@ -64,6 +69,10 @@ public class JBackground extends JPanel implements MouseListener {
 		else
 			g.drawImage(game.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
 
+		// set new Game object from play.getBoard();
+		if(play.isRuning())
+			game = new Game(play.getBoard());
+
 		Point position;
 		GameObject obj;
 		Map m = game.getMap();
@@ -72,7 +81,9 @@ public class JBackground extends JPanel implements MouseListener {
 			obj = iter.next();
 			position = map.getLocationOnScreen(obj);
 			//obj.setSpirit(MyFrame.rotateImage(obj.getSpirit(), obj.getOrientation()));
-
+			
+			//if(obj instanceof Box)  -> then g.drawRect
+			
 			g.drawImage(
 				obj.getSpirit(), 
 				position.x-obj.getInitialWidth()/2, 
@@ -80,26 +91,6 @@ public class JBackground extends JPanel implements MouseListener {
 				(int)(obj.getInitialWidth()*map.getScaleFactorX()), 
 				(int)(obj.getInitialHeight()*map.getScaleFactorY()), 
 				this);
-		}
-
-		// PAINT PATHS
-		if(game == null || game.isEmpty())
-			return;
-
-		
-		Iterator<GameObject> iterPack = game.typeIterator(new Packman(0));
-
-		Packman p;
-		Path path;
-
-		while (iterPack.hasNext()) {
-			p = (Packman) iterPack.next();
-			path = p.getPath();
-
-			if (path == null || path.getPointAmount() < 2)
-				continue;
-
-			path.paint(g, m);
 		}
 
 	}
@@ -140,12 +131,25 @@ public class JBackground extends JPanel implements MouseListener {
 
 		if(game == null) 
 			setGame(new Game());
+
+		// get the game's map for calculating coordinates.
+		Map m = game.getMap();
+
+		if(play.isRuning()) {
+			Point3D playerPos3D = game.getPlayer().getPoint();
+			Point playerPos2D = m.getLocationOnScreen(playerPos3D);
+			play.rotate(m.getAngleRaw(playerPos2D, e.getPoint()));
+		}
+
+		if(dropItem.getType() == TYPE.B) {
+			// get the point from click and calculate it's position and coordinates with the Map object.
+			pbox1 = m.getLocationFromScreen(e.getPoint());
+			return;
+		}
+			
 		
 		// get a new Clone of the item.
 		dropItem = dropItem.clone();
-		
-		// get the game's map for calculating coordinates.
-		Map m = game.getMap();
 
 		// get the point from click and calculate it's position and coordinates with the Map object.
 		Point3D p3d = m.getLocationFromScreen(e.getPoint()); //m.transformByScale(e.getX(), e.getY())
@@ -170,6 +174,25 @@ public class JBackground extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		if (!dropMode || dropItem == null)
+			return;
+
+		if(dropItem.getType() == TYPE.B) {
+			Map m = game.getMap();
+
+			// get the point from click and calculate it's position and coordinates with the Map object.
+			pbox2 = m.getLocationFromScreen(e.getPoint());
+
+			GameSpirit gs = game.createGameSpiritXY(dropItem,e.getX(),e.getY());
+			//Box box = (Box) dropItem;
+			//box.setPoints(pbox1,pbox2);
+
+			// add this game spirit and game object into game and to this graphic component.
+			//getGame().addGameObject(box);
+			add(gs);
+	
+			repaint();
+		}
 	}
 
 	/**
@@ -251,6 +274,24 @@ public class JBackground extends JPanel implements MouseListener {
 	public void setDropItem(GameObject dropItem) {
 		this.dropItem = dropItem;
 	}
+
+
+	/**
+	 * get the current play object.
+	 * @return Play - Boaz's play objects.
+	 */
+	public Play getPlay() {
+		return this.play;
+	}
+
+	/**
+	 * set a new play object.
+	 * @param Boaz's play object.
+	 */
+	public void setPlay(Play play) {
+		this.play = play;
+	}
+
 	
 	/**
 	 * updates the new window (frame) size.
