@@ -35,6 +35,7 @@ public class Game implements BasicGameSpiritFactory {
         this.objects = new TreeSet<>();
     }
     public Game(ArrayList<String> gameData){
+        int objid;
         Iterator<String> iter = gameData.iterator();
         String line;
         String[] data;
@@ -43,17 +44,22 @@ public class Game implements BasicGameSpiritFactory {
             while (iter.hasNext()){
                 line = iter.next();
                 data = line.split(",");
-                if (data[0].compareTo("P")==0)
-                    obj = new Packman(Double.parseDouble(data[2]),Double.parseDouble(data[3]),Double.parseDouble(data[4]),Integer.parseInt(data[1]),Double.parseDouble(data[5]),Double.parseDouble(data[6]));
-                if (data[0].compareTo("F")==0)
-                    obj = new Fruit(Double.parseDouble(data[2]),Double.parseDouble(data[3]),Double.parseDouble(data[4]),Integer.parseInt(data[1]));
-                if (data[0].compareTo("G")==0)
-                    obj = new Ghost(Double.parseDouble(data[2]),Double.parseDouble(data[3]),Double.parseDouble(data[4]),Integer.parseInt(data[1]),Double.parseDouble(data[5]),Double.parseDouble(data[6]));
-                if (data[0].compareTo("M")==0)
-                    obj = new Player(Double.parseDouble(data[2]),Double.parseDouble(data[3]),Double.parseDouble(data[4]),Integer.parseInt(data[1]),Double.parseDouble(data[5]),Double.parseDouble(data[6]));
-                if (data[0].compareTo("B")==0)
-                    obj = new Box(new Point3D(Double.parseDouble(data[2]),Double.parseDouble(data[3]),Double.parseDouble(data[4])),new Point3D(Double.parseDouble(data[5]),Double.parseDouble(data[6]),Double.parseDouble(data[7])));
+                objid = Integer.parseInt(data[1]);
+                if (data[0].equals("P"))
+                obj = new Packman(Double.parseDouble(data[3]),Double.parseDouble(data[2]),Double.parseDouble(data[4]),objid,Double.parseDouble(data[5]),Double.parseDouble(data[6]));
+                else if (data[0].equals("F"))
+                    obj = new Fruit(Double.parseDouble(data[3]),Double.parseDouble(data[2]),Double.parseDouble(data[4]),objid);
+                else if (data[0].equals("G"))
+                    obj = new Ghost(Double.parseDouble(data[3]),Double.parseDouble(data[2]),Double.parseDouble(data[4]),objid,Double.parseDouble(data[5]),Double.parseDouble(data[6]));
+                else if (data[0].equals("M")) {
+                    obj = new Player(Double.parseDouble(data[3]),Double.parseDouble(data[2]),Double.parseDouble(data[4]),objid,Double.parseDouble(data[5]),Double.parseDouble(data[6]));
+                    player = (Player) obj;
+                }
+                else if (data[0].equals("B"))
+                    obj = new Box(new Point3D(Double.parseDouble(data[3]),Double.parseDouble(data[2]),Double.parseDouble(data[4])),new Point3D(Double.parseDouble(data[6]),Double.parseDouble(data[5]),Double.parseDouble(data[7])), objid);
                 objects.add(obj);
+                if(id < objid)
+                    id = objid;
             }
     }
     /**

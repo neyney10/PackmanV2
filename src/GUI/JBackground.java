@@ -3,16 +3,24 @@ package GUI;
 import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
+import java.util.TreeSet;
 
 import javax.swing.JPanel;
 
+import Algorithms.SonicAlgorithm;
 import Game.Game;
+import GameObjects.Box;
 import GameObjects.GameObject;
 import GameObjects.Packman;
+import GameObjects.Player;
 import GameObjects.TYPE;
 import Geom.Point3D;
 import Maps.Map;
@@ -31,7 +39,7 @@ public class JBackground extends JPanel implements MouseListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 3817775198749911544L;
-	private boolean dropMode = false; 
+	private boolean dropMode = false;
 	private GameObject dropItem;
 	private Game game;
 	private Map map;
@@ -50,6 +58,11 @@ public class JBackground extends JPanel implements MouseListener {
 		addMouseListener(this);
 		// default map
 		map = MapFactory.getMap(MapType.ArielUniversity);
+		game = new Game();
+		game.setMap(map);
+
+		// default play game
+		play = new Play();
 	}
 
 	public JBackground(Game game) {
@@ -59,41 +72,70 @@ public class JBackground extends JPanel implements MouseListener {
 
 	@Override
 	protected void paintComponent(Graphics g) {
+
 		super.paintComponent(g);
-		
-		if(game == null)
-		{
+
+		if (game == null) {
 			g.drawImage(this.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
 			return;
-		}
-		else
+		} else
 			g.drawImage(game.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
 
 		// set new Game object from play.getBoard();
-		if(play.isRuning())
-			game = new Game(play.getBoard());
+		if (play.isRuning())
+			setGame(new Game(play.getBoard()), game.getPlayer().getOrientation());
 
 		Point position;
 		GameObject obj;
 		Map m = game.getMap();
 		Iterator<GameObject> iter = game.iterator();
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			obj = iter.next();
 			position = map.getLocationOnScreen(obj);
-			//obj.setSpirit(MyFrame.rotateImage(obj.getSpirit(), obj.getOrientation()));
-			
-			//if(obj instanceof Box)  -> then g.drawRect
-			
+
+			if (obj instanceof Box) {// -> then g.drawRect
+				Box box = (Box) obj;
+				Point position2 = map.getLocationOnScreen(box.getMax());
+
+				int width, height;
+				width = Math.abs(position2.x - position.x);
+				height = Math.abs(position2.y - position.y);
+				
+				
+				g.fillRect(position.x, position.y, (int)(width),(int) (height));
+				continue;
+			} else if (obj instanceof Player) {
+				Player player = (Player) obj;
+				player.setSpirit(MyFrame.rotateImage(player.getSpirit(), (int) player.getOrientation()));
+			}
+
 			g.drawImage(
-				obj.getSpirit(), 
-				position.x-obj.getInitialWidth()/2, 
-				position.y-obj.getInitialHeight()/2, 
-				(int)(obj.getInitialWidth()*map.getScaleFactorX()), 
-				(int)(obj.getInitialHeight()*map.getScaleFactorY()), 
+				obj.getSpirit(),
+			 	position.x - obj.getInitialWidth() / 2,
+				position.y - obj.getInitialHeight() / 2, 
+				(int) (obj.getInitialWidth() * map.getScaleFactorX()),
+				(int) (obj.getInitialHeight() * map.getScaleFactorY()), 
 				this);
 		}
 
+		Iterator<GameObject> iterp = game.typeIterator(new Packman(0));
+
+		Packman p;
+		Path path;
+
+		while (iterp.hasNext()) {
+			p = (Packman) iterp.next();
+			path = p.getPath();
+
+			if (path == null || path.getPointAmount() < 2)
+				continue;
+
+			path.paint(g, m);
+		}
+
+
 	}
+
 
 	/**
 	 * reloading all game components and objects.
@@ -101,12 +143,6 @@ public class JBackground extends JPanel implements MouseListener {
 	public void refreshGameUI() {
 		if (game == null)
 			return;
-
-		removeAll();
-
-		if (!game.isEmpty())
-			for (GameObject obj : game.getObjects())
-				add(game.createGameSpirit(obj));
 
 		repaint();
 	}
@@ -125,72 +161,74 @@ public class JBackground extends JPanel implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// ONLY FOR DEBUG
-		if (!dropMode || dropItem == null)
+		if (getGame() == null)
 			return;
-
-		if(game == null) 
-			setGame(new Game());
 
 		// get the game's map for calculating coordinates.
 		Map m = game.getMap();
 
-		if(play.isRuning()) {
+		if (play.isRuning()) {
 			Point3D playerPos3D = game.getPlayer().getPoint();
 			Point playerPos2D = m.getLocationOnScreen(playerPos3D);
-			play.rotate(m.getAngleRaw(playerPos2D, e.getPoint()));
-		}
+			double angle = m.getAngleRaw(playerPos2D, e.getPoint()) + 90;
+			play.rotate(angle);
+			game.getPlayer().setOrientation(angle);
+			return;
+		} else if (!dropMode || dropItem == null)
+			return;
 
-		if(dropItem.getType() == TYPE.B) {
-			// get the point from click and calculate it's position and coordinates with the Map object.
+		if (dropItem.getType() == TYPE.B) {
+			// get the point from click and calculate it's position and coordinates with the
+			// Map object.
 			pbox1 = m.getLocationFromScreen(e.getPoint());
 			return;
+		} else if (dropItem.getType() == TYPE.M) {
+			if (getGame().getPlayer() != null) {
+				getGame().getPlayer().setPoint(m.getLocationFromScreen(e.getPoint()));
+				repaint();
+				return;
+			}
 		}
-			
-		
+
 		// get a new Clone of the item.
 		dropItem = dropItem.clone();
 
-		// get the point from click and calculate it's position and coordinates with the Map object.
-		Point3D p3d = m.getLocationFromScreen(e.getPoint()); //m.transformByScale(e.getX(), e.getY())
+		// get the point from click and calculate it's position and coordinates with the
+		// Map object.
+		Point3D p3d = m.getLocationFromScreen(e.getPoint()); // m.transformByScale(e.getX(), e.getY())
 
 		// set the new computed point.
 		dropItem.setPoint(p3d);
-		dropItem.setId(game.generateID()); 
-		// 
-		// generate a Graphic element from this object.
-		GameSpirit gs = game.createGameSpiritXY(dropItem,e.getX(),e.getY());
+		dropItem.setId(game.generateID());
 
-		// add this game spirit and game object into game and to this graphic component.
-		getGame().addGameObject(dropItem);
-		add(gs);
+		if (dropItem.getType() == TYPE.M) {
+			getGame().setPlayer((Player) dropItem);
+		} else
+			getGame().addGameObject(dropItem);
 
 		repaint();
 
-		if (MyFrame.DEBUG) {
-
-		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (!dropMode || dropItem == null)
+		if (!dropMode || dropItem == null || getGame() == null)
 			return;
 
-		if(dropItem.getType() == TYPE.B) {
+		if (dropItem.getType() == TYPE.B) {
 			Map m = game.getMap();
 
-			// get the point from click and calculate it's position and coordinates with the Map object.
+			// get the point from click and calculate it's position and coordinates with the
+			// Map object.
 			pbox2 = m.getLocationFromScreen(e.getPoint());
 
-			GameSpirit gs = game.createGameSpiritXY(dropItem,e.getX(),e.getY());
-			//Box box = (Box) dropItem;
-			//box.setPoints(pbox1,pbox2);
+			Box box = ((Box) dropItem).clone();
+			box.setPoints(pbox1, pbox2);
+			box.setId(game.generateID());
 
 			// add this game spirit and game object into game and to this graphic component.
-			//getGame().addGameObject(box);
-			add(gs);
-	
+			getGame().addGameObject(box);
+			System.out.println("ADDED BLACKY BOX");
 			repaint();
 		}
 	}
@@ -203,6 +241,8 @@ public class JBackground extends JPanel implements MouseListener {
 	}
 
 	/**
+	 * set a new Game object to this panel, setting a default map.
+	 * 
 	 * @param game the game to set
 	 */
 	public void setGame(Game game) {
@@ -210,41 +250,75 @@ public class JBackground extends JPanel implements MouseListener {
 
 		if (game == null)
 			return;
-		if(game.getMap() == null)
+		if (game.getMap() == null)
 			game.setMap(this.map);
-		
+
+		//NOTE: TEMP
+		SonicAlgorithm sa = new SonicAlgorithm(this);
+		sa.calcPacmansPath();
+		TreeSet<GameObject> ts = new TreeSet<>();
+		ts.addAll(sa.fruits);
+		ts.addAll(sa.pacmans);
+		ts.addAll(sa.boxes);
+		this.game.setObjects(ts);
+
 		refreshGameUI();
+
 	}
-	
+
 	/**
-	 * returns this game's map, if the game does not have a map
-	 * then returning a default map or last used map.
+	 * set a new Game object to this panel, setting a default map.
+	 * 
+	 * @param game the game to set
+	 */
+	private void setGame(Game game, double playerOrientation) {
+		this.game = game;
+		game.setMap(this.map);
+		game.getPlayer().setOrientation(playerOrientation);
+
+		//NOTE: TEMP ONLY
+		SonicAlgorithm sa = new SonicAlgorithm(this);
+		sa.calcPacmansPath();
+		TreeSet<GameObject> ts = new TreeSet<>();
+		ts.addAll(sa.fruits);
+		ts.addAll(sa.pacmans);
+		ts.addAll(sa.boxes);
+		this.game.setObjects(ts);
+	}
+
+	/**
+	 * returns this game's map, if the game does not have a map then returning a
+	 * default map or last used map.
+	 * 
 	 * @return
 	 */
 	public Map getMap() {
-		if(game!=null && game.getMap() != null)
+		if (game != null && game.getMap() != null)
 			return game.getMap();
 		return map;
 	}
 
 	/**
-	 * set a new Map for this defualt map of JBackground and set the map into
-	 * the "Game" object of JBackground.
-	 * and then RefreshingGameUI. in O(N) when N is the GameObjects.
+	 * set a new Map for this defualt map of JBackground and set the map into the
+	 * "Game" object of JBackground. and then RefreshingGameUI. in O(N) when N is
+	 * the GameObjects.
+	 * 
 	 * @param map
 	 */
 	public void setMap(Map map) {
 		this.map = map;
-		
+
 		if (game == null)
 			return;
-		
+
 		game.setMap(this.map);
 		refreshGameUI();
-		
+
 	}
+
 	/**
-	 *  is dropping mode for mouse click
+	 * is dropping mode for mouse click
+	 * 
 	 * @return true if in drop mode
 	 */
 	public boolean isDropMode() {
@@ -253,6 +327,7 @@ public class JBackground extends JPanel implements MouseListener {
 
 	/**
 	 * change the drop mode
+	 * 
 	 * @param boolean true to activate, false to deactivate
 	 */
 	public void setDropMode(boolean dropMode) {
@@ -261,6 +336,7 @@ public class JBackground extends JPanel implements MouseListener {
 
 	/**
 	 * get the item to drop in dropMode
+	 * 
 	 * @return GameObject as the item to drop.
 	 */
 	public GameObject getDropItem() {
@@ -269,15 +345,16 @@ public class JBackground extends JPanel implements MouseListener {
 
 	/**
 	 * set a drop item in dropMode
+	 * 
 	 * @param dropItem GameObject to drop
 	 */
 	public void setDropItem(GameObject dropItem) {
 		this.dropItem = dropItem;
 	}
 
-
 	/**
 	 * get the current play object.
+	 * 
 	 * @return Play - Boaz's play objects.
 	 */
 	public Play getPlay() {
@@ -286,23 +363,24 @@ public class JBackground extends JPanel implements MouseListener {
 
 	/**
 	 * set a new play object.
+	 * 
 	 * @param Boaz's play object.
 	 */
 	public void setPlay(Play play) {
 		this.play = play;
 	}
 
-	
 	/**
 	 * updates the new window (frame) size.
-	 * @param width screen width
+	 * 
+	 * @param width  screen width
 	 * @param height screen height
 	 */
 	public void updateMapWithNewScreenSize(int width, int height) {
 		map.updateScreenRange(width, height);
-		if(game == null || game.getMap() == null)
+		if (game == null || game.getMap() == null)
 			return;
-		
+
 		game.getMap().updateScreenRange(width, height);
 	}
 

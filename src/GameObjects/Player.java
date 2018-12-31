@@ -95,10 +95,10 @@ public class Player extends GameObject implements Cloneable {
 	
 	/**
 	 * get the angle of this pacman.
-	 * @param angle in degrees
+	 * @return angle in degrees
 	 */
-	public void getOrientation(double angle) {
-		this.orientation = angle;
+	public double getOrientation() {
+		return this.orientation;
 	}
 
 	/**

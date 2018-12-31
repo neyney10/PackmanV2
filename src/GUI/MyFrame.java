@@ -27,8 +27,10 @@ import javax.swing.SwingConstants;
 
 import Algorithms.ShortestPathAlgo;
 import Files_format.Path2Kml;
+import GUI.Animation.AutoRun;
 import GUI.Animation.SimulatePath;
 import Game.Game;
+import GameObjects.Box;
 import GameObjects.Fruit;
 import GameObjects.Ghost;
 import GameObjects.Packman;
@@ -41,9 +43,8 @@ import Path.Solution;
 import Robot.Play;
 
 /**
- * Singleton
- * the main Window of the game.
- * have default window size of 1433x642
+ * Singleton the main Window of the game. have default window size of 1433x642
+ * 
  * @author neyne
  */
 public final class MyFrame extends JFrame implements ComponentListener {
@@ -89,6 +90,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	/**
 	 * Get this Singleton's instance.
+	 * 
 	 * @return instance of MyFrame object.
 	 */
 	public static MyFrame getInstance() {
@@ -162,7 +164,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		menuObjects.setFont(menuFont);
 		menuObjects.setCursor(handCursor);
 		menuObjects.setBorder(BorderFactory.createSoftBevelBorder(0));
-		
+
 		// would be inside gameobjects menu
 		JMenu menuMap = new JMenu("Maps");
 		menuMap.setFont(menuFont);
@@ -194,7 +196,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 				saveGame();
 			}
 		});
-		
+
 		JMenuItem export = new JMenuItem("Export game -> KML");
 		export.setFont(itemFont);
 		export.setCursor(handCursor);
@@ -279,8 +281,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			}
 		});
 
-
-		
 		JMenuItem mapAriel = new JMenuItem("Ariel University");
 		mapAriel.setFont(itemFont);
 		mapAriel.setCursor(handCursor);
@@ -288,12 +288,13 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		mapAriel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(jb == null) return;
+				if (jb == null)
+					return;
 				jb.setMap(MapFactory.getMap(MapType.ArielUniversity));
 				jb.repaint();
 			}
 		});
-		
+
 		JMenuItem mapTelAviv = new JMenuItem("Tel-Aviv");
 		mapTelAviv.setFont(itemFont);
 		mapTelAviv.setCursor(handCursor);
@@ -301,9 +302,10 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		mapTelAviv.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					if(jb == null) return;
-					jb.setMap(MapFactory.getMap(MapType.TelAviv));
-					jb.repaint();
+				if (jb == null)
+					return;
+				jb.setMap(MapFactory.getMap(MapType.TelAviv));
+				jb.repaint();
 			}
 		});
 
@@ -384,7 +386,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	}
 
-
 	/**
 	 * @see "https://stackoverflow.com/questions/8639567/java-rotating-images"
 	 * @param img
@@ -407,8 +408,8 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	}
 
 	/**
-	 * called when the user resizing the Window. updating the images and game objects position 
-	 * scaling all width , heights, and x y positions.
+	 * called when the user resizing the Window. updating the images and game
+	 * objects position scaling all width , heights, and x y positions.
 	 */
 	public void componentResized(ComponentEvent ce) {
 		rescaleGameUI();
@@ -425,15 +426,15 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 			if (jb.getMap() == null)
 				return;
-			
+
 			jb.updateMapWithNewScreenSize(this.getWidth(), this.getHeight());
-			
+
 			if (jb.getGame() == null)
 				return;
 
 			Map map = jb.getMap();
 
-			//map.updateScreenRange(this.getWidth(), this.getHeight());
+			// map.updateScreenRange(this.getWidth(), this.getHeight());
 
 			for (Component c : jb.getComponents()) {
 				if (c instanceof GameSpirit) {
@@ -465,22 +466,24 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * Load game from CSV file.
 	 */
 	public void loadGame() {
+		if(jb == null)
+			return;
+
 		FileDialog fd = new FileDialog(new Frame(), "Load Game File (CSV)", FileDialog.LOAD);
 		fd.setDirectory("/");
 		fd.setFile("*.csv");
 		fd.setVisible(true);
 
-		if (fd.getFiles().length == 0)
+		if(fd.getFile() == null)
 			return;
 
-		stop(); // stopping simulation if any.
-		setGame(new Game(fd.getFiles()[0].getAbsolutePath()));
-		
+		Play play = new Play(fd.getFiles()[0].getAbsolutePath());
+		play.setIDs(999999888);
 
-		// TEMP
-		// TODO: remove.
-		pathFindingAlgorithm = new ShortestPathAlgo(jb.getGame());
-		pathFindingAlgorithm.calcPath();
+		jb.setPlay(play);
+		jb.setGame(new Game(play.getBoard()));
+
+		stop(); // stopping simulation if any.
 
 	}
 
@@ -498,28 +501,28 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if (fd.getFiles().length != 0)
 			jb.getGame().toCsv(fd.getDirectory() + fd.getFile());
 	}
-	
+
 	/**
-	 * Exporting the  current game into a KML file.
+	 * Exporting the current game into a KML file.
 	 */
 	public void exportGame() {
-		if(jb == null || jb.getGame() == null || jb.getGame().isEmpty())
+		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty())
 			return;
-		
-			if (jb == null)
+
+		if (jb == null)
 			return;
 
 		FileDialog fd = new FileDialog(new Frame(), "Export Game File (KML)", FileDialog.SAVE);
 		fd.setDirectory("/");
 		fd.setFile("*.kml");
 		fd.setVisible(true);
-		
+
 		// if didnt choose a name
 		if (fd.getFiles().length == 0)
 			return;
-		
+
 		Solution solution = ShortestPathAlgo.convertIntoPathSolutions(jb.getGame());
-		Path2Kml.create(jb.getGame(),solution, (fd.getDirectory() + fd.getFile()));
+		Path2Kml.create(jb.getGame(), solution, (fd.getDirectory() + fd.getFile()));
 	}
 
 	/**
@@ -530,16 +533,20 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			return;
 
 		Point3D playerPos3D = jb.getGame().getPlayer().getPoint();
-		Play play = new Play("Ex4_OOP/data/Ex4_OOP_example8.csv");
-		play.setIDs(999999888);
-		play.setInitLocation(playerPos3D.x(),playerPos3D.y());
-		jb.setPlay(play);
-		play.start();
+		Play play = jb.getPlay();
+		//play.setIDs(999999888);
+		play.setInitLocation(playerPos3D.y(), playerPos3D.x());
+		jb.getPlay().start();
+		jb.repaint();
+		
+		// TEMP
+		AutoRun autoRun = new AutoRun(jb, 33);
+		autoRun.start();
 
 		btn_stopSimulation.setVisible(true);
 		btn_run.setVisible(false);
 
-		//simulating = true;
+		// simulating = true;
 	}
 
 	/**
@@ -568,15 +575,15 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	private void addBox() {
 		if (jb == null)
-		return;
+			return;
 
-		//jb.setDropItem(new Box(0));
+		jb.setDropItem(new Box(0));
 		enterDropMode();
 	}
 
 	private void addPlayer() {
 		if (jb == null)
-		return;
+			return;
 
 		jb.setDropItem(new Player(0));
 		enterDropMode();
@@ -584,12 +591,11 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	private void addGhost() {
 		if (jb == null)
-		return;
+			return;
 
 		jb.setDropItem(new Ghost(0));
 		enterDropMode();
 	}
-
 
 	/**
 	 * setting the dropMode of this.JButton to true for allowing dropping items on
@@ -618,7 +624,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * Stop running, stopping simulation
 	 */
 	public void stop() {
-		if(!simulating)
+		if (!simulating)
 			return;
 
 		simulation.interrupt();
@@ -640,10 +646,10 @@ public final class MyFrame extends JFrame implements ComponentListener {
 				GameSpirit gs = (GameSpirit) co;
 				if (gs.getGameObj() instanceof Fruit)
 					co.setVisible(true);
-				else if(gs.getGameObj() instanceof Packman)  {
-					map.updateLocationOnScreen(gs,map.transformByScale(map.getLocationOnScreen(gs.getGameObj())));
+				else if (gs.getGameObj() instanceof Packman) {
+					map.updateLocationOnScreen(gs, map.transformByScale(map.getLocationOnScreen(gs.getGameObj())));
 				}
-					
+
 			}
 		}
 
@@ -653,11 +659,11 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	}
 
 	/**
-	 * Calculate path's of all pacmans in game by using the ShortestPathAlgo class to compute.
-	 * the class set the path on each pacman after calculation.
+	 * Calculate path's of all pacmans in game by using the ShortestPathAlgo class
+	 * to compute. the class set the path on each pacman after calculation.
 	 */
 	public void computePath() {
-		if(jb == null || jb.getGame() == null)
+		if (jb == null || jb.getGame() == null)
 			return;
 
 		// compute paths
@@ -667,7 +673,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		// repaint
 		repaint();
 	}
-
 
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
