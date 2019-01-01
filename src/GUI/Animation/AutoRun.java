@@ -33,7 +33,7 @@ public class AutoRun extends Thread {
         	if(robot != null)
         		orientation = robot.getOrientation();
         	else orientation = GUI.getGame().getPlayer().getOrientation();
-            System.out.println(orientation+ " | "+(robot != null));
+            
             // advance game by a single step
             play.rotate(orientation);
             // refresh - repaint panel

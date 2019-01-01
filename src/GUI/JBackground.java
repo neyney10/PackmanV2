@@ -82,8 +82,15 @@ public class JBackground extends JPanel implements MouseListener {
 			g.drawImage(game.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
 
 		// set new Game object from play.getBoard();
-		if (play.isRuning())
-			setGame(new Game(play.getBoard()), game.getPlayer().getOrientation());
+		if (play.isRuning()) {
+			//setGame(new Game(play.getBoard()), game.getPlayer().getOrientation());
+			//TEMP
+			double angle = game.getPlayer().getOrientation();
+			game.refreshGameStatus(play.getBoard());
+			game.getPlayer().setOrientation(angle);
+			
+		}
+		
 
 		Point position;
 		GameObject obj;
@@ -275,7 +282,7 @@ public class JBackground extends JPanel implements MouseListener {
 	 * @param game the game to set
 	 */
 	private void setGame(Game game, double playerOrientation) {
-		this.game = game;
+		//this.game = game;
 		game.setMap(this.map);
 		game.getPlayer().setOrientation(playerOrientation);
 

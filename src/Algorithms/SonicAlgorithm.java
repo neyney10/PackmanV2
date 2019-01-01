@@ -22,6 +22,7 @@ public class SonicAlgorithm implements RobotAlgorithm {
 	public ArrayList<Packman> pacmans;
 	public ArrayList<Fruit>  fruits;
 	public ArrayList<Box> boxes;
+	public LinkedList<Point3D> playerPath;
 	Player player;
 	JBackground GUI;
 	/////////////
@@ -30,6 +31,7 @@ public class SonicAlgorithm implements RobotAlgorithm {
 
 	public SonicAlgorithm(JBackground GUI) {
 		this.GUI = GUI;
+		playerPath = new LinkedList<Point3D>();
 		refreshGameStatus(GUI.getGame());
 	}
 
@@ -176,6 +178,9 @@ public class SonicAlgorithm implements RobotAlgorithm {
 			}
 		}
 		
+		//
+		buildPlayerPath();
+		
 		// temp
 		temp.forEach((pack, point) -> {
 			pack.setPoint(point);
@@ -185,7 +190,6 @@ public class SonicAlgorithm implements RobotAlgorithm {
 
 	}
 
-	
 	private LinkedList<Cost> calculateDistances(Packman p) {
 		LinkedList<Cost> costs = new LinkedList<SonicAlgorithm.Cost>();
 		// iterator of fruits
@@ -232,6 +236,10 @@ public class SonicAlgorithm implements RobotAlgorithm {
 		}
 
 		return latestPoint;
+	}
+	
+	private void buildPlayerPath() {
+		
 	}
 
 	private Fruit calculateClosestFruitPosition() {
