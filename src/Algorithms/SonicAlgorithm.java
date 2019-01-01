@@ -165,56 +165,59 @@ public class SonicAlgorithm {
 		Cost cost;
 		double time, totalTime = 0;
 		LinkedList<Cost> costs = new LinkedList<>();
-		// a Cost comperator for sorting the "distCost" data structure.
+		// a Cost comparator for sorting the "distCost" data structure.
 		CostComperator costComp = new CostComperator();
-
+		LinkedList<Fruit> tempFruits = new LinkedList(fruits);
+		
+		//Iterator<Fruit> iterFruit = tempFruits.iterator();
+		while(!tempFruits.isEmpty()) {
+		costs.clear();
+		Cost minCost;
 		for(Packman pacman : pacmans) {
-			costs.addAll(calculateDistances(pacman));
-			pacman.setPath(new Path(new PathPoint(pacman.getPoint(),0)));
+			minCost = new Cost(pacman,null,Double.MAX_VALUE);
+			pacman.setPath(new Path(pacman.getPoint()));
+			for(Fruit fruit : tempFruits) {
+				double distance = this.c.distance3d(pacman.getPoint(), fruit.getPoint());
+				if(distance < minCost.cost) {
+					minCost.cost = distance;
+					minCost.f = fruit;
+				}
+			}
+			if(minCost.f != null)
+				costs.add(minCost);
 		}
 
-		while(!costs.isEmpty()) {
-			// Sort Costs
+		if(costs.isEmpty())
+			return;
+			// Sort costs
 			costs.sort(costComp);
-
-			// remove min
+			// get minimum cost
 			cost = costs.removeFirst();
 			time = cost.cost/cost.p.getSpeed();
-			totalTime += time;
-			cost.p.getPath().add(new PathPoint(cost.f.getPoint(), totalTime));
+			tempFruits.remove(cost.f);
+			cost.p.getPath().add(cost.f.getPoint());
+			// advance pacman
 			cost.p.setPoint(cost.f.getPoint());
 
-
-			// update positions
-			Cost c;
-			double vecNorm;
-			Point3D newPos;
-			Point3D moveVector;
 			Iterator<Cost> iterCost = costs.iterator();
 			while(iterCost.hasNext()) {
-				c = iterCost.next();
-				if(cost.p == c.p)
-					continue;
-				if(cost.f == c.f) {
-					iterCost.remove();
-					continue;
-				}
+				Cost c = iterCost.next();
 				
-
-				newPos = c.p.getPoint();
-				moveVector = this.c.vector3D(newPos, c.f.getPoint()); 
-				vecNorm = this.c.vectorNormal2D(moveVector);
+				if(c.p == cost.p)
+					continue;
+					
+				Point3D newPos = c.p.getPoint();
+				Point3D moveVector = this.c.vector3D(newPos, c.f.getPoint()); 
+				double vecNorm = this.c.vectorNormal2D(moveVector);
 				moveVector = new Point3D(moveVector.x()/vecNorm, moveVector.y()/vecNorm);
 				moveVector = new Point3D(moveVector.x()*c.p.getSpeed()*time, moveVector.y()*c.p.getSpeed()*time);
 				newPos = this.c.add(newPos, moveVector);
-				cost.cost = this.c.distance3d(newPos, c.f.getPoint());
 				cost.p.setPoint(newPos);
-
 			}
 		}
 
 	}
-	
+
 	private LinkedList<Cost> calculateDistances(Packman p) {
 		LinkedList<Cost> costs = new LinkedList<SonicAlgorithm.Cost>();
 		// iterator of fruits

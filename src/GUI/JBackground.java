@@ -255,7 +255,7 @@ public class JBackground extends JPanel implements MouseListener {
 
 		//NOTE: TEMP
 		SonicAlgorithm sa = new SonicAlgorithm(this);
-		sa.calcPacmansPath();
+		sa.calcPacmanPathV3();
 		TreeSet<GameObject> ts = new TreeSet<>();
 		ts.addAll(sa.fruits);
 		ts.addAll(sa.pacmans);
@@ -281,7 +281,7 @@ public class JBackground extends JPanel implements MouseListener {
 
 		//NOTE: TEMP ONLY
 		SonicAlgorithm sa = new SonicAlgorithm(this);
-		sa.calcPacmanPathV2();
+		sa.calcPacmanPathV3();
 		TreeSet<GameObject> ts = new TreeSet<>();
 		ts.addAll(sa.fruits);
 		ts.addAll(sa.pacmans);
