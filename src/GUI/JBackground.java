@@ -261,6 +261,8 @@ public class JBackground extends JPanel implements MouseListener {
 		ts.addAll(sa.pacmans);
 		ts.addAll(sa.boxes);
 		this.game.setObjects(ts);
+		Point3D p = sa.findLatestEatenFruitPosition();
+		System.out.println(p +" | "+ game.getMap().getLocationOnScreen(p));
 
 		refreshGameUI();
 
