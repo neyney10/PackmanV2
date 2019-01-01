@@ -25,7 +25,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 
+import AI.AutomaticRobot;
+import Algorithms.RobotAlgorithm;
 import Algorithms.ShortestPathAlgo;
+import Algorithms.SonicAlgorithm;
 import Files_format.Path2Kml;
 import GUI.Animation.AutoRun;
 import GUI.Animation.SimulatePath;
@@ -535,12 +538,18 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		Point3D playerPos3D = jb.getGame().getPlayer().getPoint();
 		Play play = jb.getPlay();
 		//play.setIDs(999999888);
+		// TEMP X2
+		RobotAlgorithm algorithm = new SonicAlgorithm(jb);
+		AutomaticRobot robot = new AutomaticRobot(algorithm);
+		robot.setNewGameStatus(jb.getGame());
+		playerPos3D = robot.getStartingPlayerPosition();
 		play.setInitLocation(playerPos3D.y(), playerPos3D.x());
 		jb.getPlay().start();
 		jb.repaint();
 		
 		// TEMP
 		AutoRun autoRun = new AutoRun(jb, 33);
+		autoRun.addAutomaticRobot(robot);
 		autoRun.start();
 
 		btn_stopSimulation.setVisible(true);
