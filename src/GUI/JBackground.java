@@ -261,8 +261,9 @@ public class JBackground extends JPanel implements MouseListener {
 		ts.addAll(sa.pacmans);
 		ts.addAll(sa.boxes);
 		this.game.setObjects(ts);
-		Point3D p = sa.findLatestEatenFruitPosition();
-		System.out.println(p +" | "+ game.getMap().getLocationOnScreen(p));
+		Point3D p;
+		if((p = sa.findLatestEatenFruitPosition()) != null)
+			System.out.println(p +" | "+ game.getMap().getLocationOnScreen(p));
 
 		refreshGameUI();
 
@@ -280,12 +281,15 @@ public class JBackground extends JPanel implements MouseListener {
 
 		//NOTE: TEMP ONLY
 		SonicAlgorithm sa = new SonicAlgorithm(this);
-		sa.calcPacmansPath();
+		sa.calcPacmanPathV2();
 		TreeSet<GameObject> ts = new TreeSet<>();
 		ts.addAll(sa.fruits);
 		ts.addAll(sa.pacmans);
 		ts.addAll(sa.boxes);
 		this.game.setObjects(ts);
+		Point3D p;
+		if((p = sa.findLatestEatenFruitPosition()) != null)
+			System.out.println(p +" | "+ game.getMap().getLocationOnScreen(p));
 	}
 
 	/**
