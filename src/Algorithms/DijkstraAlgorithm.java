@@ -14,6 +14,7 @@ import GameObjects.Fruit;
 import GameObjects.GameObject;
 import GameObjects.Packman;
 import Geom.Point3D;
+import Maps.Map;
 import Path.Path;
 import graph.Graph;
 import graph.Graph_Algo;
@@ -43,18 +44,21 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		iter = game.typeIterator(new Box(0));
 		while(iter.hasNext()) {
 			box = (Box) iter.next();
-			graph.add(new Vertex(""+(box.getMin()), box.getMin())); 
-			graph.add(new Vertex(""+(box.getMax()), box.getMax())); 
+			addBoxToGraph(box, game.getMap());
 		}
+		
 		for(int i =0 ; i < graph.size() ; i++) {
 			Vertex v1 = (Vertex) graph.getNodeByIndex(i);
 			for(int j = 0 ; j < i ; j++) {
-				Vertex v2 = (Vertex) graph.getNodeByIndex(i);
-				//TEMP TEST:
-				if(!checkIntersect(v1,v2))
+				Vertex v2 = (Vertex) graph.getNodeByIndex(j);
+
+				if(!checkIntersect(v1,v2))  {
 					graph.addEdge(v1.get_name(), v2.get_name(), mc.distance3d(v1.point, v2.point));
+					//System.out.println(v1.get_name() + " | "+v2.get_name()); // TEMP
+				}
 			}
 		}
+		
 
 	}
 
@@ -76,18 +80,22 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 			if(!checkIntersect(sourceNode,node) && sourceNode != node) {
 				distance = mc.distance3d(source, ((Vertex) graph.getNodeByIndex(i)).point);
 				graph.addEdge(sourceNode.get_name(), node.get_name(), distance);
-				System.out.println("SOURCE ADD EDGE");
+				//System.out.println("SOURCE ADD EDGE");
 			}
 			
 			//destination
 			if(!checkIntersect(destinationNode,node) && destinationNode != node) {
 				distance = mc.distance3d(destination, ((Vertex) graph.getNodeByIndex(i)).point);
 				graph.addEdge(destinationNode.get_name(),node.get_name(), distance);
-				System.out.println(graph.getNodeByName(destinationNode.get_name()) +" | "+(graph.getNodeByName(node.get_name())));
-				System.out.println("destination ADD EDGE");
+				//System.out.println(graph.getNodeByName(destinationNode.get_name()) +" | "+(graph.getNodeByName(node.get_name())));
+				//System.out.println("destination ADD EDGE");
 			}
+			
+			System.out.println(node.get_ni());
 		}
-		
+		System.out.println(sourceNode.get_ni());
+		System.out.println(destinationNode.get_ni());
+
 		// compute the shortest graph using the algorithm
 		Graph_Algo.dijkstra(graph, sourceNode.get_name());
 		//System.out.println(Arrays.toString(destinationNode.getPath().toArray())); //TEMP DEBUG
@@ -121,6 +129,22 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		}
 		
 		return false;
+	}
+
+	private void addBoxToGraph(Box box, Map map) {
+		Point upperLeftP = map.getLocationOnScreen(box.getMin());
+		Point lowerRightP = map.getLocationOnScreen(box.getMax());
+		
+		Point3D upperRight, lowerLeft, upperLeft, lowerRight;
+		upperRight = map.getLocationFromScreen(new Point(lowerRightP.x + 3, upperLeftP.y - 3));
+		lowerLeft = map.getLocationFromScreen(new Point(upperLeftP.x - 3, lowerRightP.y + 3));
+		upperLeft = map.getLocationFromScreen(new Point(lowerRightP.x - 3, upperLeftP.y - 3));
+		lowerRight = map.getLocationFromScreen(new Point(upperLeftP.x + 3, lowerRightP.y + 3));
+		
+		graph.add(new Vertex(""+(upperLeft), upperLeft)); 
+		graph.add(new Vertex(""+(lowerRight), lowerRight));
+		graph.add(new Vertex(""+(upperRight),upperRight)); 
+		graph.add(new Vertex(""+(lowerLeft), lowerLeft));
 	}
 }
 

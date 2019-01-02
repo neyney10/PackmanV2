@@ -39,10 +39,10 @@ public class Intersect {
         Point botPoint = map.getLocationOnScreen(box.getMax());
 
         // create a awt.geom Rectangle for the "intersects" function.
-        Rectangle2D r = new Rectangle2D.Double();
+        double deltaX = Math.abs(topPoint.getX() - botPoint.getX());
+        double deltaY = Math.abs(topPoint.getY() - botPoint.getY());
         
-        r.add(topPoint);
-        r.add(botPoint);
+        Rectangle2D r = new Rectangle2D.Double(topPoint.getX(), topPoint.getY(), deltaX, deltaY);
 
         return r.intersectsLine(line);
     }
