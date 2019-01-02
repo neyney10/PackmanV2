@@ -66,13 +66,13 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 		
 		
 		// TEMP
-//		DijkstraAlgorithm da = new DijkstraAlgorithm(game);
-//		System.out.println("FRUIT POSITION: "+game.getMap().getLocationOnScreen(fruits.get(0).getPoint()));
-//		Path path = da.calculate(player.getPoint(), fruits.get(0).getPoint());
-//		Iterator<Point3D> iterp = path.iterator();
-//		while(iterp.hasNext())
-//			System.out.print(iterp.next()+", ");
-//		System.out.println();
+		DijkstraAlgorithm da = new DijkstraAlgorithm(game);
+		System.out.println("FRUIT POSITION: "+game.getMap().getLocationOnScreen(fruits.get(0).getPoint()));
+		Path path = da.calculate(player.getPoint(), fruits.get(0).getPoint());
+		Iterator<Point3D> iterp = path.iterator();
+		while(iterp.hasNext())
+			System.out.print(iterp.next()+", ");
+		System.out.println();
 	}
 	
 	public void calcPacmanPathV2() {

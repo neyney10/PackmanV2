@@ -30,12 +30,13 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 	Intersect in;
 
 	public DijkstraAlgorithm(Game game) {
+		graph = new Graph();
 		in = new Intersect(game.getMap());
 		refreshGameStatus(game);
 	}
 
 	public void refreshGameStatus(Game game) {
-		graph = new Graph();
+		graph.ResetGraph();
 		this.game = game;
 		Iterator<GameObject> iter;
 
@@ -103,7 +104,7 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		System.out.println(sourceNode.get_ni());
 		System.out.println(destinationNode.get_ni());
 
-
+		System.out.println(graph.toString());
 		// compute the shortest graph using the algorithm
 		Graph_Algo.dijkstra(graph, sourceNode.get_name());
 
