@@ -25,16 +25,18 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 	public LinkedList<Point3D> playerPath;
 	Player player;
 	Game game;
+	RobotPathFindingAlgorithm pathAlgorithm;
 	/////////////
 	MyCoords c = new MyCoords(); 
 	boolean calculated = false; // TODO
 
-	public SonicAlgorithmV2() {
+	public SonicAlgorithmV2(RobotPathFindingAlgorithm algorithm) {
 		playerPath = new LinkedList<Point3D>();
+		this.pathAlgorithm = algorithm;
 	}
 	
-	public SonicAlgorithmV2(Game game) {
-		this();
+	public SonicAlgorithmV2(Game game, RobotPathFindingAlgorithm algorithm) {
+		this(algorithm);
 		this.game = game;
 		refreshGameStatus(game);
 	}
@@ -64,12 +66,13 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 		
 		
 		// TEMP
-		DijkstraAlgorithm da = new DijkstraAlgorithm(game);
-		Path path = da.calculate(player.getPoint(), fruits.get(0).getPoint());
-		Iterator<Point3D> iterp = path.iterator();
-		while(iterp.hasNext())
-			System.out.print(iterp.next()+", ");
-		System.out.println();
+//		DijkstraAlgorithm da = new DijkstraAlgorithm(game);
+//		System.out.println("FRUIT POSITION: "+game.getMap().getLocationOnScreen(fruits.get(0).getPoint()));
+//		Path path = da.calculate(player.getPoint(), fruits.get(0).getPoint());
+//		Iterator<Point3D> iterp = path.iterator();
+//		while(iterp.hasNext())
+//			System.out.print(iterp.next()+", ");
+//		System.out.println();
 	}
 	
 	public void calcPacmanPathV2() {
@@ -207,6 +210,10 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 	@Override
 	public double getPlayerOrientation() {
 		Fruit closestFruit = calculateClosestFruitPosition();
+		// TEMP: TODO: FINISH USING THE PATH FINDING ALGORITHM INSTEAD
+//		pathAlgorithm.refreshGameStatus(game);
+//		Path path = pathAlgorithm.calculate(player.getPoint(), closestFruit.getPoint());
+
 		double orientation = 360 -  this.c.azimuth_elevation_dist(player.getPoint(), closestFruit.getPoint())[0] + 90;
 		if(orientation > 360)
 			orientation -= 360;

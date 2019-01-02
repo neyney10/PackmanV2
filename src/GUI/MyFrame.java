@@ -26,9 +26,7 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 
 import AI.AutomaticRobot;
-import Algorithms.RobotAlgorithm;
-import Algorithms.ShortestPathAlgo;
-import Algorithms.SonicAlgorithmV2;
+import Algorithms.*;
 import Files_format.Path2Kml;
 import GUI.Animation.AutoRun;
 import GUI.Animation.SimulatePath;
@@ -539,7 +537,8 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		Play play = jb.getPlay();
 		//play.setIDs(999999888);
 		// TEMP X2
-		RobotAlgorithm algorithm = new SonicAlgorithmV2();
+		RobotPathFindingAlgorithm pathFinding = new DijkstraAlgorithm(jb.getGame());
+		RobotAlgorithm algorithm = new SonicAlgorithmV2(pathFinding);
 		AutomaticRobot robot = new AutomaticRobot(algorithm);
 		robot.setNewGameStatus(jb.getGame());
 		playerPos3D = robot.getStartingPlayerPosition();

@@ -28,9 +28,8 @@ public class Intersect {
 
     /**
      * Checks if a line collides with a given box.
-     * @param Line2D line1
-     * @param Box box
-     * @param Map map - for coordinates conversion of Box
+     * @param line
+     * @param box
      * @return true if the line collides with the box, false otherwise.
      */
     public boolean isLineIntersectsWithBox(Line2D line, Box box) {
@@ -45,6 +44,20 @@ public class Intersect {
         Rectangle2D r = new Rectangle2D.Double(topPoint.getX(), topPoint.getY(), deltaX, deltaY);
 
         return r.intersectsLine(line);
+    }
+
+    public boolean isPointInsideBox(Point point, Box box) {
+        // convert Polar coordinates of box into two X,Y pixel coordinates on screen.
+        Point topPoint = map.getLocationOnScreen(box.getMin());
+        Point botPoint = map.getLocationOnScreen(box.getMax());
+
+        // create a awt.geom Rectangle for the "intersects" function.
+        double deltaX = Math.abs(topPoint.getX() - botPoint.getX());
+        double deltaY = Math.abs(topPoint.getY() - botPoint.getY());
+
+        Rectangle2D r = new Rectangle2D.Double(topPoint.getX(), topPoint.getY(), deltaX, deltaY);
+
+        return r.contains(point);
     }
 
     /**

@@ -30,12 +30,12 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 	Intersect in;
 
 	public DijkstraAlgorithm(Game game) {
-		graph = new Graph();
 		in = new Intersect(game.getMap());
 		refreshGameStatus(game);
 	}
 
 	public void refreshGameStatus(Game game) {
+		graph = new Graph();
 		this.game = game;
 		Iterator<GameObject> iter;
 
@@ -55,6 +55,7 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 				if(!checkIntersect(v1,v2))  {
 					graph.addEdge(v1.get_name(), v2.get_name(), mc.distance3d(v1.point, v2.point));
 					//System.out.println(v1.get_name() + " | "+v2.get_name()); // TEMP
+
 				}
 			}
 		}
@@ -65,8 +66,14 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 	
 	@Override
 	public Path calculate(Point3D source, Point3D destination) {
+		if(graph == null)
+			return null;
+
+		if(game == null)
+			refreshGameStatus(game);
+
 		Vertex sourceNode = new Vertex("0"+source, source);
-		Vertex destinationNode = new Vertex("1"+destination, source);
+		Vertex destinationNode = new Vertex("1"+destination, destination);
 		graph.add(sourceNode);
 		graph.add(destinationNode);
 		
@@ -78,28 +85,31 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 			//source
 			double distance;
 			if(!checkIntersect(sourceNode,node) && sourceNode != node) {
-				distance = mc.distance3d(source, ((Vertex) graph.getNodeByIndex(i)).point);
+				distance = mc.distance3d(source, node.point);
 				graph.addEdge(sourceNode.get_name(), node.get_name(), distance);
 				//System.out.println("SOURCE ADD EDGE");
 			}
 			
 			//destination
 			if(!checkIntersect(destinationNode,node) && destinationNode != node) {
-				distance = mc.distance3d(destination, ((Vertex) graph.getNodeByIndex(i)).point);
+				distance = mc.distance3d(destination, node.point);
 				graph.addEdge(destinationNode.get_name(),node.get_name(), distance);
 				//System.out.println(graph.getNodeByName(destinationNode.get_name()) +" | "+(graph.getNodeByName(node.get_name())));
-				//System.out.println("destination ADD EDGE");
+				System.out.println("destination ADD EDGE");
 			}
-			
-			System.out.println(node.get_ni());
+
+			System.out.println(i+": "+node.get_ni());
 		}
 		System.out.println(sourceNode.get_ni());
 		System.out.println(destinationNode.get_ni());
 
+
 		// compute the shortest graph using the algorithm
 		Graph_Algo.dijkstra(graph, sourceNode.get_name());
-		//System.out.println(Arrays.toString(destinationNode.getPath().toArray())); //TEMP DEBUG
-		return parseNodePath(destinationNode.getPath());
+
+		ArrayList<String> pathString = destinationNode.getPath();
+		pathString.add(destinationNode.get_name());
+		return parseNodePath(pathString);
 	}
 	
 	private Path parseNodePath(ArrayList<String> nodePath) {
@@ -131,20 +141,60 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		return false;
 	}
 
+	private boolean checkUnreachable(Vertex v) {
+		Box box;
+		Iterator<GameObject> iter = game.typeIterator(new Box(0));
+		while(iter.hasNext()) {
+			box = (Box) iter.next();
+			Point vp = game.getMap().getLocationOnScreen(v.point);
+
+			if(in.isPointInsideBox(vp, box)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	private void addBoxToGraph(Box box, Map map) {
 		Point upperLeftP = map.getLocationOnScreen(box.getMin());
 		Point lowerRightP = map.getLocationOnScreen(box.getMax());
-		
+
+		int slide = 2;
+
+		Point lowerLeftP, upperRightP;
+		lowerLeftP = new Point(upperLeftP.x - slide, lowerRightP.y + slide);
+		upperRightP = new Point(lowerRightP.x + slide, upperLeftP.y - slide);
+
+		upperLeftP.setLocation(upperLeftP.x - slide, upperLeftP.y - slide);
+		lowerRightP.setLocation(lowerRightP.x + slide, lowerRightP.y + slide);
+
 		Point3D upperRight, lowerLeft, upperLeft, lowerRight;
-		upperRight = map.getLocationFromScreen(new Point(lowerRightP.x + 3, upperLeftP.y - 3));
-		lowerLeft = map.getLocationFromScreen(new Point(upperLeftP.x - 3, lowerRightP.y + 3));
-		upperLeft = map.getLocationFromScreen(new Point(lowerRightP.x - 3, upperLeftP.y - 3));
-		lowerRight = map.getLocationFromScreen(new Point(upperLeftP.x + 3, lowerRightP.y + 3));
-		
-		graph.add(new Vertex(""+(upperLeft), upperLeft)); 
-		graph.add(new Vertex(""+(lowerRight), lowerRight));
-		graph.add(new Vertex(""+(upperRight),upperRight)); 
-		graph.add(new Vertex(""+(lowerLeft), lowerLeft));
+		upperRight = map.getLocationFromScreen(upperRightP);
+		lowerLeft = map.getLocationFromScreen(lowerLeftP);
+		upperLeft = map.getLocationFromScreen(upperLeftP);
+		lowerRight = map.getLocationFromScreen(lowerRightP);
+
+		Vertex v1 = new Vertex(""+(upperLeft), upperLeft);
+		Vertex v2 = new Vertex(""+(lowerRight), lowerRight);
+		Vertex v3 = new Vertex(""+(upperRight),upperRight);
+		Vertex v4 = new Vertex(""+(lowerLeft), lowerLeft);
+
+		if(!checkUnreachable(v1))
+			graph.add(v1);
+		if(!checkUnreachable(v2))
+			graph.add(v2);
+		if(!checkUnreachable(v3))
+			graph.add(v3);
+		if(!checkUnreachable(v4))
+			graph.add(v4);
+
+//		System.out.println(graph.getNodeByName(""+(upperLeft))
+//				+ " | "+graph.getNodeByName(""+(lowerRight))
+//				+ " | "+graph.getNodeByName(""+(upperRight))
+//				+ " | "+graph.getNodeByName(""+(lowerLeft)));
+//
+//		System.out.println(upperLeftP+" | "+ lowerRightP + " | " + upperRightP + " | "+ lowerLeftP);
 	}
 }
 
