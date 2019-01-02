@@ -121,4 +121,8 @@ public class Node
     public static void resetCounter(){
         _counter = 0;
     }
+    
+    public static void decreaseCounter() {
+    	--_counter;
+    }
 }

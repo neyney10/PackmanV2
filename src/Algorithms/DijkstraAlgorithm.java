@@ -177,18 +177,24 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		lowerRight = map.getLocationFromScreen(lowerRightP);
 
 		Vertex v1 = new Vertex(""+(upperLeft), upperLeft);
-		Vertex v2 = new Vertex(""+(lowerRight), lowerRight);
-		Vertex v3 = new Vertex(""+(upperRight),upperRight);
-		Vertex v4 = new Vertex(""+(lowerLeft), lowerLeft);
-
 		if(!checkUnreachable(v1))
 			graph.add(v1);
+		else Node.decreaseCounter();
+		
+		Vertex v2 = new Vertex(""+(lowerRight), lowerRight);
 		if(!checkUnreachable(v2))
 			graph.add(v2);
+		else Node.decreaseCounter();
+		
+		Vertex v3 = new Vertex(""+(upperRight),upperRight);
 		if(!checkUnreachable(v3))
 			graph.add(v3);
+		else Node.decreaseCounter();
+		
+		Vertex v4 = new Vertex(""+(lowerLeft), lowerLeft);
 		if(!checkUnreachable(v4))
 			graph.add(v4);
+		else Node.decreaseCounter();
 
 //		System.out.println(graph.getNodeByName(""+(upperLeft))
 //				+ " | "+graph.getNodeByName(""+(lowerRight))
