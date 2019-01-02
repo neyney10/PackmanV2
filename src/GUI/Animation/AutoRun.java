@@ -39,7 +39,9 @@ public class AutoRun extends Thread {
             // refresh - repaint panel
             GUI.repaint();
             // Temp
-            robot.setNewGameStatus(new Game(play.getBoard()));
+            if(robot != null)
+            	robot.setNewGameStatus(new Game(play.getBoard()));
+            
             try {
                 Thread.sleep(refreshDelayRate);
                 

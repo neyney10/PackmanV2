@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="Ex4_OOP/Ex4_v0.2.jar"/>
 	<classpathentry kind="lib" path="Ex4_OOP/mysql-connector-java-5.1.47.jar"/>
+	<classpathentry kind="lib" path="Graph_101/Graph_v0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

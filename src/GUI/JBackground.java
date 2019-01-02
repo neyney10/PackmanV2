@@ -15,7 +15,7 @@ import java.util.TreeSet;
 
 import javax.swing.JPanel;
 
-import Algorithms.SonicAlgorithm;
+import Algorithms.SonicAlgorithmV2;
 import Game.Game;
 import GameObjects.Box;
 import GameObjects.GameObject;
@@ -261,8 +261,8 @@ public class JBackground extends JPanel implements MouseListener {
 			game.setMap(this.map);
 
 		//NOTE: TEMP
-		SonicAlgorithm sa = new SonicAlgorithm(this);
-		sa.calcPacmanPathV3();
+		SonicAlgorithmV2 sa = new SonicAlgorithmV2(game);
+		sa.calcPacmanPathV2();
 		TreeSet<GameObject> ts = new TreeSet<>();
 		ts.addAll(sa.fruits);
 		ts.addAll(sa.pacmans);

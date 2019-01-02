@@ -17,22 +17,26 @@ import GameObjects.Player;
 import Geom.Point3D;
 import Path.Path;
 
-public class SonicAlgorithm implements RobotAlgorithm {
+public class SonicAlgorithmV2 implements RobotAlgorithm {
 
 	public ArrayList<Packman> pacmans;
 	public ArrayList<Fruit>  fruits;
 	public ArrayList<Box> boxes;
 	public LinkedList<Point3D> playerPath;
 	Player player;
-	JBackground GUI;
+	Game game;
 	/////////////
 	MyCoords c = new MyCoords(); 
-	boolean calculated = false;
+	boolean calculated = false; // TODO
 
-	public SonicAlgorithm(JBackground GUI) {
-		this.GUI = GUI;
+	public SonicAlgorithmV2() {
 		playerPath = new LinkedList<Point3D>();
-		refreshGameStatus(GUI.getGame());
+	}
+	
+	public SonicAlgorithmV2(Game game) {
+		this();
+		this.game = game;
+		refreshGameStatus(game);
 	}
 
 	public void refreshGameStatus(Game game) {
@@ -57,68 +61,22 @@ public class SonicAlgorithm implements RobotAlgorithm {
 			boxes.add((Box) iter.next().clone()); 
 		
 		player = game.getPlayer();
+		
+		
+		// TEMP
+		DijkstraAlgorithm da = new DijkstraAlgorithm(game);
+		Path path = da.calculate(player.getPoint(), fruits.get(0).getPoint());
+		Iterator<Point3D> iterp = path.iterator();
+		while(iterp.hasNext())
+			System.out.print(iterp.next()+", ");
+		System.out.println();
 	}
-
-	/**
-	 * Get path for each pacman.
-	 */
-	public void calcPacmansPath() {
-
-		// list of costs for each pacman
-		LinkedList<Cost>  distCost = new LinkedList<>();
-		// iterator of pacmans
-		Iterator<Packman> iterPack = pacmans.iterator();
-		// a Cost comperator for sorting the "distCost" data structure.
-		CostComperator costComp = new CostComperator();
-
-
-		double time;
-		Path path;
-		Point3D startingPoint;
-		Cost cost; // refrence holder
-		Packman pacman; // reference holder
-		while(iterPack.hasNext()) {
-			// get the next pacman
-			pacman = iterPack.next();
-			// save starting point to return to
-			startingPoint = pacman.getPoint();
-			// create new path for it
-			path = new Path();
-			path.add(startingPoint);
-			time = 0;
-			// start a clean list of costs for this pacman.
-			distCost = calculateDistances(pacman);
-
-			// Sort list
-			distCost.sort(costComp);
-
-			while(!distCost.isEmpty()) {
-				cost = distCost.removeFirst();
-				// calculate time
-				time += cost.cost/pacman.getSpeed();
-				// add the closest fruit to the pacman's path.
-				path.add(new PathPoint(cost.f.getPoint(), time));
-				// update the pacman's position, it is now standing on the fruit.
-				pacman.setPoint(cost.f.getPoint());
-
-				//recalculate edges of cost - recalculate all the distanced for this pacman to all fruits.
-				recalculateDistances(distCost, pacman.getPoint());
-
-				// Re-sort after relax
-				distCost.sort(costComp);
-			}
-
-			pacman.setPath(path);
-			pacman.setPoint(startingPoint);
-		}
-	}
-
-	public void calcPacmanPathV3() {
+	
+	public void calcPacmanPathV2() {
 	
 		if(pacmans.size() == 0 || fruits.size() ==0)
 			return;
 		
-		// temp
 		Cost cost;
 		double time, totalTime = 0;
 		LinkedList<Cost> costs = new LinkedList<>();
@@ -190,32 +148,6 @@ public class SonicAlgorithm implements RobotAlgorithm {
 
 	}
 
-	private LinkedList<Cost> calculateDistances(Packman p) {
-		LinkedList<Cost> costs = new LinkedList<SonicAlgorithm.Cost>();
-		// iterator of fruits
-		Iterator<Fruit> iterFruit;
-		// build the "costs" costs data structure.
-		double distance;
-		Fruit fruit; // reference holder
-		iterFruit = fruits.iterator();
-		while(iterFruit.hasNext()) {
-			fruit = iterFruit.next();
-			// calculate distance between the pacman and fruit.
-			distance = c.distance3d(p.getPoint(), fruit.getPoint());
-			// add it to the list.
-			costs.add(new Cost(p, fruit, distance));
-		}
-
-		return costs;
-	}
-
-	private void recalculateDistances(LinkedList<Cost> costs, Point3D p) {
-		costs.forEach((cost) -> {
-			cost.cost = c.distance3d(cost.p.getPoint(), cost.f.getPoint());
-		});
-
-	}
-
 	public Point3D findLatestEatenFruitPosition() {
 		double maxTime = -1;
 		Point3D p, latestPoint = null;
@@ -263,12 +195,13 @@ public class SonicAlgorithm implements RobotAlgorithm {
 
 		return closestFruit;
 	}
+	
 	/**
 	 * Sonic movement algorithm.
 	 */
 	@Override
 	public void calculate() {
-		calcPacmanPathV3();
+		calcPacmanPathV2();
 	}
 	
 	@Override
@@ -352,5 +285,7 @@ public class SonicAlgorithm implements RobotAlgorithm {
 		}
 
 	}
+
+
 
 }
