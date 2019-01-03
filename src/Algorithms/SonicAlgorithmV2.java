@@ -8,6 +8,7 @@ import java.util.LinkedList;
 
 import Coords.MyCoords;
 import GUI.JBackground;
+import GUI.MyFrame;
 import Game.Game;
 import GameObjects.Box;
 import GameObjects.Fruit;
@@ -25,8 +26,13 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 	public LinkedList<Point3D> playerPath;
 	Player player;
 	Game game;
+	// Path handling //
 	RobotPathFindingAlgorithm pathAlgorithm;
-	/////////////
+	Path path;
+	Iterator<Point3D> iterPath;
+	Point3D nextPoint;
+	int step, steps;
+	// utillities //
 	MyCoords c = new MyCoords(); 
 	boolean calculated = false; // TODO
 
@@ -34,16 +40,15 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 		playerPath = new LinkedList<Point3D>();
 		this.pathAlgorithm = algorithm;
 	}
-	
+
 	public SonicAlgorithmV2(Game game, RobotPathFindingAlgorithm algorithm) {
 		this(algorithm);
-		this.game = game;
 		refreshGameStatus(game);
 	}
 
 	public void refreshGameStatus(Game game) {
 		Iterator<GameObject> iter;
-
+		this.game = game;
 		// PACMANS
 		pacmans = new ArrayList<Packman>();
 		iter = game.typeIterator(new Packman(0));
@@ -61,25 +66,17 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 		iter = game.typeIterator(new Box(0));
 		while(iter.hasNext()) 
 			boxes.add((Box) iter.next().clone()); 
-		
+
 		player = game.getPlayer();
-		
-		
-		// TEMP
-		DijkstraAlgorithm da = new DijkstraAlgorithm(game);
-		System.out.println("FRUIT POSITION: "+game.getMap().getLocationOnScreen(fruits.get(0).getPoint()));
-		Path path = da.calculate(player.getPoint(), fruits.get(0).getPoint());
-		Iterator<Point3D> iterp = path.iterator();
-		while(iterp.hasNext())
-			System.out.print(iterp.next()+", ");
-		System.out.println();
+
+
 	}
-	
+
 	public void calcPacmanPathV2() {
-	
+
 		if(pacmans.size() == 0 || fruits.size() ==0)
 			return;
-		
+
 		Cost cost;
 		double time, totalTime = 0;
 		LinkedList<Cost> costs = new LinkedList<>();
@@ -92,8 +89,8 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 			pacman.setPath(new Path(new PathPoint(pacman.getPoint(), 0)));
 			temp.put(pacman, pacman.getPoint()); // temp
 		}
-		
-		
+
+
 		while(!tempFruits.isEmpty()) {
 			costs.clear();
 			Cost minCost;
@@ -101,7 +98,7 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 				minCost = new Cost(pacman,null,Double.MAX_VALUE);
 				for(Fruit fruit : tempFruits) {
 					double distance = this.c.distance3d(pacman.getPoint(), fruit.getPoint());
-	
+
 					if(distance < minCost.cost) {
 						minCost.cost = distance;
 						minCost.f = fruit;
@@ -109,7 +106,7 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 				}
 				costs.add(minCost);
 			}
-		
+
 			// Sort costs
 			costs.sort(costComp);
 			// get minimum cost
@@ -138,16 +135,16 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 				c.p.getPath().add(newPos);
 			}
 		}
-		
+
 		//
 		buildPlayerPath();
-		
+
 		// temp
 		temp.forEach((pack, point) -> {
 			pack.setPoint(point);
 		});
-		
-		
+
+
 
 	}
 
@@ -172,9 +169,9 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 
 		return latestPoint;
 	}
-	
+
 	private void buildPlayerPath() {
-		
+
 	}
 
 	private Fruit calculateClosestFruitPosition() {
@@ -182,7 +179,7 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 		Iterator<Fruit> iterFruit;
 		// reference holder to the cloest fruit
 		Fruit closestFruit = null;
-		
+
 		double distance, minDistance = Double.MAX_VALUE;
 		Fruit fruit; // reference holder
 		iterFruit = fruits.iterator();
@@ -198,7 +195,64 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 
 		return closestFruit;
 	}
-	
+
+	/**
+	 * Advancing by a single step 
+	 * if the player is already close enough to the next point or step >= steps then
+	 * calculating a new point by calling the "nextPoint()" function. <br>
+	 * NOTE: the three function "nextStep()", "nextPoint() and "nextPath()" are integrated inside each-other
+	 */
+	private void nextStep() {
+		++step; // increase the step counter
+		// if the player is close enough to destination point (next point) then just get the next point.
+		if(step >= steps || this.c.distance3d(player.getPoint(), nextPoint) < player.getSpeed()/10 )
+				nextPoint();
+
+		System.out.println(step+"/"+steps);
+	}
+
+	/**
+	 * Advancing by a single point in calculated path. 
+	 * if the path is over then calculating a new path by calling the "nextPath()" function. <br>
+	 * NOTE: the three function "nextStep()", "nextPoint() and "nextPath()" are integrated inside each-other
+	 */
+	private void nextPoint() {
+		if(path != null && path.getPointAmount() > 0 && iterPath.hasNext()) {
+
+			Point3D prevPoint = player.getPoint();
+			
+			// fix: if not close enough to the point.
+			if(!(this.c.distance3d(player.getPoint(), nextPoint) > player.getSpeed()/10)) 
+				nextPoint = iterPath.next();
+
+
+			// calculate number of steps required to reach the next point.
+			step = 0;
+			steps = (int) Math.round(this.c.distance3d(prevPoint, nextPoint)*11/player.getSpeed()) + 1;
+			
+			System.out.println("New Point: "+step+"/"+steps);
+		} else nextPath();
+
+	}
+
+	/**
+	 * Advancing to the next objective by calculating the path using the path algorithm given to this object.
+	 * NOTE: the three function "nextStep()", "nextPoint() and "nextPath()" are integrated inside each-other
+	 */
+	private void nextPath() {
+		Fruit closestFruit = calculateClosestFruitPosition();
+		// Use the path finding algorithm to calculate the path to reach the fruit position.
+		path = pathAlgorithm.calculate(player.getPoint(), closestFruit.getPoint());
+		MyFrame.getInstance().path = path; // TEMP
+		if(path.getPointAmount() <= 1)
+			return; // return default.
+
+		iterPath = path.iterator();
+		nextPoint = iterPath.next();
+		
+		nextPoint();
+	}
+
 	/**
 	 * Sonic movement algorithm.
 	 */
@@ -206,22 +260,21 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 	public void calculate() {
 		calcPacmanPathV2();
 	}
-	
+
 	@Override
 	public double getPlayerOrientation() {
-		Fruit closestFruit = calculateClosestFruitPosition();
-		// TEMP: TODO: FINISH USING THE PATH FINDING ALGORITHM INSTEAD
-//		pathAlgorithm.refreshGameStatus(game);
-//		Path path = pathAlgorithm.calculate(player.getPoint(), closestFruit.getPoint());
+		nextStep();
 
-		double orientation = 360 -  this.c.azimuth_elevation_dist(player.getPoint(), closestFruit.getPoint())[0] + 90;
+		double orientation = 360 -  this.c.azimuth_elevation_dist(player.getPoint(), nextPoint)[0] + 90;
 		if(orientation > 360)
 			orientation -= 360;
 		if(orientation < 0)
 			orientation += 360;
+		System.out.println("*Orientation: "+orientation + " | *to: "+(game.getMap().getLocationOnScreen(nextPoint)));
+		System.out.println("*Distance: "+this.c.distance3d(player.getPoint(), nextPoint));
 		return orientation; 
 	}
-	
+
 	@Override
 	public Point3D getPlayerStartPosition() {
 		Point3D point;
@@ -233,6 +286,24 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 		}
 		return point;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -29,18 +29,17 @@ public class AutoRun extends Thread {
     public void run() {
         double orientation;
         while(this.play.isRuning()) {
-        	
-        	if(robot != null)
+
+        	if(robot != null) {
+        		robot.setNewGameStatus(GUI.getGame());
         		orientation = robot.getOrientation();
+        	}
         	else orientation = GUI.getGame().getPlayer().getOrientation();
             
             // advance game by a single step
             play.rotate(orientation);
             // refresh - repaint panel
             GUI.repaint();
-            // Temp
-            if(robot != null)
-            	robot.setNewGameStatus(new Game(play.getBoard()));
             
             try {
                 Thread.sleep(refreshDelayRate);

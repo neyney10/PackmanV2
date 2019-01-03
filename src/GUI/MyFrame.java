@@ -40,6 +40,7 @@ import Geom.Point3D;
 import Maps.Map;
 import Maps.MapFactory;
 import Maps.MapFactory.MapType;
+import Path.Path;
 import Path.Solution;
 import Robot.Play;
 
@@ -89,6 +90,9 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 */
 	private static final long serialVersionUID = 121312L;
 
+	// temp
+	public Path path;
+	
 	/**
 	 * Get this Singleton's instance.
 	 * 
@@ -530,7 +534,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * running the current game.
 	 */
 	public void runGame() {
-		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty()) // || simulating
+		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty() || jb.getMap() == null) // || simulating
 			return;
 
 		Point3D playerPos3D = jb.getGame().getPlayer().getPoint();
@@ -547,7 +551,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		jb.repaint();
 		
 		// TEMP
-		AutoRun autoRun = new AutoRun(jb, 33);
+		AutoRun autoRun = new AutoRun(jb, 70);
 		autoRun.addAutomaticRobot(robot);
 		autoRun.start();
 

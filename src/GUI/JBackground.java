@@ -88,7 +88,7 @@ public class JBackground extends JPanel implements MouseListener {
 			double angle = game.getPlayer().getOrientation();
 			game.refreshGameStatus(play.getBoard());
 			game.getPlayer().setOrientation(angle);
-			
+
 		}
 		
 
@@ -139,8 +139,17 @@ public class JBackground extends JPanel implements MouseListener {
 
 			path.paint(g, m);
 		}
+		
+		
+		// TEMP
+		path = null;
+		if(MyFrame.getInstance().path != null)
+		path = MyFrame.getInstance().path;
+		if (path != null && path.getPointAmount() >= 2)
+			path.paint(g, game.getMap());
+		
 
-
+			
 	}
 
 

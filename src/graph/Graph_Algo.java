@@ -127,7 +127,9 @@ public class Graph_Algo
                     }
                 }
             }
-
+            if(min_node == null)
+            	System.out.println("*DEBUG: min_node is NULL [Graph_Algo]");
+            
             ++non_white;
             min_node.get_info()._color = 1;
             min_node.get_info()._temp_path.addAll(source_node.get_info()._temp_path);

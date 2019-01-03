@@ -28,6 +28,7 @@ public class Graph
         boolean ans = false;
         if (!this.exist(d))
         {
+        	d.set_id(_nodes.size());
             this._nodes.add(d);
             ans = true;
         }
