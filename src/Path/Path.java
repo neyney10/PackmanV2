@@ -60,6 +60,15 @@ public class Path {
 		return points.size();
 	}
 
+	
+	/**
+	 * return the last point in this path
+	 * @return Point3D last point.
+	 */
+	public Point3D getLast() {
+		return points.getLast();
+	}
+
 
 	/**
 	 * RETURNS THE SIZE IN METERS

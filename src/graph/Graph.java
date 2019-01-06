@@ -180,4 +180,16 @@ public class Graph
         }
 
     }
+    
+//    public void remove(String nodeName) {
+//    	Node node = getNodeByName(nodeName);
+//    	
+//    	if(node == null)
+//    		return;
+//    	
+//    	_nodes.remove(node);
+// 
+//    	for(int i = 0; i < _nodes.size() ; i++)
+//    		_nodes.get(i).set_id(i);
+//    }
 }

@@ -8,7 +8,6 @@ import Robot.Play;
 public class AutomaticRobot {
 	
 	RobotAlgorithm algorithm;
-	Player player;
 	
 	public AutomaticRobot(RobotAlgorithm algorithm) {
 		this.algorithm = algorithm;

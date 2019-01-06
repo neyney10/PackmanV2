@@ -38,6 +38,7 @@ public class SonicAlgorithmV1 implements RobotAlgorithm {
 	}
 
 	public void refreshGameStatus(Game game) {
+		
 		Iterator<GameObject> iter;
 
 		// PACMANS
@@ -73,7 +74,9 @@ public class SonicAlgorithmV1 implements RobotAlgorithm {
 		// a Cost comperator for sorting the "distCost" data structure.
 		CostComperator costComp = new CostComperator();
 
-
+		if(pacmans.size() ==0)
+			return;
+		
 		double time;
 		Path path;
 		Point3D startingPoint;
@@ -146,6 +149,9 @@ public class SonicAlgorithmV1 implements RobotAlgorithm {
 		Point3D p, latestPoint = null;
 		PathPoint pp;
 		for(Packman pacman : pacmans) {
+			if(pacman.getPath() == null)
+				return fruits.get(0).getPoint();
+			
 			Iterator<Point3D> iterPath = pacman.getPath().iterator();
 			while(iterPath.hasNext()) {
 				p = iterPath.next();
@@ -197,6 +203,9 @@ public class SonicAlgorithmV1 implements RobotAlgorithm {
 	@Override
 	public double getPlayerOrientation() {
 		Fruit closestFruit = calculateClosestFruitPosition();
+		if(closestFruit == null)
+			return 0; //default
+		
 		double orientation = 360 -  this.c.azimuth_elevation_dist(player.getPoint(), closestFruit.getPoint())[0] + 90;
 		if(orientation > 360)
 			orientation -= 360;
@@ -210,6 +219,8 @@ public class SonicAlgorithmV1 implements RobotAlgorithm {
 		Point3D point;
 		try {
 			point = findLatestEatenFruitPosition();
+			if(point == null) 
+				point = fruits.get(0).getPoint();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

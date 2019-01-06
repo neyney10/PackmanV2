@@ -1,6 +1,8 @@
 package GUI;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -44,7 +46,8 @@ public class JBackground extends JPanel implements MouseListener {
 	private Game game;
 	private Map map;
 	private Play play; // Boaz's Play object manager/server
-
+	private boolean showStatistics;
+	
 	// for box creation with mouse click
 	private Point3D pbox1, pbox2;
 
@@ -63,6 +66,9 @@ public class JBackground extends JPanel implements MouseListener {
 
 		// default play game
 		play = new Play();
+		
+		//default showing statistics
+		setShowStatistics(true);
 	}
 
 	public JBackground(Game game) {
@@ -83,14 +89,13 @@ public class JBackground extends JPanel implements MouseListener {
 
 		// set new Game object from play.getBoard();
 		if (play.isRuning()) {
-			//setGame(new Game(play.getBoard()), game.getPlayer().getOrientation());
-			//TEMP
 			double angle = game.getPlayer().getOrientation();
-			game.refreshGameStatus(play.getBoard());
-			game.getPlayer().setOrientation(angle);
+			synchronized (game) {
+				game.refreshGameStatus(play.getBoard());
+				game.getPlayer().setOrientation(angle);
+			}
 
 		}
-		
 
 		Point position;
 		GameObject obj;
@@ -107,8 +112,8 @@ public class JBackground extends JPanel implements MouseListener {
 				int width, height;
 				width = Math.abs(position2.x - position.x);
 				height = Math.abs(position2.y - position.y);
-				
-				
+
+
 				g.fillRect(position.x, position.y, (int)(width),(int) (height));
 				continue;
 			} else if (obj instanceof Player) {
@@ -117,19 +122,20 @@ public class JBackground extends JPanel implements MouseListener {
 			}
 
 			g.drawImage(
-				obj.getSpirit(),
-			 	position.x - obj.getInitialWidth() / 2,
-				position.y - obj.getInitialHeight() / 2, 
-				(int) (obj.getInitialWidth() * map.getScaleFactorX()),
-				(int) (obj.getInitialHeight() * map.getScaleFactorY()), 
-				this);
+					obj.getSpirit(),
+					position.x - obj.getInitialWidth() / 2,
+					position.y - obj.getInitialHeight() / 2, 
+					(int) (obj.getInitialWidth() * map.getScaleFactorX()),
+					(int) (obj.getInitialHeight() * map.getScaleFactorY()), 
+					this);
 		}
+		if(showStatistics)
+			paintGameStatistics(g, 5, 5);
 
 		Iterator<GameObject> iterp = game.typeIterator(new Packman(0));
 
 		Packman p;
 		Path path;
-
 		while (iterp.hasNext()) {
 			p = (Packman) iterp.next();
 			path = p.getPath();
@@ -139,17 +145,63 @@ public class JBackground extends JPanel implements MouseListener {
 
 			path.paint(g, m);
 		}
-		
-		
+
+
 		// TEMP
 		path = null;
 		if(MyFrame.getInstance().path != null)
-		path = MyFrame.getInstance().path;
+			path = MyFrame.getInstance().path;
 		if (path != null && path.getPointAmount() >= 2)
 			path.paint(g, game.getMap());
-		
 
+
+
+	}
+
+	/**
+	 * Painting Play.getStatistics() with a small blue panel
+	 * @param g - graphics object to draw with/on
+	 * @param x - x position on screen to start painting
+	 * @param y - y position on screen to start painting
+	 */
+	private void paintGameStatistics(Graphics g, int x,int y) {
+		Graphics2D g2d = (Graphics2D) g;
+
+		// COLOR
+		int alpha = 127; // 50% transparent
+		Color rectColor = new Color(111, 111, 222, alpha);
+		Color headColor = new Color(55, 55, 244, alpha+35);
+		Color borderColor = new Color(55, 55, 155, alpha+55);
+
+		// FONT
+		int fontSize = 16;
+		Font textFont = new Font("Arial", Font.BOLD, fontSize);
+
+		// SET CUSTOMIZED CONFIGURATION
+		g.setColor(rectColor);
+		g.setFont(textFont);
+		int lineSpace = 6;
+		int overflowBarrier = 23;
+		int roundDiameter = 15;
+
+		g2d.fillRoundRect(x, y, 200, 133, roundDiameter, roundDiameter);
+		g.setColor(headColor);
+		g2d.fillRoundRect(x, y, 200, 22, roundDiameter, roundDiameter);
+		g.setColor(borderColor);
+		g2d.setStroke(new BasicStroke(2));
+		g2d.drawRoundRect(x, y, 200, 133,roundDiameter,roundDiameter);
+
+		g.setColor(Color.BLACK);
+
+		String[] lines = play.getStatistics().split(",");
+		for(String line : lines) {
+			if(line.length() > overflowBarrier)
+				line = line.substring(0, overflowBarrier);
 			
+		    g.drawString(line, x+8, y+fontSize);
+			y += fontSize+lineSpace;
+		}
+
 	}
 
 
@@ -189,6 +241,7 @@ public class JBackground extends JPanel implements MouseListener {
 			double angle = m.getAngleRaw(playerPos2D, e.getPoint()) + 90;
 			play.rotate(angle);
 			game.getPlayer().setOrientation(angle);
+			repaint();
 			return;
 		} else if (!dropMode || dropItem == null)
 			return;
@@ -393,6 +446,20 @@ public class JBackground extends JPanel implements MouseListener {
 			return;
 
 		game.getMap().updateScreenRange(width, height);
+	}
+
+	/**
+	 * @return the showStatistics
+	 */
+	public boolean isShowStatistics() {
+		return showStatistics;
+	}
+
+	/**
+	 * @param showStatistics the showStatistics to set
+	 */
+	public void setShowStatistics(boolean showStatistics) {
+		this.showStatistics = showStatistics;
 	}
 
 }

@@ -30,7 +30,7 @@ import Path.Path;
  * [3] then in every game's step call getPlayerOrientation to calculate next move.
  * @author Ofek Bader
  */
-public class SonicAlgorithmV2 implements RobotAlgorithm {
+public class SonicAlgorithmV3 implements RobotAlgorithm {
 
 	////////////////////////
 	// Game's status data //
@@ -40,7 +40,7 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 	public ArrayList<Box> boxes; // list of boxes
 	Player player; // player object itself
 	Game game; // game's object.
-	
+
 	///////////////////
 	// Path handling //
 	///////////////////
@@ -49,20 +49,23 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 	Iterator<Point3D> iterPath; // players' path iterator.
 	Point3D nextPoint; // the current next position the player is going to.
 	int step, steps;
-	
+
 	////////////////
 	// utillities //
 	////////////////
 	MyCoords c = new MyCoords(); 
 	boolean calculated = false; // TODO
 
-	
+	/// OTHER ///
+	LinkedList<Cost> costs;
+
+
 	/**
 	 * [Constructor] <br>
 	 * Create a new Sonic Algorithm Version 2.0, supply a path Finding algorithm for reaching next's goal.
 	 * @param algorithm Path-Finding algorithm.
 	 */
-	public SonicAlgorithmV2(RobotPathFindingAlgorithm algorithm) {
+	public SonicAlgorithmV3(RobotPathFindingAlgorithm algorithm) {
 		this.pathAlgorithm = algorithm;
 	}
 
@@ -72,7 +75,7 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 	 * @param game - game object to refresh game status, calling "refreshGameStatus(game)".
 	 * @param algorithm Path-Finding algorithm.
 	 */
-	public SonicAlgorithmV2(Game game, RobotPathFindingAlgorithm algorithm) {
+	public SonicAlgorithmV3(Game game, RobotPathFindingAlgorithm algorithm) {
 		this(algorithm);
 		refreshGameStatus(game);
 	}
@@ -100,7 +103,21 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 			boxes.add((Box) iter.next().clone()); 
 
 		player = game.getPlayer();
+		
+		
+		// temp X2
+		if(path != null) {
+			boolean found = false;
+			for(int i =0; i< fruits.size();i++) {
+				if(fruits.get(i).getPoint().equals(path.getLast())) {
+					found = true;
+					break;
+				}
 
+			}
+			if(!found)
+				nextPath();
+		}
 
 	}
 
@@ -115,7 +132,7 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 
 		Cost cost;
 		double time, totalTime = 0;
-		LinkedList<Cost> costs = new LinkedList<>();
+		costs = new LinkedList<>();
 		// a Cost comparator for sorting the "distCost" data structure.
 		CostComperator costComp = new CostComperator();
 		LinkedList<Fruit> tempFruits = new LinkedList(fruits);
@@ -176,8 +193,6 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 		temp.forEach((pack, point) -> {
 			pack.setPoint(point);
 		});
-
-
 
 	}
 
@@ -243,7 +258,7 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 		++step; // increase the step counter
 		// if the player is close enough to destination point (next point) then just get the next point.
 		if(step >= steps || this.c.distance3d(player.getPoint(), nextPoint) < player.getSpeed()/10 )
-				nextPoint();
+			nextPoint();
 
 		//System.out.println(step+"/"+steps);
 	}
@@ -257,7 +272,7 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 		if(path != null && path.getPointAmount() > 0 && iterPath.hasNext()) {
 
 			Point3D prevPoint = player.getPoint();
-			
+
 			// fix: if not close enough to the point.
 			if(!(this.c.distance3d(player.getPoint(), nextPoint) > player.getSpeed()/10)) 
 				nextPoint = iterPath.next();
@@ -265,7 +280,7 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 			// calculate number of steps required to reach the next point.
 			step = 0;
 			steps = (int) Math.round(this.c.distance3d(prevPoint, nextPoint)*11/player.getSpeed()) + 1;
-			
+
 			//System.out.println("New Point: "+step+"/"+steps);
 		} else nextPath();
 
@@ -276,19 +291,63 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 	 * NOTE: the three functions "nextStep()", "nextPoint() and "nextPath()" are integrated inside each-other
 	 */
 	private void nextPath() {
-		Fruit closestFruit = calculateClosestFruitPosition();
-		if(closestFruit == null) // if there are not more fruits to find
+		calculate();
+		DijkstraAlgorithm da = new DijkstraAlgorithm(game);
+		Point3D dest[]  = new Point3D[fruits.size()];
+		for(int i =0; i< dest.length;i++)
+			dest[i] = fruits.get(i).getPoint();
+		Path[] paths = da.test(player.getPoint(), dest);
+
+		if(paths.length == 0) {
+			path = null;
 			return;
+		}
+			
 		
-		// Use the path finding algorithm to calculate the path to reach the fruit position.
-		path = pathAlgorithm.calculate(player.getPoint(), closestFruit.getPoint());
+		path = paths[0];
+		double minTime = path.length()/player.getSpeed()*20;
+		int k = 0;
+		boolean fastest = false;
+
+		while(!fastest && k<paths.length) {
+			fastest = true;
+			Iterator<Packman> iterPack = pacmans.iterator();
+			while(iterPack.hasNext()) {
+				Packman pacman = iterPack.next();
+
+				if(pacman.getPath() == null)
+					continue;
+
+				Iterator<Point3D> iterPath = pacman.getPath().iterator();
+				while(iterPath.hasNext()) {
+					Point3D p3d = iterPath.next();
+					PathPoint pp;
+					if(p3d instanceof PathPoint) {
+						pp = (PathPoint) p3d;
+						if(path.getLast().equals(pp)) {
+							//System.out.println("P Time: "+pp.time + "min Time: "+minTime);
+							if(pp.time < minTime) {
+								path = paths[k++];
+								minTime = path.length()*1.49;
+								fastest = false;
+							}
+							break;
+						}
+					}
+				}
+				if(!fastest)
+					break;
+			}
+		}
+		//System.out.println(k);
+		if(k == paths.length)
+			path = paths[0];
+
 		MyFrame.getInstance().path = path; // TEMP
-		if(path.getPointAmount() <= 1)
-			return; // return default.
 
 		iterPath = path.iterator();
 		nextPoint = iterPath.next();
-		
+
 		nextPoint();
 	}
 
@@ -321,10 +380,10 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 		} catch (Exception e) {
 			System.out.println("Error, couldn't calculate pacman's paths, are there any pacmans?");
 		}
-		
+
 		if(point == null)
 			point = fruits.get(0).getPoint();
-		
+
 		return point;
 	}
 

@@ -36,6 +36,9 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 	}
 
 	public void refreshGameStatus(Game game) {
+		if(game == null)
+			return;
+		
 		graph.ResetGraph();
 		this.game = game;
 		Iterator<GameObject> iter;
@@ -67,9 +70,8 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		if(graph == null)
 			return null;
 		
-
 		// clear previous calculations
-		refreshGameStatus(game);
+		//refreshGameStatus(game);
 		graph.clear_meta_data();
 		
 		Vertex sourceNode = new Vertex("0"+source, source);
@@ -93,7 +95,6 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 				distance = mc.distance3d(destination, node.point);
 				graph.addEdge(destinationNode.get_name(),node.get_name(), distance);
 			}
-
 		}
 
 		//System.out.println(graph);
@@ -103,6 +104,24 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		ArrayList<String> pathString = destinationNode.getPath();
 		pathString.add(destinationNode.get_name());
 		return parseNodePath(pathString);
+	}
+	
+	/**
+	 * Test
+	 * @param source
+	 * @return
+	 */
+	public Path[] test(Point3D source, Point3D[] destinations) {
+		Path[] paths = new Path[destinations.length];
+		for(int i = 0 ; i < destinations.length ; i++ ) {
+			paths[i] = calculate(source, destinations[i]);
+		}
+		
+		Arrays.sort(paths, (p1,p2) -> {
+			return (int) (p1.length() - p2.length());
+		});
+		
+		return paths;
 	}
 	
 	private Path parseNodePath(ArrayList<String> nodePath) {
