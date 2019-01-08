@@ -81,6 +81,8 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 	public void refreshGameStatus(Game game) {
 		Iterator<GameObject> iter;
 		this.game = game;
+		pathAlgorithm.refreshGameStatus(game);
+		
 		// PACMANS
 		pacmans = new ArrayList<Packman>();
 		iter = game.typeIterator(new Packman(0));
@@ -112,7 +114,7 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 
 		if(pacmans.size() == 0 || fruits.size() ==0)
 			return;
-
+		
 		Cost cost;
 		double time, totalTime = 0;
 		LinkedList<Cost> costs = new LinkedList<>();
@@ -332,6 +334,13 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 
 
 
+
+	////////////////////// OTHER //////////////////
+
+	@Override
+	public RobotAlgorithm clone() {
+		return new SonicAlgorithmV2(pathAlgorithm.clone());
+	}
 
 
 

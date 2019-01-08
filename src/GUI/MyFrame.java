@@ -175,7 +175,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		menuFont = new Font("Arial", Font.PLAIN, menuFontSize);
 		itemFont = new Font("Arial", Font.PLAIN, itemFontSize);
 
-
 		/*
 		 * pack it up. from last to first generated components to create the 'Z' height
 		 * layer property and stack components
@@ -187,6 +186,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	/**
 	 * Initialize menu bar for this JFrame.
+	 * 
 	 * @return JMenuBar the created menu bar
 	 */
 	private JMenuBar initMenuBar() {
@@ -194,7 +194,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 		menubar.add(initFileMenu());
 		menubar.add(initGameObjectMenu());
-		//menubar.add(initRobotMenu());
+		// menubar.add(initRobotMenu());
 
 		btn_run = new JButton();
 		btn_run.setText("RUN [A]");
@@ -268,6 +268,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	/**
 	 * Initialize menu for files
+	 * 
 	 * @return JMenu file menu
 	 */
 	private JMenu initFileMenu() {
@@ -336,6 +337,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	/**
 	 * Initialize menu for game objects
+	 * 
 	 * @return JMenu game objects menu
 	 */
 	private JMenu initGameObjectMenu() {
@@ -404,7 +406,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			}
 		});
 
-		//TEMP
+		// TEMP
 		JMenuItem gmobjShowStatistics = new JMenuItem("Show statistics");
 		gmobjShowStatistics.setFont(itemFont);
 		gmobjShowStatistics.setCursor(handCursor);
@@ -413,7 +415,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		gmobjShowStatistics.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(jb == null)
+				if (jb == null)
 					return;
 
 				jb.setShowStatistics(!jb.isShowStatistics());
@@ -434,6 +436,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	/**
 	 * Initialize menu for robot
+	 * 
 	 * @return JMenu robot's menu
 	 */
 	private JMenu initRobotMenu() {
@@ -449,7 +452,10 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		strategyAlgorithm1.setIcon(pacmanIcon);
 		strategyAlgorithm1.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) { robot = new AutomaticRobot(new SonicAlgorithmV1()); } });
+			public void actionPerformed(ActionEvent e) {
+				robot = new AutomaticRobot(new SonicAlgorithmV1());
+			}
+		});
 
 		JMenuItem strategyAlgorithm2 = new JMenuItem("Strategy: Sonic-Ver-2.0");
 		strategyAlgorithm2.setFont(itemFont);
@@ -458,7 +464,10 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		strategyAlgorithm2.setIcon(pacmanIcon);
 		strategyAlgorithm2.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) { robot = new AutomaticRobot(new SonicAlgorithmV2(new DijkstraAlgorithm(jb.getGame()))); } });
+			public void actionPerformed(ActionEvent e) {
+				robot = new AutomaticRobot(new SonicAlgorithmV2(new DijkstraAlgorithm(jb.getGame())));
+			}
+		});
 
 		JMenuItem strategyAlgorithm3 = new JMenuItem("Strategy: Sonic-Ver-3.0");
 		strategyAlgorithm3.setFont(itemFont);
@@ -467,8 +476,10 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		strategyAlgorithm3.setIcon(pacmanIcon);
 		strategyAlgorithm3.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) { robot = new AutomaticRobot(new SonicAlgorithmV3(new DijkstraAlgorithm(jb.getGame()))); } });
-
+			public void actionPerformed(ActionEvent e) {
+				robot = new AutomaticRobot(new SonicAlgorithmV3(new DijkstraAlgorithm(jb.getGame())));
+			}
+		});
 
 		menuRobot.add(strategyAlgorithm1);
 		menuRobot.add(strategyAlgorithm2);
@@ -484,7 +495,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		menuMap.setCursor(handCursor);
 		menuMap.setBackground(Color.WHITE);
 		menuMap.setBorder(BorderFactory.createSoftBevelBorder(0));
-
 
 		JMenuItem mapAriel = new JMenuItem("Ariel University");
 		mapAriel.setFont(itemFont);
@@ -562,7 +572,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 				return;
 
 			// TEMP -40
-			jb.updateMapWithNewScreenSize(this.getWidth()-40, this.getHeight()-40);
+			jb.updateMapWithNewScreenSize(this.getWidth() - 40, this.getHeight() - 40);
 
 			if (jb.getGame() == null)
 				return;
@@ -601,7 +611,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * Load game from CSV file.
 	 */
 	public void loadGame() {
-		if(jb == null)
+		if (jb == null)
 			return;
 
 		FileDialog fd = new FileDialog(new Frame(), "Load Game File (CSV)", FileDialog.LOAD);
@@ -609,7 +619,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		fd.setFile("*.csv");
 		fd.setVisible(true);
 
-		if(fd.getFile() == null)
+		if (fd.getFile() == null)
 			return;
 
 		scenario = fd.getFiles()[0].getAbsolutePath();
@@ -665,39 +675,41 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * running the current game.
 	 */
 	public void runGame() {
-		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty() || jb.getMap() == null) // || simulating
+		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty() || jb.getMap() == null || scenario == null) // ||
+																														// simulating
 			return;
 
-		if(robot == null) {
+		jb.setPlay(new Play(scenario));
+		Play play = jb.getPlay();
+
+		if (robot == null) {
 			// Configure PathFinding algorithm for the robot
 			RobotPathFindingAlgorithm pathFinding = new DijkstraAlgorithm(jb.getGame());
 			// Configure Robot tactic algorithm, load it with the path algorithm.
 			RobotAlgorithm algorithm = new SonicAlgorithmV3(pathFinding);
 			// Configure the robot itself with the tactic algorithm and update it status.
-			AutomaticRobot robot = new AutomaticRobot(algorithm);
-		}
+			robot = new AutomaticRobot(algorithm);
+		} else robot = robot.clone();
 		robot.setNewGameStatus(jb.getGame());
 
-
-
-		//get Robot's chosen starting position.
+		// get Robot's chosen starting position.
 		Point3D playerPos3D = robot.getStartingPlayerPosition();
 
-		Play play = jb.getPlay();
 		play.setInitLocation(playerPos3D.y(), playerPos3D.x());
 
 		// start game.
 		play.start();
 		jb.repaint();
 
-		/* Create a thread handler for handling the game's frame-rate/refresh mechanism.
+		/*
+		 * Create a thread handler for handling the game's frame-rate/refresh mechanism.
 		 * give it the robot to handle at each frame.
 		 */
 		autoRun = new AutoRun(jb, 22);
 		autoRun.addAutomaticRobot(robot);
 		autoRun.start();
 
-		if(jb.getPlay().isRuning()) {
+		if (jb.getPlay().isRuning()) {
 			btn_stopSimulation.setVisible(true);
 			btn_run.setVisible(false);
 			btn_run_manual.setVisible(false);
@@ -710,8 +722,9 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			return;
 
 		Point3D playerPos3D = jb.getGame().getPlayer().getPoint();
+		jb.setPlay(new Play(scenario));
 		Play play = jb.getPlay();
-		//play.setIDs(999999888);
+		// play.setIDs(999999888);
 
 		play.setInitLocation(playerPos3D.y(), playerPos3D.x());
 
@@ -722,7 +735,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		autoRun = new AutoRun(jb, 33);
 		autoRun.start();
 
-		if(jb.getPlay().isRuning()) {
+		if (jb.getPlay().isRuning()) {
 			btn_stopSimulation.setVisible(true);
 			btn_run.setVisible(false);
 			btn_run_manual.setVisible(false);
@@ -805,16 +818,16 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * Stop running, stopping simulation
 	 */
 	public void stop() {
-		//if (!simulating)
-		if(jb == null || autoRun == null)
+		// if (!simulating)
+		if (jb == null || autoRun == null)
 			return;
 
-		//simulation.interrupt();
+		// simulation.interrupt();
 		jb.getPlay().stop();
 		autoRun.interrupt();
 
 		try {
-			//simulation.join();
+			// simulation.join();
 			autoRun.join();
 		} catch (InterruptedException e) {
 
@@ -824,19 +837,20 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if (jb == null || jb.getGame() == null)
 			return;
 
-		//		Map map = jb.getGame().getMap();
+		// Map map = jb.getGame().getMap();
 		//
-		//		for (Component co : jb.getComponents()) {
-		//			if (co instanceof GameSpirit) {
-		//				GameSpirit gs = (GameSpirit) co;
-		//				if (gs.getGameObj() instanceof Fruit)
-		//					co.setVisible(true);
-		//				else if (gs.getGameObj() instanceof Packman) {
-		//					map.updateLocationOnScreen(gs, map.transformByScale(map.getLocationOnScreen(gs.getGameObj())));
-		//				}
+		// for (Component co : jb.getComponents()) {
+		// if (co instanceof GameSpirit) {
+		// GameSpirit gs = (GameSpirit) co;
+		// if (gs.getGameObj() instanceof Fruit)
+		// co.setVisible(true);
+		// else if (gs.getGameObj() instanceof Packman) {
+		// map.updateLocationOnScreen(gs,
+		// map.transformByScale(map.getLocationOnScreen(gs.getGameObj())));
+		// }
 		//
-		//			}
-		//		}
+		// }
+		// }
 
 		btn_run.setVisible(true);
 		btn_run_manual.setVisible(true);
@@ -853,12 +867,12 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		JDialog dialog = createRobotDialog();
 		dialog.setModal(true);
 		dialog.setVisible(true);
-		//		if (jb == null || jb.getGame() == null)
-		//			return;
+		// if (jb == null || jb.getGame() == null)
+		// return;
 		//
-		//		// compute paths
-		////		pathFindingAlgorithm = new ShortestPathAlgo(jb.getGame());
-		////		pathFindingAlgorithm.calcPath();
+		// // compute paths
+		//// pathFindingAlgorithm = new ShortestPathAlgo(jb.getGame());
+		//// pathFindingAlgorithm.calcPath();
 
 		// repaint
 		repaint();
@@ -867,17 +881,17 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	public JDialog createRobotDialog() {
 		JDialog dialog = new JDialog(this, "Robot factory! Create your own robot!");
 		dialog.setSize(755, 133);
-		dialog.setLayout(new FlowLayout(1,25,15));
+		dialog.setLayout(new FlowLayout(1, 25, 15));
 
 		// Path's label
 		JLabel lbl_paths = new JLabel("Path Finding Algorithm: ");
 
 		// Path's cmb row descriptions
-		String[] paths = { "Dijkstra" }; 
+		String[] paths = { "Dijkstra" };
 
 		// combo box of path finding algo
 		JComboBox<String> cmb_Path = new JComboBox<>(paths);
-		cmb_Path.addActionListener((e)-> {
+		cmb_Path.addActionListener((e) -> {
 
 		});
 
@@ -885,31 +899,27 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		JLabel lbl_algos = new JLabel("Strategy Algorithm: ");
 
 		// Combo box description of algorithm.
-		RobotAlgorithm[] algos = {
-				new SonicAlgorithmV1(),
-				new SonicAlgorithmV2(null),
-				new SonicAlgorithmV3(null)
-		};
+		RobotAlgorithm[] algos = { new SonicAlgorithmV1(), new SonicAlgorithmV2(null), new SonicAlgorithmV3(null) };
 
 		// combo box of algorithms.
 		JComboBox<RobotAlgorithm> cmb_Algo = new JComboBox<>(algos);
-		cmb_Algo.addActionListener((e)-> {
+		cmb_Algo.addActionListener((e) -> {
 
 		});
 
 		JButton btn_choose = new JButton("Choose Best");
 		btn_choose.addActionListener((e) -> {
-			if(MyFrame.this.scenario == null)
+			if (MyFrame.this.scenario == null)
 				return;
-			
+
 			RobotAlgorithm algorithm;
-			
+
 			JDialog notification = new JDialog();
 			notification.setTitle("This task might take some time... Please wait.");
 			notification.add(new JLabel("Please wait for the robot's simulation to end.."));
 			notification.setSize(300, 100);
 			notification.setVisible(true);
-			
+
 			RobotSimulator simulator = new RobotSimulator();
 			simulator.addAlgorithm(new SonicAlgorithmV1());
 			simulator.addAlgorithm(new SonicAlgorithmV2(new DijkstraAlgorithm(jb.getGame())));
@@ -921,7 +931,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 			System.out.println("[Robot Factory] Created the robot we can make!");
 
-			
 			notification.setVisible(false);
 			notification.dispose();
 			dialog.setVisible(false);
@@ -935,7 +944,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			Game game = MyFrame.this.jb.getGame();
 			RobotPathFindingAlgorithm pathAlgorithm = new DijkstraAlgorithm(game);
 			RobotAlgorithm strategyAlgorithm = null;
-			switch(ind) {
+			switch (ind) {
 			case 0:
 				strategyAlgorithm = new SonicAlgorithmV1();
 				break;
@@ -947,8 +956,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 				break;
 			}
 
-
-			MyFrame.this.robot = new AutomaticRobot(strategyAlgorithm); 
+			MyFrame.this.robot = new AutomaticRobot(strategyAlgorithm);
 
 			System.out.println("[Robot Factory] Created a new Robot!");
 
@@ -964,7 +972,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		dialog.add(btn_submit);
 
 		return dialog;
-
 
 	}
 

@@ -10,7 +10,7 @@ import Geom.Point3D;
  * starting position the robot's think is best according to the strategy.
  * @author Ofek Bader
  */
-public interface RobotAlgorithm {
+public interface RobotAlgorithm extends Cloneable {
 	
 	/**
 	 * Calculate strategy, recommended if not must to call this function before making
@@ -38,4 +38,10 @@ public interface RobotAlgorithm {
 	 * @param game
 	 */
 	public void refreshGameStatus(Game game);
+	
+	/**
+	 * Clones this algorithm
+	 * @return same type of algorithm, different instance.
+	 */
+	public RobotAlgorithm clone();
 }

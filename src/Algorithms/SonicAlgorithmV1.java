@@ -229,6 +229,27 @@ public class SonicAlgorithmV1 implements RobotAlgorithm {
 	}
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//////////// OTHER ////////////
+	
+
+	@Override
+	public RobotAlgorithm clone() {
+		return new SonicAlgorithmV1();
+	}
+
+	
 
 
 

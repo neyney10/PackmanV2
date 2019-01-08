@@ -106,23 +106,8 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		return parseNodePath(pathString);
 	}
 	
-	/**
-	 * Test
-	 * @param source
-	 * @return
-	 */
-	public Path[] test(Point3D source, Point3D[] destinations) {
-		Path[] paths = new Path[destinations.length];
-		for(int i = 0 ; i < destinations.length ; i++ ) {
-			paths[i] = calculate(source, destinations[i]);
-		}
-		
-		Arrays.sort(paths, (p1,p2) -> {
-			return (int) (p1.length() - p2.length());
-		});
-		
-		return paths;
-	}
+	
+
 	
 	private Path parseNodePath(ArrayList<String> nodePath) {
 		Path path = new Path();
@@ -172,7 +157,7 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		Point upperLeftP = map.getLocationOnScreen(box.getMin());
 		Point lowerRightP = map.getLocationOnScreen(box.getMax());
 
-		int shift = 10;
+		int shift = (int)(10*map.getScaleFactorX()+map.getScaleFactorY()/2);
 
 		Point lowerLeftP, upperRightP;
 		lowerLeftP = new Point(upperLeftP.x - shift, lowerRightP.y + shift);
@@ -207,6 +192,12 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 //				+ " | "+graph.getNodeByName(""+(lowerLeft)));
 //
 //			System.out.println(upperLeftP+" | "+ lowerRightP + " | " + upperRightP + " | "+ lowerLeftP);
+	}
+	
+	@Override
+	public DijkstraAlgorithm clone() {
+		DijkstraAlgorithm cl = new DijkstraAlgorithm(game);
+		return cl;
 	}
 }
 

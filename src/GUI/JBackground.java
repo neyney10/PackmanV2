@@ -97,6 +97,8 @@ public class JBackground extends JPanel implements MouseListener {
 
 		}
 
+		
+		Image img;
 		Point position;
 		GameObject obj;
 		Map m = game.getMap();
@@ -118,19 +120,22 @@ public class JBackground extends JPanel implements MouseListener {
 				continue;
 			} else if (obj instanceof Player) {
 				Player player = (Player) obj;
-				player.setSpirit(MyFrame.rotateImage(player.getSpirit(), (int) player.getOrientation()));
-			}
+				img = MyFrame.rotateImage(player.getSpirit(), (int) player.getOrientation());
+				
+			} else img = obj.getSpirit();
 
 			g.drawImage(
-					obj.getSpirit(),
+					img,
 					position.x - obj.getInitialWidth() / 2,
 					position.y - obj.getInitialHeight() / 2, 
 					(int) (obj.getInitialWidth() * map.getScaleFactorX()),
 					(int) (obj.getInitialHeight() * map.getScaleFactorY()), 
 					this);
 		}
-		if(showStatistics)
+		if(showStatistics) {
 			paintGameStatistics(g, 5, 5);
+			paintScenarioStatistics(g, 210, 5);
+		}
 
 		Iterator<GameObject> iterp = game.typeIterator(new Packman(0));
 
@@ -202,6 +207,49 @@ public class JBackground extends JPanel implements MouseListener {
 			y += fontSize+lineSpace;
 		}
 
+	}
+	
+	/**
+	 * Painting statistics from DB with a small green panel
+	 * @param g - graphics object to draw with/on
+	 * @param x - x position on screen to start painting
+	 * @param y - y position on screen to start painting
+	 */
+	private void paintScenarioStatistics(Graphics g, int x, int y) {
+		Graphics2D g2d = (Graphics2D) g;
+	
+
+		// COLOR
+		int alpha = 127; // 50% transparent
+		Color rectColor = new Color(80, 155, 55, alpha);
+		Color headColor = new Color(55, 160, 111, alpha+35);
+		Color borderColor = new Color(100, 122, 111, alpha+55);
+
+		// FONT
+		int fontSize = 16;
+		Font textFont = new Font("Arial", Font.BOLD, fontSize);
+
+		// SET CUSTOMIZED CONFIGURATION
+		g.setColor(rectColor);
+		g.setFont(textFont);
+		int lineSpace = 6;
+		int roundDiameter = 15;
+
+		g2d.fillRoundRect(x, y, 200, 66, roundDiameter, roundDiameter);
+		g.setColor(headColor);
+		g2d.fillRoundRect(x, y, 200, 22, roundDiameter, roundDiameter);
+		g.setColor(borderColor);
+		g2d.setStroke(new BasicStroke(2));
+		g2d.drawRoundRect(x, y, 200, 66,roundDiameter,roundDiameter);
+
+		g.setColor(Color.BLACK);
+		y += fontSize;
+		g.drawString("Average Score ", x+8, y);
+		y += fontSize + lineSpace;
+		g.drawString("This Scenario: 186.41", x+8, y);
+		y += fontSize + lineSpace;
+		g.drawString("All Scenarios: 59.123", x+8, y);
+		
 	}
 
 
@@ -322,18 +370,7 @@ public class JBackground extends JPanel implements MouseListener {
 		if (game.getMap() == null)
 			game.setMap(this.map);
 
-		//NOTE: TEMP
-		SonicAlgorithmV2 sa = new SonicAlgorithmV2(game, null);
-		sa.calcPacmanPathV2();
-		TreeSet<GameObject> ts = new TreeSet<>();
-		ts.addAll(sa.fruits);
-		ts.addAll(sa.pacmans);
-		ts.addAll(sa.boxes);
-		this.game.setObjects(ts);
-		Point3D p;
-		if((p = sa.findLatestEatenFruitPosition()) != null)
-			System.out.println(p +" | "+ game.getMap().getLocationOnScreen(p));
-
+	
 		refreshGameUI();
 
 	}

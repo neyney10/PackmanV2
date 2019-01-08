@@ -53,6 +53,7 @@ public class AutoRun extends Thread {
 		System.out.println("***** Game Statistics *******");
 		System.out.println(play.getStatistics());
 		GUI.repaint();
+		
 	}
 
 

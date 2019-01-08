@@ -26,6 +26,8 @@ public class Game implements BasicGameSpiritFactory {
     private Map map;
     // id counter for GameObjects.
     private int id = 0;
+    
+    private double gameScore = 0;
 
     /**
      * [Constructor] <br>
@@ -160,6 +162,21 @@ public class Game implements BasicGameSpiritFactory {
     	return objects.subSet(lowestObject, heighestObject).iterator();
     }
     
+    /**
+     * Get this game's score.
+     * @return game score in double
+     */
+    public double getGameScore() {
+    	return this.gameScore;
+    }
+    
+    /**
+     * Set this game's score.
+     * @param score
+     */
+    public void setGameScore(double score) {
+    	this.gameScore = score;
+    }
 
     /**
      * Get the Game's map.
