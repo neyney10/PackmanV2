@@ -71,10 +71,7 @@ public class JBackground extends JPanel implements MouseListener {
 		setShowStatistics(true);
 	}
 
-	public JBackground(Game game) {
-		this();
-		setGame(game);
-	}
+	
 
 	@Override
 	protected void paintComponent(Graphics g) {
