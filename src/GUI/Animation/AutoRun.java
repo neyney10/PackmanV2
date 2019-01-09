@@ -7,6 +7,12 @@ import GUI.JBackground;
 import Game.Game;
 import Robot.Play;
 
+/**
+ * AutoRun class is a thread which simply calls "panel.repaint" and "play.rotate" on every step.
+ * between each step the thread sleeps for "RefreshDelayRate" milliseconds.
+ * @author neyne
+ *
+ */
 public class AutoRun extends Thread {
 
 	private JBackground GUI;
@@ -14,6 +20,12 @@ public class AutoRun extends Thread {
 	private Play play;
 	private AutomaticRobot robot;
 
+	/**
+	 * [Constructor] <br>
+	 * Create a new Auto Run thread for auto running the game frame rate.
+	 * @param GUI
+	 * @param refreshDelayRate milliseconds delay between each step/frame 
+	 */
 	public AutoRun(JBackground GUI, int refreshDelayRate) {
 		this.GUI = GUI;
 		this.refreshDelayRate = refreshDelayRate;
@@ -21,6 +33,10 @@ public class AutoRun extends Thread {
 		setDaemon(true);
 	}
 
+	/**
+	 * Add an automatic robot as a player to this auto run.
+	 * @param robot - the automatic robot to assign.
+	 */
 	public void addAutomaticRobot(AutomaticRobot robot) {
 		this.robot = robot;
 	}

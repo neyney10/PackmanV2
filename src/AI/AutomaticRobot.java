@@ -1,10 +1,7 @@
 package AI;
 import Algorithms.RobotAlgorithm;
-import Algorithms.SonicAlgorithmV3;
 import Game.Game;
-import GameObjects.Player;
 import Geom.Point3D;
-import Robot.Play;
 
 /**
  * An automatic robot which plays the game with the "Play" offline server.

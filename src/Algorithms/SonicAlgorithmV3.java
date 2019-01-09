@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import Coords.MyCoords;
-import GUI.JBackground;
-import GUI.MyFrame;
 import Game.Game;
 import GameObjects.Box;
 import GameObjects.Fruit;
@@ -36,9 +34,9 @@ public class SonicAlgorithmV3 implements RobotAlgorithm, Cloneable {
 	////////////////////////
 	// Game's status data //
 	////////////////////////
-	public ArrayList<Packman> pacmans; // list of pacmans
-	public ArrayList<Fruit>  fruits; // list of fruits
-	public ArrayList<Box> boxes; // list of boxes
+	private ArrayList<Packman> pacmans; // list of pacmans
+	private ArrayList<Fruit>  fruits; // list of fruits
+	private ArrayList<Box> boxes; // list of boxes
 	Player player; // player object itself
 	Game game; // game's object.
 
@@ -248,32 +246,6 @@ public class SonicAlgorithmV3 implements RobotAlgorithm, Cloneable {
 	}
 
 	/**
-	 * Get the closest fruit to player, in raw air-distance calculation.
-	 * @return Closest fruit.
-	 */
-	private Fruit calculateClosestFruitPosition() {
-		// iterator of fruits
-		Iterator<Fruit> iterFruit;
-		// reference holder to the cloest fruit
-		Fruit closestFruit = null;
-
-		double distance, minDistance = Double.MAX_VALUE;
-		Fruit fruit; // reference holder
-		iterFruit = fruits.iterator();
-		while(iterFruit.hasNext()) {
-			fruit = iterFruit.next();
-			// calculate distance between the pacman and fruit.
-			distance = c.distance3d(player.getPoint(), fruit.getPoint());
-			if(distance < minDistance) {
-				minDistance = distance;
-				closestFruit = fruit;
-			}
-		}
-
-		return closestFruit;
-	}
-
-	/**
 	 * Advancing by a single step 
 	 * if the player is already close enough to the next point or step >= steps then
 	 * calculating a new point by calling the "nextPoint()" function. <br>
@@ -380,8 +352,6 @@ public class SonicAlgorithmV3 implements RobotAlgorithm, Cloneable {
 		if(k == paths.length)
 			path = paths[0];
 
-		MyFrame.getInstance().path = path; // TEMP
-
 		iterPath = path.iterator();
 		nextPoint = iterPath.next();
 
@@ -418,7 +388,7 @@ public class SonicAlgorithmV3 implements RobotAlgorithm, Cloneable {
 			System.out.println("Error, couldn't calculate pacman's paths, are there any pacmans?");
 		}
 
-		if(point == null)
+		if(point == null && fruits.size() > 0)
 			point = fruits.get(0).getPoint();
 
 		return point;

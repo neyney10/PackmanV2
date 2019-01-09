@@ -93,7 +93,7 @@ public class RobotSimulator {
 
 	/**
 	 * Returns the best algorithm simulated.
-	 * @return
+	 * @return the best RobotAlgorithm 
 	 */
 	public RobotAlgorithm getBest() {
 		return bestAlgorithm;

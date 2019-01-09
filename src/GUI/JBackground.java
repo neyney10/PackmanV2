@@ -82,7 +82,7 @@ public class JBackground extends JPanel implements MouseListener {
 			g.drawImage(this.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
 			return;
 		} else
-			g.drawImage(game.getMap().getBackground(), 0, 0, getWidth(), getHeight(), this);
+			g.drawImage(game.getMap().getBackground(), 0, 0, getWidth()-15, getHeight()-65, this);
 
 		// set new Game object from play.getBoard();
 		if (play.isRuning()) {
@@ -98,7 +98,7 @@ public class JBackground extends JPanel implements MouseListener {
 		Image img;
 		Point position;
 		GameObject obj;
-		Map m = game.getMap();
+		Map m = game.getMap(); 
 		Iterator<GameObject> iter = game.iterator();
 		while (iter.hasNext()) {
 			obj = iter.next();
@@ -133,29 +133,6 @@ public class JBackground extends JPanel implements MouseListener {
 			paintGameStatistics(g, 5, 5);
 			paintScenarioStatistics(g, 210, 5);
 		}
-
-		Iterator<GameObject> iterp = game.typeIterator(new Packman(0));
-
-		Packman p;
-		Path path;
-		while (iterp.hasNext()) {
-			p = (Packman) iterp.next();
-			path = p.getPath();
-
-			if (path == null || path.getPointAmount() < 2)
-				continue;
-
-			path.paint(g, m);
-		}
-
-
-		// TEMP
-		path = null;
-		if(MyFrame.getInstance().path != null)
-			path = MyFrame.getInstance().path;
-		if (path != null && path.getPointAmount() >= 2)
-			path.paint(g, game.getMap());
-
 
 
 	}
@@ -475,11 +452,11 @@ public class JBackground extends JPanel implements MouseListener {
 	 * @param height screen height
 	 */
 	public void updateMapWithNewScreenSize(int width, int height) {
-		map.updateScreenRange(width, height);
+		map.updateScreenRange(width-15, height-65);
 		if (game == null || game.getMap() == null)
 			return;
 
-		game.getMap().updateScreenRange(width, height);
+		game.getMap().updateScreenRange(width-15, height-65);
 	}
 
 	/**

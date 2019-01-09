@@ -107,7 +107,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	private static final long serialVersionUID = 121312L;
 
 	// temp
-	public Path path;
 	private String scenario;
 
 	/**
@@ -403,8 +402,8 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			if (jb.getMap() == null)
 				return;
 
-			// TEMP -40
-			jb.updateMapWithNewScreenSize(this.getWidth() - 40, this.getHeight() - 40);
+		
+			jb.updateMapWithNewScreenSize(this.getWidth(), this.getHeight());
 
 			if (jb.getGame() == null)
 				return;
@@ -476,6 +475,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 		jb.setPlay(new Play(scenario));
 		Play play = jb.getPlay();
+		jb.setGame(new Game(play.getBoard()));
 
 		if (robot == null) {
 			// Configure PathFinding algorithm for the robot
@@ -764,6 +764,11 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	
 	///////// OTHER ////////
 	
+	/**
+	 * Dialog for entering IDs
+	 * @author Ofek Bader
+	 *
+	 */
 	class DialogID extends JDialog {
 		String[] ids;
 		

@@ -8,10 +8,21 @@ import java.awt.geom.Rectangle2D;
 import GameObjects.Box;
 import Maps.Map;
 
+/**
+ * A logic calculations class of intersection
+ * between two lines or line and a box (rectangle)
+ * @author Neyney
+ *
+ */
 public class Intersect {
 
-    Map map;
+    private Map map;
 
+    /**
+     * [Constructor] <br>
+     * create a new Intersect calculation object.
+     * @param map - for converting geodetic coordinates to pixels for various calculations.
+     */
     public Intersect(Map map) {
         this.map = map;
     }
@@ -46,6 +57,12 @@ public class Intersect {
         return r.intersectsLine(line);
     }
 
+    /**
+     * Checks if the a specific point (2d) is inside a box (rectangle 2d).
+     * @param point - Point to check
+     * @param box - the rectangle to check
+     * @return true if the point is inside the box, false otherwise.
+     */
     public boolean isPointInsideBox(Point point, Box box) {
         // convert Polar coordinates of box into two X,Y pixel coordinates on screen.
         Point topPoint = map.getLocationOnScreen(box.getMin());
@@ -60,8 +77,12 @@ public class Intersect {
         return r.contains(point);
     }
 
+
     /**
-     * @param 
+     * tests if a line intersects with one of the boxes in the given list of boxes.
+     * @param line - the line to check intersection.
+     * @param boxes - the array of boxes to check if the line intersects with.
+     * @return true if the line intersects with one of them, false otherwise
      */
     public boolean isLineIntersectsWithBoxes(Line2D line, Box[] boxes) {
         for(Box box : boxes)

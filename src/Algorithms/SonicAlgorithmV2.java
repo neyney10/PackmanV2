@@ -35,9 +35,9 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 	////////////////////////
 	// Game's status data //
 	////////////////////////
-	public ArrayList<Packman> pacmans; // list of pacmans
-	public ArrayList<Fruit>  fruits; // list of fruits
-	public ArrayList<Box> boxes; // list of boxes
+	private ArrayList<Packman> pacmans; // list of pacmans
+	private ArrayList<Fruit>  fruits; // list of fruits
+	private ArrayList<Box> boxes; // list of boxes
 	Player player; // player object itself
 	Game game; // game's object.
 	
@@ -284,7 +284,7 @@ public class SonicAlgorithmV2 implements RobotAlgorithm {
 		
 		// Use the path finding algorithm to calculate the path to reach the fruit position.
 		path = pathAlgorithm.calculate(player.getPoint(), closestFruit.getPoint());
-		MyFrame.getInstance().path = path; // TEMP
+
 		if(path.getPointAmount() <= 1)
 			return; // return default.
 
