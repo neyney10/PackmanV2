@@ -3,6 +3,8 @@ package GUI.Animation;
 import javax.swing.JPanel;
 
 import AI.AutomaticRobot;
+import DB.DataBase;
+import DB.GameScores;
 import GUI.JBackground;
 import Game.Game;
 import Robot.Play;
@@ -68,8 +70,37 @@ public class AutoRun extends Thread {
 
 		System.out.println("***** Game Statistics *******");
 		System.out.println(play.getStatistics());
+		
+		double[] scores = getScoreDataFromDB();
+		GUI.setAvgAll(scores[0]);
+		GUI.setAvgScenario(scores[1]);
+		GUI.setAvgPlayer(scores[2]);
+		
 		GUI.repaint();
 		
+	}
+	
+	/**
+	 * returns a 3 score result, [0] is the average score of all games and players, [1] is the average score
+	 * of all games in this scenario. [2] is the average of all games of this player in the scenario.
+	 * @return an array of score results from DB
+	 */
+	private double[] getScoreDataFromDB() {
+		DataBase db = new DataBase("jdbc:mysql://ariel-oop.xyz:3306/oop?useUnicode=yes&characterEncoding=UTF-8&useSSL=false",
+				"student", 
+				"student");
+		
+		GameScores gameScores = new GameScores(db);
+		double avgAll = gameScores.averageScoreForAllScenarios();
+		double avgMap = gameScores.averageScoreForScenario(GUI.getScenarioHashCode());
+		double avgPlayer;
+		if(robot == null)
+			avgPlayer = gameScores.averageScoreForScenario(GUI.getScenarioHashCode(), Long.parseLong(GUI.getPlayerID()));
+		else avgPlayer = 0;
+
+		double[] scores = {avgAll, avgMap, avgPlayer};
+		
+		return scores;
 	}
 
 

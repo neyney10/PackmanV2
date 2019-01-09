@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 /**
  *  DataBase :
- *  connect to a data base
+ *  connect to a SQL-Based database, formally built for MySql
  */
 public class DataBase implements DBConnection {
     private Connection connection;

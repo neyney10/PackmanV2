@@ -535,6 +535,8 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		else if(ids.length >= 3)
 			play.setIDs(Long.parseLong(ids[0]),Long.parseLong(ids[1]),Long.parseLong(ids[2]));
 		
+		jb.setPlayerID(ids[0]);
+		
 		// start game.
 		play.start();
 		jb.repaint();

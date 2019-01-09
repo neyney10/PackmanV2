@@ -30,7 +30,7 @@ public class GameScores {
      * @param id int id of user.
      * @return Average of score
      */
-    public double averageScoreForAllScenarios(int id){
+    public double averageScoreForAllScenarios(long id){
         return averageScore("SELECT AVG(Point) FROM logs WHERE FirstID="+id+" OR SecondID="+id+" OR ThirdID="+id+";");
     }
 
@@ -46,10 +46,10 @@ public class GameScores {
     /**
      * averageScoreForScenario gets average score by id and scenario
      * @param scenario int hash of scenario
-     * @param id int id of user.
+     * @param id long id of user.
      * @return Average of score
      */
-    public double averageScoreForScenario(int scenario,int id){
+    public double averageScoreForScenario(int scenario,long id){
         return averageScore("SELECT AVG(Point) FROM logs WHERE SomeDouble="+scenario+" AND ( FirstID="+id+" OR SecondID="+id+" OR ThirdID="+id+");");
     }
 

@@ -12,6 +12,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -53,7 +54,11 @@ public class JBackground extends JPanel implements MouseListener {
 	
 	private String scenario;
 	private int scenarioHashCode;
+	private String playerID;
 	
+	private double avgAll; // average score of all scenarios and games retrieved from the database.
+	private double avgScenario; // average score of all games in this particular last scenario played.
+	private double avgPlayer; // average score of all games of the scenario of the last player played.
 	/**
 	 * [Constructor] <br>
 	 * Creates a new JBackground object, initializing new defualt Map.
@@ -212,20 +217,24 @@ public class JBackground extends JPanel implements MouseListener {
 		int lineSpace = 6;
 		int roundDiameter = 15;
 
-		g2d.fillRoundRect(x, y, 200, 66, roundDiameter, roundDiameter);
+		g2d.fillRoundRect(x, y, 200, 88, roundDiameter, roundDiameter);
 		g.setColor(headColor);
 		g2d.fillRoundRect(x, y, 200, 22, roundDiameter, roundDiameter);
 		g.setColor(borderColor);
 		g2d.setStroke(new BasicStroke(2));
-		g2d.drawRoundRect(x, y, 200, 66,roundDiameter,roundDiameter);
+		g2d.drawRoundRect(x, y, 200, 88,roundDiameter,roundDiameter);
 
+		
+		
 		g.setColor(Color.BLACK);
 		y += fontSize;
 		g.drawString("Average Score ", x+8, y);
 		y += fontSize + lineSpace;
-		g.drawString("This Scenario: 186.41", x+8, y);
+		g.drawString("Your avg in map: "+String.format("%.2f", getAvgPlayer()), x+8, y);
 		y += fontSize + lineSpace;
-		g.drawString("All Scenarios: 59.123", x+8, y);
+		g.drawString("This Scenario: "+String.format("%.2f", getAvgScenario()), x+8, y);
+		y += fontSize + lineSpace;
+		g.drawString("All Scenarios: "+String.format("%.2f", getAvgAll()), x+8, y);
 		
 	}
 
@@ -494,6 +503,78 @@ public class JBackground extends JPanel implements MouseListener {
 	 */
 	public void setShowStatistics(boolean showStatistics) {
 		this.showStatistics = showStatistics;
+	}
+
+
+
+	/**
+	 * @return the avgAll
+	 */
+	public double getAvgAll() {
+		return avgAll;
+	}
+
+
+
+	/**
+	 * @param avgAll the avgAll to set
+	 */
+	public void setAvgAll(double avgAll) {
+		this.avgAll = avgAll;
+	}
+
+
+
+	/**
+	 * @return the avgScenario
+	 */
+	public double getAvgScenario() {
+		return avgScenario;
+	}
+
+
+
+	/**
+	 * @param avgScenario the avgScenario to set
+	 */
+	public void setAvgScenario(double avgScenario) {
+		this.avgScenario = avgScenario;
+	}
+
+
+
+	/**
+	 * @return the avgPlayer
+	 */
+	public double getAvgPlayer() {
+		return avgPlayer;
+	}
+
+
+
+	/**
+	 * @param avgPlayer the avgPlayer to set
+	 */
+	public void setAvgPlayer(double avgPlayer) {
+		this.avgPlayer = avgPlayer;
+	}
+
+
+
+	/**
+	 * @return the playerID
+	 */
+	public String getPlayerID() {
+		return playerID;
+	}
+
+
+
+	/**
+	 * @param playerID the playerID to set
+	 */
+	public void setPlayerID(String playerID) {
+		this.playerID = playerID;
 	}
 
 }
