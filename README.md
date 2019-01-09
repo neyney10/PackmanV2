@@ -84,15 +84,15 @@ Link of wiki: https://github.com/neyney10/PackmanV2/wiki<br>
 our game scores for auto and manaul playing each scenario has different layout for the player to complete <br>
 and at the end of every game will get a score, to rate his gameplay.<br>
 
-- Example 1: manaul: auto: 53.5 <br>
-- Example 2: manaul: auto 80.9 <br>
-- Example 3: manaul: auto 54.8 <br>
-- Example 4: manaul: auto 81.2 <br>
-- Example 5: manaul: auto 81.2 <br>
-- Example 6: manaul: auto 13.0 <br>
-- Example 7: manaul: auto 68.4 <br>
-- Example 8: manaul: auto 20.3 <br>
-- Example 9: manaul: auto 23.9 <br>
+- Example 1: manaul: 27.6 auto: 53.5 <br><br>
+- Example 2: manaul: 64.2 auto: 80.9 <br><br>
+- Example 3: manaul: 45.1 auto: 54.8 <br><br>
+- Example 4: manaul: 81.2 auto: 81.2 <br><br>
+- Example 5: manaul: 81.2 auto: 81.2 <br><br>
+- Example 6: manaul: 12.0 auto: 13.0 <br><br>
+- Example 7: manaul: 46.0 auto: 68.4 <br><br>
+- Example 8: manaul: 20.0 auto: 20.3 <br><br>
+- Example 9: manaul: 21.9 auto: 23.9 <br><br>
 
 
 # Summary of Game's Code Library Structure
