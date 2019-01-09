@@ -12,8 +12,14 @@ import Path.Path;
  * data received from this interface in its calculations.
  * @author Ofek Bader
  */
-public interface RobotPathFindingAlgorithm {
+public interface RobotPathFindingAlgorithm extends Cloneable {
 	
+	/**
+	 * Calculate a path between the source and destination
+	 * @param source Point
+	 * @param destination Point
+	 * @return Path from source to destination
+	 */
 	public Path calculate(Point3D source, Point3D destination);
 	
 	/**
@@ -22,5 +28,11 @@ public interface RobotPathFindingAlgorithm {
 	 * @param game
 	 */
 	public void refreshGameStatus(Game game);
+	
+	/**
+	 * Clone this algorithm
+	 * @return a new instance of this algorithm.
+	 */
+	public RobotPathFindingAlgorithm clone();
 	
 }

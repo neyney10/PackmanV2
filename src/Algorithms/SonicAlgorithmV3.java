@@ -1,14 +1,13 @@
 package Algorithms;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import Coords.MyCoords;
-import GUI.JBackground;
-import GUI.MyFrame;
 import Game.Game;
 import GameObjects.Box;
 import GameObjects.Fruit;
@@ -19,7 +18,7 @@ import Geom.Point3D;
 import Path.Path;
 
 /**
- * Sonic's algorithm for robot. Version 2.0 <br>
+ * Sonic's algorithm for robot. Version 3.0 <br>
  * Strategy: <br>
  * General strategy: help the pacmans to eat all fruits the fastest you can and earn the time left bonus. <br>
  * Starting Position: start in the latest fruit that will be eaten. <br>
@@ -30,14 +29,14 @@ import Path.Path;
  * [3] then in every game's step call getPlayerOrientation to calculate next move.
  * @author Ofek Bader
  */
-public class SonicAlgorithmV3 implements RobotAlgorithm {
+public class SonicAlgorithmV3 implements RobotAlgorithm, Cloneable {
 
 	////////////////////////
 	// Game's status data //
 	////////////////////////
-	public ArrayList<Packman> pacmans; // list of pacmans
-	public ArrayList<Fruit>  fruits; // list of fruits
-	public ArrayList<Box> boxes; // list of boxes
+	private ArrayList<Packman> pacmans; // list of pacmans
+	private ArrayList<Fruit>  fruits; // list of fruits
+	private ArrayList<Box> boxes; // list of boxes
 	Player player; // player object itself
 	Game game; // game's object.
 
@@ -82,8 +81,13 @@ public class SonicAlgorithmV3 implements RobotAlgorithm {
 
 	@Override
 	public void refreshGameStatus(Game game) {
+		if( game == null)
+			return;
+		
 		Iterator<GameObject> iter;
 		this.game = game;
+		pathAlgorithm.refreshGameStatus(game);
+		
 		// PACMANS
 		pacmans = new ArrayList<Packman>();
 		iter = game.typeIterator(new Packman(0));
@@ -221,31 +225,24 @@ public class SonicAlgorithmV3 implements RobotAlgorithm {
 
 		return latestPoint;
 	}
-
+	
 	/**
-	 * Get the closest fruit to player, in raw air-distance calculation.
-	 * @return Closest fruit.
+	 * Calculating a path for each destination using the pathAlgorithm of this class
+	 * @param source - source point
+	 * @param destinations array - array of possible destinations to calculates distances/paths to.
+	 * @return array of paths sorted by shortest path to longest.
 	 */
-	private Fruit calculateClosestFruitPosition() {
-		// iterator of fruits
-		Iterator<Fruit> iterFruit;
-		// reference holder to the cloest fruit
-		Fruit closestFruit = null;
-
-		double distance, minDistance = Double.MAX_VALUE;
-		Fruit fruit; // reference holder
-		iterFruit = fruits.iterator();
-		while(iterFruit.hasNext()) {
-			fruit = iterFruit.next();
-			// calculate distance between the pacman and fruit.
-			distance = c.distance3d(player.getPoint(), fruit.getPoint());
-			if(distance < minDistance) {
-				minDistance = distance;
-				closestFruit = fruit;
-			}
+	public Path[] calculateMultiplePaths(Point3D source, Point3D[] destinations) {
+		Path[] paths = new Path[destinations.length];
+		for(int i = 0 ; i < destinations.length ; i++ ) {
+			paths[i] = pathAlgorithm.calculate(source, destinations[i]);
 		}
-
-		return closestFruit;
+		
+		Arrays.sort(paths, (p1,p2) -> {
+			return (int) (p1.length() - p2.length());
+		});
+		
+		return paths;
 	}
 
 	/**
@@ -291,19 +288,25 @@ public class SonicAlgorithmV3 implements RobotAlgorithm {
 	 * NOTE: the three functions "nextStep()", "nextPoint() and "nextPath()" are integrated inside each-other
 	 */
 	private void nextPath() {
-		calculate();
-		DijkstraAlgorithm da = new DijkstraAlgorithm(game);
+		// update current paths of pacmans
+		calcPacmanPathV2();
+
+		// create the destinations array of all fruits
 		Point3D dest[]  = new Point3D[fruits.size()];
+		
 		for(int i =0; i< dest.length;i++)
 			dest[i] = fruits.get(i).getPoint();
-		Path[] paths = da.test(player.getPoint(), dest);
+		
+		// calculate the paths to each fruit using the pathFinding algorithm of this class multiple times.
+		Path[] paths = calculateMultiplePaths(player.getPoint(), dest);
 
+		// if there are no paths ( no fruits ) then exit.
 		if(paths.length == 0) {
 			path = null;
 			return;
 		}
 			
-		
+		// find the path which the player would succesfuly eat the fruit before any pacman does.
 		path = paths[0];
 		double minTime = path.length()/player.getSpeed()*20;
 		int k = 0;
@@ -315,9 +318,15 @@ public class SonicAlgorithmV3 implements RobotAlgorithm {
 			while(iterPack.hasNext()) {
 				Packman pacman = iterPack.next();
 
+				// if there is no path to the pacman ( if not calculated yet ) then check the next pacman in the array.
 				if(pacman.getPath() == null)
 					continue;
 
+				// for each pacman get his path and check if the
+				// fruit you want to eat is its path, if it is then
+				// check who reached it first. if the pacman reaches it
+				// first then check another path. if there are no paths
+				// just take the shortest.
 				Iterator<Point3D> iterPath = pacman.getPath().iterator();
 				while(iterPath.hasNext()) {
 					Point3D p3d = iterPath.next();
@@ -342,8 +351,6 @@ public class SonicAlgorithmV3 implements RobotAlgorithm {
 		//System.out.println(k);
 		if(k == paths.length)
 			path = paths[0];
-
-		MyFrame.getInstance().path = path; // TEMP
 
 		iterPath = path.iterator();
 		nextPoint = iterPath.next();
@@ -381,7 +388,7 @@ public class SonicAlgorithmV3 implements RobotAlgorithm {
 			System.out.println("Error, couldn't calculate pacman's paths, are there any pacmans?");
 		}
 
-		if(point == null)
+		if(point == null && fruits.size() > 0)
 			point = fruits.get(0).getPoint();
 
 		return point;
@@ -391,8 +398,12 @@ public class SonicAlgorithmV3 implements RobotAlgorithm {
 
 
 
-
-
+	///////////////////// OTHER /////////////////////////////
+	
+	@Override
+	public SonicAlgorithmV3 clone() {
+		return new SonicAlgorithmV3(pathAlgorithm.clone());
+	}
 
 
 

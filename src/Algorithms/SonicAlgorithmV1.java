@@ -17,26 +17,47 @@ import GameObjects.Player;
 import Geom.Point3D;
 import Path.Path;
 
+/**
+ * Sonic's algorithm for robot. Version 1.0 <br>
+ * Strategy: <br>
+ * General strategy: help the pacmans to eat all fruits the fastest you can and earn the time left bonus. <br>
+ * Starting Position: start in the latest fruit that will be eaten. <br>
+ * How to use:  <br>
+ * [1] pass into constructor the Game object <br>
+ * [2] call getPlayerStartingPosition for initializing player position into "Play" server using
+ * the setInitLocation function. <br>
+ * [3] then in every game's step call getPlayerOrientation to calculate next move.
+ * @author Ofek Bader
+ */
 public class SonicAlgorithmV1 implements RobotAlgorithm {
 
-	public ArrayList<Packman> pacmans;
-	public ArrayList<Fruit>  fruits;
-	public ArrayList<Box> boxes;
+	private ArrayList<Packman> pacmans;
+	private ArrayList<Fruit>  fruits;
+	private ArrayList<Box> boxes;
 	Player player;
 	Game game;
 	/////////////
 	MyCoords c = new MyCoords(); 
 	boolean calculated = false; // TODO
 
+	/**
+	 * [Constructor] <br>
+	 * Generate a new SonicAlgorithmV1, must provide a "Game" object later on on the refreshGameStatus at least once.
+	 */
 	public SonicAlgorithmV1() {
 	}
 	
+	/**
+	 * [Constructor] <br>
+	 * @param game - the game status to set.
+	 */
 	public SonicAlgorithmV1(Game game) {
 		this();
 		this.game = game;
 		refreshGameStatus(game);
 	}
 
+	@Override
 	public void refreshGameStatus(Game game) {
 		
 		Iterator<GameObject> iter;
@@ -118,6 +139,11 @@ public class SonicAlgorithmV1 implements RobotAlgorithm {
 		}
 	}
 
+	/**
+	 * Calculate distances of pacman to fruits.
+	 * @param p - pacman
+	 * @return a heap of costs (distances)
+	 */
 	private LinkedList<Cost> calculateDistances(Packman p) {
 		LinkedList<Cost> costs = new LinkedList<SonicAlgorithmV1.Cost>();
 		// iterator of fruits
@@ -137,6 +163,11 @@ public class SonicAlgorithmV1 implements RobotAlgorithm {
 		return costs;
 	}
 
+	/**
+	 * Given a already calculated heap, recalculate / refresh the costs of each edge.
+	 * @param costs - the heap of costs
+	 * @param p - relative to point p.
+	 */
 	private void recalculateDistances(LinkedList<Cost> costs, Point3D p) {
 		costs.forEach((cost) -> {
 			cost.cost = c.distance3d(cost.p.getPoint(), cost.f.getPoint());
@@ -144,6 +175,10 @@ public class SonicAlgorithmV1 implements RobotAlgorithm {
 
 	}
 
+	/**
+	 * Get the latest fruit that gets eaten.
+	 * @return the position of the fruit that gets eaten.
+	 */
 	public Point3D findLatestEatenFruitPosition() {
 		double maxTime = -1;
 		Point3D p, latestPoint = null;
@@ -170,6 +205,10 @@ public class SonicAlgorithmV1 implements RobotAlgorithm {
 	}
 	
 
+	/**
+	 * Get the closest fruit to player, in raw air-distance calculation.
+	 * @return Closest fruit.
+	 */
 	private Fruit calculateClosestFruitPosition() {
 		// iterator of fruits
 		Iterator<Fruit> iterFruit;
@@ -229,6 +268,27 @@ public class SonicAlgorithmV1 implements RobotAlgorithm {
 	}
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//////////// OTHER ////////////
+	
+
+	@Override
+	public RobotAlgorithm clone() {
+		return new SonicAlgorithmV1();
+	}
+
+	
 
 
 

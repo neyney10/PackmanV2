@@ -9,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -36,7 +37,6 @@ import AI.RobotSimulator;
 import Algorithms.*;
 import Files_format.Path2Kml;
 import GUI.Animation.AutoRun;
-import GUI.Animation.SimulatePath;
 import Game.Game;
 import GameObjects.Box;
 import GameObjects.Fruit;
@@ -92,10 +92,8 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	// cursors
 	Cursor handCursor;
 
-	// path algorithm
-	private ShortestPathAlgo pathFindingAlgorithm;
+
 	// Simulation
-	private SimulatePath simulation;
 	private AutoRun autoRun;
 	private boolean simulating = false;
 
@@ -108,9 +106,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 */
 	private static final long serialVersionUID = 121312L;
 
-	// temp
-	public Path path;
-	private String scenario;
+
 
 	/**
 	 * Get this Singleton's instance.
@@ -175,7 +171,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		menuFont = new Font("Arial", Font.PLAIN, menuFontSize);
 		itemFont = new Font("Arial", Font.PLAIN, itemFontSize);
 
-
 		/*
 		 * pack it up. from last to first generated components to create the 'Z' height
 		 * layer property and stack components
@@ -187,6 +182,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	/**
 	 * Initialize menu bar for this JFrame.
+	 * 
 	 * @return JMenuBar the created menu bar
 	 */
 	private JMenuBar initMenuBar() {
@@ -194,7 +190,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 		menubar.add(initFileMenu());
 		menubar.add(initGameObjectMenu());
-		//menubar.add(initRobotMenu());
+	
 
 		btn_run = new JButton();
 		btn_run.setText("RUN [A]");
@@ -231,7 +227,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		btn_compute.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MyFrame.this.computePath();
+				MyFrame.this.createRobot();
 			}
 		});
 
@@ -268,6 +264,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	/**
 	 * Initialize menu for files
+	 * 
 	 * @return JMenu file menu
 	 */
 	private JMenu initFileMenu() {
@@ -290,29 +287,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			}
 		});
 
-		JMenuItem i2 = new JMenuItem("Save game -> CSV");
-		i2.setFont(itemFont);
-		i2.setCursor(handCursor);
-		i2.setBackground(Color.cyan);
-		i2.setIcon(saveIcon);
-		i2.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveGame();
-			}
-		});
-
-		JMenuItem export = new JMenuItem("Export game -> KML");
-		export.setFont(itemFont);
-		export.setCursor(handCursor);
-		export.setBackground(Color.cyan);
-		export.setIcon(saveIcon);
-		export.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				exportGame();
-			}
-		});
+		
 
 		JMenuItem clear = new JMenuItem("Clear current game");
 		clear.setFont(itemFont);
@@ -327,8 +302,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		});
 
 		menu.add(i1);
-		menu.add(i2);
-		menu.add(export);
 		menu.add(clear);
 
 		return menu;
@@ -336,61 +309,16 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	/**
 	 * Initialize menu for game objects
+	 * 
 	 * @return JMenu game objects menu
 	 */
 	private JMenu initGameObjectMenu() {
-		JMenu menuObjects = new JMenu("Game Objects");
+		JMenu menuObjects = new JMenu("Game Settings");
 		menuObjects.setFont(menuFont);
 		menuObjects.setCursor(handCursor);
 		menuObjects.setBorder(BorderFactory.createSoftBevelBorder(0));
 
-		JMenuItem gmobjAddPackman = new JMenuItem("Pokemon +");
-		gmobjAddPackman.setFont(itemFont);
-		gmobjAddPackman.setCursor(handCursor);
-		gmobjAddPackman.setBackground(Color.ORANGE);
-		gmobjAddPackman.setIcon(pacmanIcon);
-		gmobjAddPackman.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				addPackman();
-			}
-		});
-
-		JMenuItem gmobjAddFruit = new JMenuItem("Yummy +");
-		gmobjAddFruit.setFont(itemFont);
-		gmobjAddFruit.setCursor(handCursor);
-		gmobjAddFruit.setBackground(Color.ORANGE);
-		gmobjAddFruit.setIcon(fruitIcon);
-		gmobjAddFruit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				addFruit();
-			}
-		});
-
-		JMenuItem gmobjAddGhost = new JMenuItem("Boo +");
-		gmobjAddGhost.setFont(itemFont);
-		gmobjAddGhost.setCursor(handCursor);
-		gmobjAddGhost.setBackground(Color.ORANGE);
-		gmobjAddGhost.setIcon(fruitIcon);
-		gmobjAddGhost.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				addGhost();
-			}
-		});
-
-		JMenuItem gmobjAddBox = new JMenuItem("Blacky +");
-		gmobjAddBox.setFont(itemFont);
-		gmobjAddBox.setCursor(handCursor);
-		gmobjAddBox.setBackground(Color.ORANGE);
-		gmobjAddBox.setIcon(fruitIcon);
-		gmobjAddBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				addBox();
-			}
-		});
+	
 
 		JMenuItem gmobjAddPlayer = new JMenuItem("The Chosen one +");
 		gmobjAddPlayer.setFont(itemFont);
@@ -404,7 +332,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			}
 		});
 
-		//TEMP
+		// TEMP
 		JMenuItem gmobjShowStatistics = new JMenuItem("Show statistics");
 		gmobjShowStatistics.setFont(itemFont);
 		gmobjShowStatistics.setCursor(handCursor);
@@ -413,7 +341,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		gmobjShowStatistics.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(jb == null)
+				if (jb == null)
 					return;
 
 				jb.setShowStatistics(!jb.isShowStatistics());
@@ -421,104 +349,16 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			}
 		});
 
-		menuObjects.add(gmobjAddPackman);
-		menuObjects.add(gmobjAddFruit);
-		menuObjects.add(gmobjAddGhost);
-		menuObjects.add(gmobjAddBox);
 		menuObjects.add(gmobjAddPlayer);
 		menuObjects.add(gmobjShowStatistics);
-		menuObjects.add(initMapMenu()); // adding a submenu
+
 
 		return menuObjects;
 	}
 
-	/**
-	 * Initialize menu for robot
-	 * @return JMenu robot's menu
-	 */
-	private JMenu initRobotMenu() {
-		JMenu menuRobot = new JMenu("Robot");
-		menuRobot.setFont(menuFont);
-		menuRobot.setCursor(handCursor);
-		menuRobot.setBorder(BorderFactory.createSoftBevelBorder(0));
-
-		JMenuItem strategyAlgorithm1 = new JMenuItem("Strategy: Sonic-Ver-1.0");
-		strategyAlgorithm1.setFont(itemFont);
-		strategyAlgorithm1.setCursor(handCursor);
-		strategyAlgorithm1.setBackground(Color.ORANGE);
-		strategyAlgorithm1.setIcon(pacmanIcon);
-		strategyAlgorithm1.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) { robot = new AutomaticRobot(new SonicAlgorithmV1()); } });
-
-		JMenuItem strategyAlgorithm2 = new JMenuItem("Strategy: Sonic-Ver-2.0");
-		strategyAlgorithm2.setFont(itemFont);
-		strategyAlgorithm2.setCursor(handCursor);
-		strategyAlgorithm2.setBackground(Color.ORANGE);
-		strategyAlgorithm2.setIcon(pacmanIcon);
-		strategyAlgorithm2.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) { robot = new AutomaticRobot(new SonicAlgorithmV2(new DijkstraAlgorithm(jb.getGame()))); } });
-
-		JMenuItem strategyAlgorithm3 = new JMenuItem("Strategy: Sonic-Ver-3.0");
-		strategyAlgorithm3.setFont(itemFont);
-		strategyAlgorithm3.setCursor(handCursor);
-		strategyAlgorithm3.setBackground(Color.ORANGE);
-		strategyAlgorithm3.setIcon(pacmanIcon);
-		strategyAlgorithm3.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) { robot = new AutomaticRobot(new SonicAlgorithmV3(new DijkstraAlgorithm(jb.getGame()))); } });
 
 
-		menuRobot.add(strategyAlgorithm1);
-		menuRobot.add(strategyAlgorithm2);
-		menuRobot.add(strategyAlgorithm3);
-
-		return menuRobot;
-	}
-
-	private JMenu initMapMenu() {
-		// would be inside gameobjects menu
-		JMenu menuMap = new JMenu("Maps");
-		menuMap.setFont(menuFont);
-		menuMap.setCursor(handCursor);
-		menuMap.setBackground(Color.WHITE);
-		menuMap.setBorder(BorderFactory.createSoftBevelBorder(0));
-
-
-		JMenuItem mapAriel = new JMenuItem("Ariel University");
-		mapAriel.setFont(itemFont);
-		mapAriel.setCursor(handCursor);
-		mapAriel.setBackground(Color.GRAY);
-		mapAriel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (jb == null)
-					return;
-				jb.setMap(MapFactory.getMap(MapType.ArielUniversity));
-				jb.repaint();
-			}
-		});
-
-		JMenuItem mapTelAviv = new JMenuItem("Tel-Aviv");
-		mapTelAviv.setFont(itemFont);
-		mapTelAviv.setCursor(handCursor);
-		mapTelAviv.setBackground(Color.GRAY);
-		mapTelAviv.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (jb == null)
-					return;
-				jb.setMap(MapFactory.getMap(MapType.TelAviv));
-				jb.repaint();
-			}
-		});
-		// pack menus
-		menuMap.add(mapAriel);
-		menuMap.add(mapTelAviv);
-
-		return menuMap;
-	}
+	
 
 	/**
 	 * @see "https://stackoverflow.com/questions/8639567/java-rotating-images"
@@ -561,8 +401,8 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			if (jb.getMap() == null)
 				return;
 
-			// TEMP -40
-			jb.updateMapWithNewScreenSize(this.getWidth()-40, this.getHeight()-40);
+		
+			jb.updateMapWithNewScreenSize(this.getWidth(), this.getHeight());
 
 			if (jb.getGame() == null)
 				return;
@@ -584,6 +424,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * Clearing all game objects from the game.
 	 */
 	public void clear() {
+		stop();
 		setGame(new Game());
 	}
 
@@ -601,7 +442,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * Load game from CSV file.
 	 */
 	public void loadGame() {
-		if(jb == null)
+		if (jb == null)
 			return;
 
 		FileDialog fd = new FileDialog(new Frame(), "Load Game File (CSV)", FileDialog.LOAD);
@@ -609,95 +450,55 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		fd.setFile("*.csv");
 		fd.setVisible(true);
 
-		if(fd.getFile() == null)
+		if (fd.getFile() == null)
 			return;
 
-		scenario = fd.getFiles()[0].getAbsolutePath();
-		Play play = new Play(fd.getFiles()[0].getAbsolutePath());
-		play.setIDs(999999888);
-
-		jb.setPlay(play);
-		jb.setGame(new Game(play.getBoard()));
+		jb.loadGame(fd.getFiles()[0].getAbsolutePath());
 
 		stop(); // stopping simulation if any.
 
 	}
 
 	/**
-	 * Saving the current game to a CSV file
-	 */
-	public void saveGame() {
-		if (jb == null)
-			return;
-
-		FileDialog fd = new FileDialog(new Frame(), "Save Game File (CSV)", FileDialog.SAVE);
-		fd.setDirectory("/");
-		fd.setFile("*.csv");
-		fd.setVisible(true);
-		if (fd.getFiles().length != 0)
-			jb.getGame().toCsv(fd.getDirectory() + fd.getFile());
-	}
-
-	/**
-	 * Exporting the current game into a KML file.
-	 */
-	public void exportGame() {
-		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty())
-			return;
-
-		if (jb == null)
-			return;
-
-		FileDialog fd = new FileDialog(new Frame(), "Export Game File (KML)", FileDialog.SAVE);
-		fd.setDirectory("/");
-		fd.setFile("*.kml");
-		fd.setVisible(true);
-
-		// if didnt choose a name
-		if (fd.getFiles().length == 0)
-			return;
-
-		Solution solution = ShortestPathAlgo.convertIntoPathSolutions(jb.getGame());
-		Path2Kml.create(jb.getGame(), solution, (fd.getDirectory() + fd.getFile()));
-	}
-
-	/**
-	 * running the current game.
+	 * running the current game on automatic mode, a robot plays as the player.
 	 */
 	public void runGame() {
-		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty() || jb.getMap() == null) // || simulating
+		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty() || jb.getMap() == null) // ||
+																														// simulating
 			return;
 
-		if(robot == null) {
+		jb.setPlay(new Play(jb.getScenario()));
+		Play play = jb.getPlay();
+		jb.setGame(new Game(play.getBoard()));
+
+		if (robot == null) {
 			// Configure PathFinding algorithm for the robot
 			RobotPathFindingAlgorithm pathFinding = new DijkstraAlgorithm(jb.getGame());
 			// Configure Robot tactic algorithm, load it with the path algorithm.
 			RobotAlgorithm algorithm = new SonicAlgorithmV3(pathFinding);
 			// Configure the robot itself with the tactic algorithm and update it status.
-			AutomaticRobot robot = new AutomaticRobot(algorithm);
-		}
+			robot = new AutomaticRobot(algorithm);
+		} else robot = robot.clone();
 		robot.setNewGameStatus(jb.getGame());
 
-
-
-		//get Robot's chosen starting position.
+		// get Robot's chosen starting position.
 		Point3D playerPos3D = robot.getStartingPlayerPosition();
 
-		Play play = jb.getPlay();
 		play.setInitLocation(playerPos3D.y(), playerPos3D.x());
 
 		// start game.
 		play.start();
 		jb.repaint();
 
-		/* Create a thread handler for handling the game's frame-rate/refresh mechanism.
+		/*
+		 * Create a thread handler for handling the game's frame-rate/refresh mechanism.
 		 * give it the robot to handle at each frame.
 		 */
 		autoRun = new AutoRun(jb, 22);
 		autoRun.addAutomaticRobot(robot);
 		autoRun.start();
 
-		if(jb.getPlay().isRuning()) {
+		if (jb.getPlay().isRuning()) {
 			btn_stopSimulation.setVisible(true);
 			btn_run.setVisible(false);
 			btn_run_manual.setVisible(false);
@@ -705,16 +506,35 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	}
 
+	/**
+	 * Run current game manually as the user plays the game and controls the player.
+	 */
 	public void runGameManual() {
 		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty() || jb.getMap() == null) // || simulating
 			return;
 
 		Point3D playerPos3D = jb.getGame().getPlayer().getPoint();
+		if(playerPos3D == null || playerPos3D.equals(new Point3D(0,0,0))) //abort
+			return;
+		
+		System.out.println(playerPos3D);
+		jb.setPlay(new Play(jb.getScenario()));
 		Play play = jb.getPlay();
-		//play.setIDs(999999888);
 
 		play.setInitLocation(playerPos3D.y(), playerPos3D.x());
 
+	
+		// get ids
+		String[] ids = showEnterIDDialog();
+		if(ids == null || ids.length == 0)
+			return;
+		else if(ids.length == 1)
+			play.setIDs(Long.parseLong(ids[0]));
+		else if(ids.length == 2)
+			play.setIDs(Long.parseLong(ids[0]),Long.parseLong(ids[1]));
+		else if(ids.length >= 3)
+			play.setIDs(Long.parseLong(ids[0]),Long.parseLong(ids[1]),Long.parseLong(ids[2]));
+		
 		// start game.
 		play.start();
 		jb.repaint();
@@ -722,45 +542,26 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		autoRun = new AutoRun(jb, 33);
 		autoRun.start();
 
-		if(jb.getPlay().isRuning()) {
+		if (jb.getPlay().isRuning()) {
 			btn_stopSimulation.setVisible(true);
 			btn_run.setVisible(false);
 			btn_run_manual.setVisible(false);
 		}
 	}
-
+	
 	/**
-	 * setting the dropMode of this.JButton to true for allowing dropping items on
-	 * map from type Packman.
+	 * Creates and shows on screen a dialog for entering ID's
+	 * @returns ID's in strings format.
 	 */
-	public void addPackman() {
-		if (jb == null)
-			return;
-
-		jb.setDropItem(new Packman(0));
-		enterDropMode();
+	public String[] showEnterIDDialog() {
+		DialogID dialog  = new DialogID(this, "Please insert your ID!", true);
+		return dialog.showDialog();
 	}
 
+	
 	/**
-	 * setting the dropMode of this.JButton to true for allowing dropping items on
-	 * map from type Fruit.
+	 * Add or re-locate player in-game
 	 */
-	public void addFruit() {
-		if (jb == null)
-			return;
-
-		jb.setDropItem(new Fruit(0));
-		enterDropMode();
-	}
-
-	private void addBox() {
-		if (jb == null)
-			return;
-
-		jb.setDropItem(new Box(0));
-		enterDropMode();
-	}
-
 	private void addPlayer() {
 		if (jb == null)
 			return;
@@ -769,13 +570,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		enterDropMode();
 	}
 
-	private void addGhost() {
-		if (jb == null)
-			return;
 
-		jb.setDropItem(new Ghost(0));
-		enterDropMode();
-	}
 
 	/**
 	 * setting the dropMode of this.JButton to true for allowing dropping items on
@@ -805,16 +600,16 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * Stop running, stopping simulation
 	 */
 	public void stop() {
-		//if (!simulating)
-		if(jb == null || autoRun == null)
+		// if (!simulating)
+		if (jb == null || autoRun == null)
 			return;
 
-		//simulation.interrupt();
+		// simulation.interrupt();
 		jb.getPlay().stop();
 		autoRun.interrupt();
 
 		try {
-			//simulation.join();
+			// simulation.join();
 			autoRun.join();
 		} catch (InterruptedException e) {
 
@@ -824,19 +619,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if (jb == null || jb.getGame() == null)
 			return;
 
-		//		Map map = jb.getGame().getMap();
-		//
-		//		for (Component co : jb.getComponents()) {
-		//			if (co instanceof GameSpirit) {
-		//				GameSpirit gs = (GameSpirit) co;
-		//				if (gs.getGameObj() instanceof Fruit)
-		//					co.setVisible(true);
-		//				else if (gs.getGameObj() instanceof Packman) {
-		//					map.updateLocationOnScreen(gs, map.transformByScale(map.getLocationOnScreen(gs.getGameObj())));
-		//				}
-		//
-		//			}
-		//		}
+
 
 		btn_run.setVisible(true);
 		btn_run_manual.setVisible(true);
@@ -849,35 +632,33 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * Calculate path's of all pacmans in game by using the ShortestPathAlgo class
 	 * to compute. the class set the path on each pacman after calculation.
 	 */
-	public void computePath() {
+	public void createRobot() {
 		JDialog dialog = createRobotDialog();
 		dialog.setModal(true);
 		dialog.setVisible(true);
-		//		if (jb == null || jb.getGame() == null)
-		//			return;
-		//
-		//		// compute paths
-		////		pathFindingAlgorithm = new ShortestPathAlgo(jb.getGame());
-		////		pathFindingAlgorithm.calcPath();
 
 		// repaint
 		repaint();
 	}
 
+	/**
+	 * Create a robot builder / creator / factory dialog.
+	 * @return a JDialog object with all the required menus and buttons.
+	 */
 	public JDialog createRobotDialog() {
 		JDialog dialog = new JDialog(this, "Robot factory! Create your own robot!");
 		dialog.setSize(755, 133);
-		dialog.setLayout(new FlowLayout(1,25,15));
+		dialog.setLayout(new FlowLayout(1, 25, 15));
 
 		// Path's label
 		JLabel lbl_paths = new JLabel("Path Finding Algorithm: ");
 
 		// Path's cmb row descriptions
-		String[] paths = { "Dijkstra" }; 
+		String[] paths = { "Dijkstra" };
 
 		// combo box of path finding algo
 		JComboBox<String> cmb_Path = new JComboBox<>(paths);
-		cmb_Path.addActionListener((e)-> {
+		cmb_Path.addActionListener((e) -> {
 
 		});
 
@@ -885,43 +666,38 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		JLabel lbl_algos = new JLabel("Strategy Algorithm: ");
 
 		// Combo box description of algorithm.
-		RobotAlgorithm[] algos = {
-				new SonicAlgorithmV1(),
-				new SonicAlgorithmV2(null),
-				new SonicAlgorithmV3(null)
-		};
+		RobotAlgorithm[] algos = { new SonicAlgorithmV1(), new SonicAlgorithmV2(null), new SonicAlgorithmV3(null) };
 
 		// combo box of algorithms.
 		JComboBox<RobotAlgorithm> cmb_Algo = new JComboBox<>(algos);
-		cmb_Algo.addActionListener((e)-> {
+		cmb_Algo.addActionListener((e) -> {
 
 		});
 
 		JButton btn_choose = new JButton("Choose Best");
 		btn_choose.addActionListener((e) -> {
-			if(MyFrame.this.scenario == null)
+			if (MyFrame.this.jb.getScenario() == null)
 				return;
-			
+
 			RobotAlgorithm algorithm;
-			
+
 			JDialog notification = new JDialog();
 			notification.setTitle("This task might take some time... Please wait.");
 			notification.add(new JLabel("Please wait for the robot's simulation to end.."));
 			notification.setSize(300, 100);
 			notification.setVisible(true);
-			
+
 			RobotSimulator simulator = new RobotSimulator();
 			simulator.addAlgorithm(new SonicAlgorithmV1());
 			simulator.addAlgorithm(new SonicAlgorithmV2(new DijkstraAlgorithm(jb.getGame())));
 			simulator.addAlgorithm(new SonicAlgorithmV3(new DijkstraAlgorithm(jb.getGame())));
-			simulator.simulate(scenario);
+			simulator.simulate(jb.getScenario());
 			algorithm = simulator.getBest();
 			robot = new AutomaticRobot(algorithm);
 			robot.setNewGameStatus(jb.getGame());
 
 			System.out.println("[Robot Factory] Created the robot we can make!");
 
-			
 			notification.setVisible(false);
 			notification.dispose();
 			dialog.setVisible(false);
@@ -935,7 +711,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			Game game = MyFrame.this.jb.getGame();
 			RobotPathFindingAlgorithm pathAlgorithm = new DijkstraAlgorithm(game);
 			RobotAlgorithm strategyAlgorithm = null;
-			switch(ind) {
+			switch (ind) {
 			case 0:
 				strategyAlgorithm = new SonicAlgorithmV1();
 				break;
@@ -947,8 +723,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 				break;
 			}
 
-
-			MyFrame.this.robot = new AutomaticRobot(strategyAlgorithm); 
+			MyFrame.this.robot = new AutomaticRobot(strategyAlgorithm);
 
 			System.out.println("[Robot Factory] Created a new Robot!");
 
@@ -965,7 +740,6 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 		return dialog;
 
-
 	}
 
 	@Override
@@ -978,6 +752,80 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 	@Override
 	public void componentShown(ComponentEvent arg0) {
+	}
+	
+	
+	
+	
+	
+	
+	
+	///////// OTHER ////////
+	
+	/**
+	 * Dialog for entering IDs
+	 * @author Ofek Bader
+	 *
+	 */
+	class DialogID extends JDialog {
+		String[] ids;
+		
+		/**
+		 * Create new JDialog of subtype DialogID
+		 * @param myFrame - frame
+		 * @param string - title
+		 * @param b - is modal (set to true)
+		 */
+		public DialogID(MyFrame myFrame, String string, boolean b) {
+			super(myFrame, string, b);
+		}
+
+		/**
+		 * Use this when wanting to show the dialog, returns the user CSV input of ids.
+		 * @return ids
+		 */
+		public String[] showDialog() { 
+			center();
+			
+			// set layout
+			this.setLayout(new FlowLayout());
+			
+			// create text field to enter ID's. seperated by comma
+			JTextField inp_id = new JTextField("999999888");
+			inp_id.setColumns(33);
+			
+			// create "continue"/"submit" button
+			JButton btn_submit = new JButton("Continue");
+			btn_submit.addActionListener((e) -> {
+				String[] csv = inp_id.getText().split(",");
+				ids = csv;
+				this.setVisible(false);
+				this.dispose();
+			});
+			
+			this.add(inp_id);
+			this.add(btn_submit);
+			
+			this.pack();
+			
+			this.setVisible(true);
+			
+			return ids;
+		}
+		
+		/**
+		 * Center the dialog on screen
+		 */
+		private void center() {
+			final int width = this.getWidth();
+		    final int height = this.getHeight();
+		    final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		    int x = (screenSize.width / 2) - (width / 2);
+		    int y = (screenSize.height / 2) - (height / 2);
+
+		    this.setLocation(x, y);
+		}
+		
 	}
 
 }

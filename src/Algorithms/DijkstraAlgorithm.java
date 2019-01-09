@@ -3,24 +3,25 @@ package Algorithms;
 import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 
 import Coords.MyCoords;
 import Game.Game;
 import GameObjects.Box;
-import GameObjects.Fruit;
 import GameObjects.GameObject;
-import GameObjects.Packman;
 import Geom.Point3D;
 import Maps.Map;
 import Path.Path;
 import graph.Graph;
 import graph.Graph_Algo;
 import graph.Node;
-import graph.Node_Info;
 
+/**
+ * Dijkstra Algorihm implementation for the RobotPathFindingAlgorithm.
+ * using the Dijkstra's algorithm for computing the shortest path (with obstacles) from point SOURCE to point TARGET.
+ * @author neyne
+ *
+ */
 public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 
 	Graph graph;
@@ -29,12 +30,20 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 	MyCoords mc = new MyCoords();
 	Intersect in;
 
+	/**
+	 * [Constructor] <br>
+	 * creates a new DijkstraAlgorithm instance.
+	 * @param game - the game object to compute on, takes the boxes coordinates from it, along with the map object.
+	 */
 	public DijkstraAlgorithm(Game game) {
 		graph = new Graph();
 		in = new Intersect(game.getMap());
 		refreshGameStatus(game);
 	}
 
+	/**
+	 * Refreshes game's status.
+	 */
 	public void refreshGameStatus(Game game) {
 		if(game == null)
 			return;
@@ -106,24 +115,12 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		return parseNodePath(pathString);
 	}
 	
-	/**
-	 * Test
-	 * @param source
-	 * @return
-	 */
-	public Path[] test(Point3D source, Point3D[] destinations) {
-		Path[] paths = new Path[destinations.length];
-		for(int i = 0 ; i < destinations.length ; i++ ) {
-			paths[i] = calculate(source, destinations[i]);
-		}
-		
-		Arrays.sort(paths, (p1,p2) -> {
-			return (int) (p1.length() - p2.length());
-		});
-		
-		return paths;
-	}
 	
+	/**
+	 * Parse nodes string into a Path object.
+	 * @param nodePath - list of strings, each string is Node's name.
+	 * @return Path object - the path parsed from those strings
+	 */
 	private Path parseNodePath(ArrayList<String> nodePath) {
 		Path path = new Path();
 		Vertex v;
@@ -135,6 +132,12 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		return path;
 	}
 	
+	/**
+	 * Check intersection of 2 Vertices with all boxes in game if they'll form a line.
+	 * @param v1 Vertex 1
+	 * @param v2 Vertex 2
+	 * @return true if the Edge/Line between v1 and v2 intersects with an obstacle (box), else the path is clear and returns true.
+	 */
 	private boolean checkIntersect(Vertex v1, Vertex v2) {
 		//TEMP TEST:
 		Box box;
@@ -153,6 +156,12 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		return false;
 	}
 
+	/**
+	 * Check if a certain Vertex "v" cannot be reached from any other Vertex in graph because of obstacles.
+	 * @param v the vertex to check for reachabillty.
+	 * @return true if the Vertex "v" cannot be reached from any other vertex, false if there is at least a single 
+	 * vertex that can reach to it
+	 */
 	private boolean checkUnreachable(Vertex v) {
 		Box box;
 		Iterator<GameObject> iter = game.typeIterator(new Box(0));
@@ -168,11 +177,16 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		return false;
 	}
 
+	/**
+	 * Add a box to a graph, compute first the 4 points outlining it, shift them by a few meters and then add to graph.
+	 * @param box - the box to add
+	 * @param map - map object to calculate pixel coordinates from geodetic.
+	 */
 	private void addBoxToGraph(Box box, Map map) {
 		Point upperLeftP = map.getLocationOnScreen(box.getMin());
 		Point lowerRightP = map.getLocationOnScreen(box.getMax());
 
-		int shift = 10;
+		int shift = (int)(10*map.getScaleFactorX()+map.getScaleFactorY()/2);
 
 		Point lowerLeftP, upperRightP;
 		lowerLeftP = new Point(upperLeftP.x - shift, lowerRightP.y + shift);
@@ -201,12 +215,12 @@ public class DijkstraAlgorithm implements RobotPathFindingAlgorithm {
 		if(!checkUnreachable(v4))
 			graph.add(v4);
 
-//		System.out.println(graph.getNodeByName(""+(upperLeft))
-//				+ " | "+graph.getNodeByName(""+(lowerRight))
-//				+ " | "+graph.getNodeByName(""+(upperRight))
-//				+ " | "+graph.getNodeByName(""+(lowerLeft)));
-//
-//			System.out.println(upperLeftP+" | "+ lowerRightP + " | " + upperRightP + " | "+ lowerLeftP);
+	}
+	
+	@Override
+	public DijkstraAlgorithm clone() {
+		DijkstraAlgorithm cl = new DijkstraAlgorithm(game);
+		return cl;
 	}
 }
 
