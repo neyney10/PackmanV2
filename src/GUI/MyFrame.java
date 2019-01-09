@@ -106,8 +106,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 */
 	private static final long serialVersionUID = 121312L;
 
-	// temp
-	private String scenario;
+
 
 	/**
 	 * Get this Singleton's instance.
@@ -454,12 +453,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		if (fd.getFile() == null)
 			return;
 
-		scenario = fd.getFiles()[0].getAbsolutePath();
-		Play play = new Play(fd.getFiles()[0].getAbsolutePath());
-		play.setIDs(999999888);
-
-		jb.setPlay(play);
-		jb.setGame(new Game(play.getBoard()));
+		jb.loadGame(fd.getFiles()[0].getAbsolutePath());
 
 		stop(); // stopping simulation if any.
 
@@ -469,11 +463,11 @@ public final class MyFrame extends JFrame implements ComponentListener {
 	 * running the current game on automatic mode, a robot plays as the player.
 	 */
 	public void runGame() {
-		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty() || jb.getMap() == null || scenario == null) // ||
+		if (jb == null || jb.getGame() == null || jb.getGame().isEmpty() || jb.getMap() == null) // ||
 																														// simulating
 			return;
 
-		jb.setPlay(new Play(scenario));
+		jb.setPlay(new Play(jb.getScenario()));
 		Play play = jb.getPlay();
 		jb.setGame(new Game(play.getBoard()));
 
@@ -524,7 +518,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			return;
 		
 		System.out.println(playerPos3D);
-		jb.setPlay(new Play(scenario));
+		jb.setPlay(new Play(jb.getScenario()));
 		Play play = jb.getPlay();
 
 		play.setInitLocation(playerPos3D.y(), playerPos3D.x());
@@ -538,7 +532,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			play.setIDs(Long.parseLong(ids[0]));
 		else if(ids.length == 2)
 			play.setIDs(Long.parseLong(ids[0]),Long.parseLong(ids[1]));
-		else if(ids.length == 3)
+		else if(ids.length >= 3)
 			play.setIDs(Long.parseLong(ids[0]),Long.parseLong(ids[1]),Long.parseLong(ids[2]));
 		
 		// start game.
@@ -647,6 +641,10 @@ public final class MyFrame extends JFrame implements ComponentListener {
 		repaint();
 	}
 
+	/**
+	 * Create a robot builder / creator / factory dialog.
+	 * @return a JDialog object with all the required menus and buttons.
+	 */
 	public JDialog createRobotDialog() {
 		JDialog dialog = new JDialog(this, "Robot factory! Create your own robot!");
 		dialog.setSize(755, 133);
@@ -678,7 +676,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 
 		JButton btn_choose = new JButton("Choose Best");
 		btn_choose.addActionListener((e) -> {
-			if (MyFrame.this.scenario == null)
+			if (MyFrame.this.jb.getScenario() == null)
 				return;
 
 			RobotAlgorithm algorithm;
@@ -693,7 +691,7 @@ public final class MyFrame extends JFrame implements ComponentListener {
 			simulator.addAlgorithm(new SonicAlgorithmV1());
 			simulator.addAlgorithm(new SonicAlgorithmV2(new DijkstraAlgorithm(jb.getGame())));
 			simulator.addAlgorithm(new SonicAlgorithmV3(new DijkstraAlgorithm(jb.getGame())));
-			simulator.simulate(scenario);
+			simulator.simulate(jb.getScenario());
 			algorithm = simulator.getBest();
 			robot = new AutomaticRobot(algorithm);
 			robot.setNewGameStatus(jb.getGame());

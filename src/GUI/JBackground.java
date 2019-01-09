@@ -50,7 +50,10 @@ public class JBackground extends JPanel implements MouseListener {
 	
 	// for box creation with mouse click
 	private Point3D pbox1, pbox2;
-
+	
+	private String scenario;
+	private int scenarioHashCode;
+	
 	/**
 	 * [Constructor] <br>
 	 * Creates a new JBackground object, initializing new defualt Map.
@@ -349,16 +352,31 @@ public class JBackground extends JPanel implements MouseListener {
 
 	}
 
-	/**
-	 * set a new Game object to this panel, setting a default map.
-	 * 
-	 * @param game the game to set
-	 */
-	private void setGame(Game game, double playerOrientation) {
-		//this.game = game;
-		game.setMap(this.map);
-		game.getPlayer().setOrientation(playerOrientation);
 
+	/**
+	 * get this's play's scenario hashcode if any.
+	 * @return scenarios of play hashcode
+	 */
+	public int getScenarioHashCode() {
+		return this.scenarioHashCode;
+	}
+	
+	/**
+	 * get the scenario file path.
+	 * @return path to the CSV file.
+	 */
+	public String getScenario() {
+		return this.scenario;
+	}
+	
+	public void loadGame(String filePath) {
+		scenario = filePath;
+		Play play = new Play(filePath);
+		scenarioHashCode = play.getHash1();
+		play.setIDs(999999888); // DEFAULT ID.
+
+		this.setPlay(play);
+		this.setGame(new Game(play.getBoard()));
 	}
 
 	/**
