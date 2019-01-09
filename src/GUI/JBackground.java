@@ -369,6 +369,11 @@ public class JBackground extends JPanel implements MouseListener {
 		return this.scenario;
 	}
 	
+	/**
+	 * Loads the game into the Panel, setting the game using the "setGame()" and initializing the Play object along with
+	 * other data.
+	 * @param filePath - to the CSV game file to load.
+	 */
 	public void loadGame(String filePath) {
 		scenario = filePath;
 		Play play = new Play(filePath);
