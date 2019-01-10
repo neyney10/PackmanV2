@@ -1,24 +1,4 @@
 
-## Development Status: In development 
-forked from https://github.com/Lichy24/Packman.
-#### Software objectives:
-- ~~make player~~ [COMPLETED]
-- ~~make ghosts~~ [COMPLETED]
-- ~~make black rectangles no go zone.~~ [COMPLETED]
-- ~~make "server" like system that the play can play against~~ [COMPLETED]
-- ~~database system/data collector~~ [COMPLETED]
-- ~~design & develop an autonomous system for playing~~ [COMPLETED]
-- ~~game report~~ [COMPLETED]
-- update readme
-- update javadoc
-- ~~update UML~~ [COMPLETED]
-
-#### General objectives:
-- ~~Write for each function and class a Javadoc description.~~ [COMPLETED]
-- ~~Generate Javadoc folder.~~ [COMPLETED]
-- ~~Edit readme.md file to have HOW-TO-USE toturial and software description.~~ [COMPLETED]
-
-
 # What is it?
 This is a Multi-pacman game simulation over Google Earth! <br>
 You can fork this repisoritory and add new GameObjects by yourself!
@@ -90,3 +70,20 @@ and at the end of every game will get a score, to rate his gameplay.<br>
 - Example 8: <br>Manual: 20.0<br>Auto: 20.3 <br><br>
 - Example 9: <br>Manual: 21.9<br>Auto: 23.9 <br><br>
 
+
+## Development Status: Released Version 1.0 Beta! see the "Realeases Tab:
+## NOTICE: We moved our project managemnet to the "Projects" tabs here on github! check it out! the current list here is deprecated and outdated.
+#### Software objectives:
+- ~~make player~~ [COMPLETED]
+- ~~make ghosts~~ [COMPLETED]
+- ~~make black rectangles no go zone.~~ [COMPLETED]
+- ~~make "server" like system that the play can play against~~ [COMPLETED]
+- ~~database system/data collector~~ [COMPLETED]
+- ~~design & develop an autonomous system for playing~~ [COMPLETED]
+- ~~game report~~ [COMPLETED]
+- ~~update UML~~ [COMPLETED]
+
+#### General objectives:
+- ~~Write for each function and class a Javadoc description.~~ [COMPLETED]
+- ~~Generate Javadoc folder.~~ [COMPLETED]
+- ~~Edit readme.md file to have HOW-TO-USE toturial and software description.~~ [COMPLETED]
