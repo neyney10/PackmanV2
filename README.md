@@ -26,8 +26,9 @@ You can fork this repisoritory and add new GameObjects by yourself!
 ## Demos
 ### Ariel University
 ![alt text](Other/GitHubMedia/demo.png)
+<br><br>
+![alt text](Other/GitHubMedia/running.jpg)
 <br>
-
 ## Contributors:
 - Ofek Bader:
 	-   -> https://github.com/neyney10
