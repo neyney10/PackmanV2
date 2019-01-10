@@ -27,7 +27,7 @@ You can fork this repisoritory and add new GameObjects by yourself!
 ### Ariel University
 ![alt text](Other/GitHubMedia/demo.png)
 <br><br>
-![alt text](Other/GitHubMedia/running.jpg)
+![alt text](Other/GitHubMedia/running.JPG)
 <br>
 ## Contributors:
 - Ofek Bader:
@@ -80,13 +80,13 @@ Link of wiki: https://github.com/neyney10/PackmanV2/wiki<br>
 our game scores for auto and manual playing each scenario has different layout for the player to complete <br>
 and at the end of every game will get a score, to rate his gameplay.<br>
 
-- Example 1: <br>manual: 27.6<br>auto: 53.5 <br><br>
-- Example 2: <br>manual: 64.2<br>auto: 80.9 <br><br>
-- Example 3: <br>manual: 45.1<br>auto: 54.8 <br><br>
-- Example 4: <br>manual: 81.2<br>auto: 81.2 <br><br>
-- Example 5: <br>manual: 81.2<br>auto: 81.2 <br><br>
-- Example 6: <br>manual: 12.0<br>auto: 13.0 <br><br>
-- Example 7: <br>manual: 46.0<br>auto: 68.4 <br><br>
-- Example 8: <br>manual: 20.0<br>auto: 20.3 <br><br>
-- Example 9: <br>manual: 21.9<br>auto: 23.9 <br><br>
+- Example 1: <br>Manual: 27.6<br>Auto: 53.5 <br><br>
+- Example 2: <br>Manual: 64.2<br>Auto: 80.9 <br><br>
+- Example 3: <br>Manual: 45.1<br>Auto: 54.8 <br><br>
+- Example 4: <br>Manual: 81.2<br>Auto: 81.2 <br><br>
+- Example 5: <br>Manual: 81.2<br>Auto: 81.2 <br><br>
+- Example 6: <br>Manual: 12.0<br>Auto: 13.0 <br><br>
+- Example 7: <br>Manual: 46.0<br>Auto: 68.4 <br><br>
+- Example 8: <br>Manual: 20.0<br>Auto: 20.3 <br><br>
+- Example 9: <br>Manual: 21.9<br>Auto: 23.9 <br><br>
 
